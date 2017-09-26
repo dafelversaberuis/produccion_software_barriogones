@@ -1,0 +1,485 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/plantillas/principal.xhtml">
+
+	<ui:define name="body">
+
+		<h:form id="formCompras">
+
+			<p:growl id="messages" showDetail="true" globalOnly="true" />
+
+
+			<div class="row x_title">
+				<div class="col-md-6">
+					<p:outputLabel value="#{mensaje.moduloVentas}: "
+						styleClass="tituloPrincipal" />
+					<p:spacer width="2" />
+					<p:outputLabel
+						value="#{mensaje.transaccionesElectronicasEfectuadas}"
+						styleClass="tituloPrincipal" />
+				</div>
+			</div>
+
+			<div align="center" class="titulo"></div>
+
+			<p:outputPanel id="pnlVenta">
+
+				<p:spacer height="10" />
+
+				<p:accordionPanel id="pnlCrear">
+					<p:tab title="#{mensaje.consultarVentasCriterios}"
+						titleStyle="font-size:16px" closable="true">
+
+						<p:panelGrid columns="4" cellpadding="0" cellspacing="0"
+							styleClass="ui-panelgrid-blank">
+
+							<p:outputLabel for="calFechaDesde" value="#{mensaje.fechaDesde}"
+								style="font-weight:bold; font-size:14px" />
+
+							<p:calendar id="calFechaDesde"
+								value="#{administrarVenta.venta.tFechaDesde}"
+								pattern="yyyy-MM-dd" mask="true" style="font-size:14px" />
+							<p:spacer width="1" />
+							<p:message for="calFechaDesde" />
+
+
+
+
+							<p:outputLabel for="calFechaHasta" value="#{mensaje.fechaHasta}"
+								style="font-weight:bold; font-size:14px" />
+
+							<p:calendar id="calFechaHasta"
+								value="#{administrarVenta.venta.tFechaHasta}"
+								pattern="yyyy-MM-dd" mask="true" style="font-size:14px" />
+							<p:spacer width="1" />
+							<p:message for="calFechaHasta" />
+
+
+
+
+							<p:outputLabel for="lstEstadoTransaccion"
+								value="#{mensaje.estadoTransaccion}"
+								style="font-weight:bold; font-size:14px" />
+
+							<p:selectOneMenu id="lstEstadoTransaccion"
+								style="font-size:14px;"
+								value="#{administrarVenta.venta.estadoTransaccion}"
+								label="#{mensaje.estadoTransaccion}">
+								<f:selectItem itemValue="" itemLabel="#{mensaje.comboVacio}" />
+								<f:selectItem itemValue="A" itemLabel="#{mensaje.aprobada}" />
+								<f:selectItem itemValue="P"
+									itemLabel="#{mensaje.transaccionPendiente}" />
+
+							</p:selectOneMenu>
+							<p:spacer width="1" />
+							<p:message for="lstEstadoTransaccion" />
+
+
+							<p:outputLabel for="lstNumeroArbolitos"
+								value="#{mensaje.itemsResumen}"
+								style="font-weight:bold; font-size:14px" />
+
+
+
+							<p:selectOneMenu id="lstNumeroArbolitos" style="font-size:14px;"
+								value="#{administrarVenta.venta.tOperadorConsulta}"
+								label="#{mensaje.numeroArbolitos}">
+								<f:selectItem itemValue="" itemLabel="#{mensaje.comboVacio}" />
+								<f:selectItem itemValue="MENOR_IGUAL"
+									itemLabel="#{mensaje.menorIgual}" />
+								<f:selectItem itemValue="MAYOR_IGUAL"
+									itemLabel="#{mensaje.mayorIgual}" />
+								<f:selectItem itemValue="IGUAL" itemLabel="#{mensaje.igualA}" />
+
+							</p:selectOneMenu>
+
+							<p:inputText value="#{administrarVenta.venta.cantidadTotalVenta}"
+								id="txtNumeroArbolitos" style="font-size:14px; width:50px" />
+
+							<p:message for="lstNumeroArbolitos" />
+
+
+							<p:outputLabel for="lstValor" value="#{mensaje.valorVentas}"
+								style="font-weight:bold; font-size:14px" />
+
+
+
+							<p:selectOneMenu id="lstValor" style="font-size:14px;"
+								value="#{administrarVenta.venta.tOperadorVentas}"
+								label="#{mensaje.lstValor}">
+								<f:selectItem itemValue="" itemLabel="#{mensaje.comboVacio}" />
+								<f:selectItem itemValue="MENOR_IGUAL"
+									itemLabel="#{mensaje.menorIgual}" />
+								<f:selectItem itemValue="MAYOR_IGUAL"
+									itemLabel="#{mensaje.mayorIgual}" />
+								<f:selectItem itemValue="IGUAL" itemLabel="#{mensaje.igualA}" />
+
+							</p:selectOneMenu>
+
+							<p:inputText value="#{administrarVenta.venta.valorTotalConIva}"
+								id="txtValor" style="font-size:14px;" />
+
+							<p:message for="lstValor" />
+
+
+
+
+							<p:outputLabel for="txtNombres" value="#{mensaje.comprador}"
+								style="font-weight:bold; font-size:14px" />
+
+
+
+							<p:inputText
+								value="#{administrarVenta.venta.comprador.nombreCompleto}"
+								id="txtNombres" style="font-size:14px;" />
+
+
+							<p:spacer width="1" />
+							<p:message for="txtNombres" />
+							
+							<p:outputLabel for="txtTransaccion" value="#{mensaje.idTransaccionPago}"
+								style="font-weight:bold; font-size:14px" />
+
+
+
+							<p:inputText
+								value="#{administrarVenta.venta.idTransaccion}"
+								id="txtTransaccion" style="font-size:14px;" />
+
+
+							<p:spacer width="1" />
+							<p:message for="txtTransaccion" />
+							
+							
+							<p:outputLabel for="txtReferencia" value="#{mensaje.idReferencia}"
+								style="font-weight:bold; font-size:14px" />
+
+
+
+							<p:inputText
+								value="#{administrarVenta.venta.id}"
+								id="txtReferencia" style="font-size:14px;" />
+
+
+							<p:spacer width="1" />
+							<p:message for="txtReferencia" />
+
+
+
+
+							<p:outputLabel for="lstTrajeta" value="#{mensaje.esTarjeta}"
+								style="font-weight:bold; font-size:14px" />
+
+							<p:selectOneMenu id="lstTrajeta" style="font-size:14px;"
+								value="#{administrarVenta.venta.tarjeta.id}"
+								label="#{mensaje.moneda}">
+								<f:selectItem itemValue="" itemLabel="#{mensaje.comboVacio}" />
+								<f:selectItem itemValue="1" itemLabel="#{mensaje.SI}" />
+								<f:selectItem itemValue="0" itemLabel="#{mensaje.NO}" />
+
+							</p:selectOneMenu>
+							<p:spacer width="1" />
+
+							<p:message for="lstTrajeta" />
+
+
+							<p:outputLabel for="lstConvenio" value="#{mensaje.convenio}"
+								style="font-weight:bold; font-size:14px;" />
+							<p:selectOneMenu id="lstConvenio"
+								style="font-size:14px; width:100%"
+								value="#{administrarVenta.venta.tarjeta.convenio.id}"
+								label="#{mensaje.convenio}">
+								<f:selectItems value="#{hacerMantenimiento.itemsConveniosVenta}" />
+							</p:selectOneMenu>
+							<p:spacer width="1" />
+							<p:message for="lstConvenio" />
+
+							<p:outputLabel for="lstMoneda" value="#{mensaje.moneda}"
+								style="font-weight:bold; font-size:14px" />
+
+							<p:selectOneMenu id="lstMoneda" style="font-size:14px;"
+								required="true" value="#{administrarVenta.venta.moneda}"
+								label="#{mensaje.moneda}">
+								<f:selectItem itemValue="" itemLabel="#{mensaje.comboVacio}" />
+								<f:selectItem itemValue="COP"
+									itemLabel="#{mensaje.pesoColombiano}" />
+								<f:selectItem itemValue="US" itemLabel="#{mensaje.dolar}" />
+
+							</p:selectOneMenu>
+							<p:spacer width="1" />
+
+							<p:message for="lstMoneda" />
+
+						</p:panelGrid>
+
+
+
+						<p:spacer height="10" />
+						<div align="center">
+							<p:commandButton id="btnConsultar"
+								style="font-size:14px; font-weight: normal !important;"
+								action="#{administrarVenta.consultarVentas()}"
+								value="#{mensaje.consultar}" update=":formCompras" />
+
+							<p:spacer width="10" />
+							<p:commandButton id="btnBorrar"
+								style="font-size:14px; font-weight: normal; text-decoration: none !important;"
+								action="#{administrarVenta.cancelarConsultaVenta()}"
+								process="@this" value="#{mensaje.cancelar}"
+								update=":formCompras">
+
+								<p:resetInput target=":formCompras:pnlVenta" />
+
+							</p:commandButton>
+
+						</div>
+
+
+						<p:blockUI block=":formCompras:pnlVenta"
+							trigger="btnConsultar, btnBorrar">
+
+							<p:graphicImage value="../imagenes/cargando.gif" />
+
+
+						</p:blockUI>
+					</p:tab>
+				</p:accordionPanel>
+
+				<p:spacer height="30" />
+				<p:accordionPanel id="pnlDtlTransaccionesAprobadas">
+					<p:tab title="#{mensaje.listadoTransaccionesEfectuadas}"
+						titleStyle="font-size:16px" closable="true">
+
+						<p:dataTable var="loc" id="dtlTransaccionesAprobadas"
+							rowIndexVar="item" value="#{administrarVenta.ventas}"
+							reflow="true" rows="10" paginator="true"
+							paginatorPosition="bottom" draggableColumns="true"
+							emptyMessage="#{mensaje.noExistenciaVentasTodas}">
+							<p:column headerText="#"
+								style="font-size:14px; text-align:right; width:15px">
+								<p:outputLabel value="#{(item+1)}"
+									style="font-weight:normal; font-size:14px" />
+							</p:column>
+							<p:column headerText="#{mensaje.fechaTransaccion}"
+								sortBy="#{loc.fechaTransaccion}"
+								filterBy="#{loc.fechaTransaccion}" style="font-size:14px; width:100px">
+								<p:outputLabel value="#{loc.fechaTransaccion}"
+									style="font-weight:normal; font-size:14px" />
+							</p:column>
+							
+							<p:column headerText="#{mensaje.idReferencia}"
+								sortBy="#{loc.id}"
+								style="font-size:14px; text-align:right">
+								<p:outputLabel value="#{loc.id}"
+									style="font-weight:normal; font-size:14px" />
+
+							</p:column>
+
+							<p:column headerText="#{mensaje.compradorSimple}"
+								sortBy="#{loc.comprador.nombreCompleto}" style="font-size:14px">
+								<p:outputLabel value="#{loc.comprador.nombreCompleto}" rendered="#{loc.comprador!=null and loc.comprador.id!=null}"
+									style="font-weight:normal; font-size:14px" />
+									
+									<p:outputLabel value="-" rendered="#{!(loc.comprador!=null and loc.comprador.id!=null)}"
+									style="font-weight:normal; font-size:14px" />	
+
+							</p:column>
+							<p:column headerText="#{mensaje.convenio}"
+								sortBy="#{loc.tarjeta.convenio.nombre}" style="font-size:14px">  
+								<p:outputLabel value="#{loc.tarjeta.convenio.nombre} (#{loc.tarjeta.porcentajeComisionAplicado} %)" rendered="#{loc.tarjeta!=null and loc.tarjeta.convenio!=null and loc.tarjeta.convenio.nombre!=null}"
+									style="font-weight:normal; font-size:12px" />
+									<p:outputLabel value="-" rendered="#{!(loc.tarjeta!=null and loc.tarjeta.convenio!=null and loc.tarjeta.convenio.nombre!=null)}"
+									style="font-weight:normal; font-size:14px" />
+
+							</p:column>
+
+							
+
+							<p:column headerText="#{mensaje.itemsResumen}"
+								sortBy="#{loc.cantidadTotalVenta}"
+								style="font-size:14px; text-align:right; width:50px">  
+								<p:outputLabel value="#{loc.cantidadTotalVenta}"
+									style="font-weight:normal; font-size:14px" />
+
+							</p:column>
+
+							<p:column headerText="#{mensaje.precioSinImpuestos}"
+								sortBy="#{loc.valorTotalVenta}"
+								style="font-size:14px; text-align:right">    
+								<p:outputLabel value="#{loc.valorTotalVenta}"
+									rendered="#{loc.moneda=='COP'}"
+									style="font-weight:normal; font-size:14px">
+
+									<f:convertNumber type="currency" currencySymbol="$ " />
+								</p:outputLabel>
+								<p:outputLabel value="#{loc.valorTotalVenta}"
+									rendered="#{loc.moneda!='COP'}"
+									style="font-weight:normal; font-size:14px">
+
+									<f:convertNumber type="currency" currencySymbol="US$ " />
+								</p:outputLabel>
+
+							</p:column>
+							<p:column headerText="#{mensaje.impuestos}"
+								sortBy="#{loc.valorTotalIva}"
+								style="font-size:14px; text-align:right">
+								<p:outputLabel value="#{loc.valorTotalIva}"
+									rendered="#{loc.moneda=='COP'}"
+									style="font-weight:normal; font-size:14px">
+									<f:convertNumber type="currency" currencySymbol="$ " />
+								</p:outputLabel>
+								<p:outputLabel value="#{loc.valorTotalIva}"
+									rendered="#{loc.moneda!='COP'}"
+									style="font-weight:normal; font-size:14px">
+									<f:convertNumber type="currency" currencySymbol="US$ " />
+								</p:outputLabel>
+
+							</p:column>
+
+							<p:column headerText="#{mensaje.gananaciaConvenio}"
+								sortBy="#{loc.gananaciaConvenio}"
+								style="font-size:14px; text-align:right">
+								<p:outputLabel value="#{loc.gananaciaConvenio}"
+									rendered="#{loc.moneda=='COP'}"
+									style="font-weight:bold; font-size:14px">
+									<f:convertNumber type="currency" currencySymbol="$ " />
+								</p:outputLabel>
+								<p:outputLabel value="#{loc.gananaciaConvenio}"
+									rendered="#{loc.moneda!='COP'}"
+									style="font-weight:bold; font-size:14px">
+									<f:convertNumber type="currency" currencySymbol="US$ " />
+								</p:outputLabel>
+
+							</p:column>
+							
+							<p:column headerText="#{mensaje.totalTransaccion}"
+								sortBy="#{loc.valorTotalConIva}"
+								style="font-size:14px; text-align:right">
+								<p:outputLabel value="#{loc.valorTotalConIva}"
+									rendered="#{loc.moneda=='COP'}"
+									style="font-weight:bold; font-size:14px">
+									<f:convertNumber type="currency" currencySymbol="$ " />
+								</p:outputLabel>
+								<p:outputLabel value="#{loc.valorTotalConIva}"
+									rendered="#{loc.moneda!='COP'}"
+									style="font-weight:bold; font-size:14px">
+									<f:convertNumber type="currency" currencySymbol="US$ " />
+								</p:outputLabel>
+
+							</p:column>
+
+
+
+							<p:column headerText="#{mensaje.estadoTransaccion}"
+								style="font-size:14px; text-align:left">
+								<p:outputLabel value="#{mensaje.transaccionAprobada} #{loc.idTransaccion}"
+									style="font-weight:normal; font-size:14px"
+									rendered="#{loc.estadoTransaccion =='A'}" />
+								<p:outputLabel value="#{mensaje.transaccionPendiente}"
+									style="font-weight:normal; font-size:14px"
+									rendered="#{loc.estadoTransaccion!='A'}" />
+
+							</p:column>
+							<p:column headerText="#{mensaje.acciones}"
+								style="font-size:14px; text-align:center;">
+								<p:commandButton id="btnIrDetalle"
+									style="background-origin: content-box; background-image: url('../imagenes/buscar.png'); background-size: cover; background-repeat:no-repeat; width:16px; height:16px; vertical-align:bottom; border:0; background-color:transparent"
+									value=""
+									action="#{administrarVenta.asignarVenta(loc,'DETALLE_VENTA')}"
+									process="dtlTransaccionesAprobadas" update=":formVerVentas" />
+								<p:tooltip for="btnIrDetalle"
+									value="#{mensaje.verDetalleVentas}" trackMouse="true" />
+
+
+								<p:commandButton id="btnIrEliminar"
+									rendered="#{loc.estadoTransaccion=='P'}"
+									style="background-origin: content-box; background-image: url('../imagenes/borrar.png'); background-size: cover; background-repeat:no-repeat; width:16px; height:16px; vertical-align:bottom; border:0; background-color:transparent"
+									value=""
+									action="#{administrarVenta.asignarVenta(loc,'ELIMINAR_VENTA')}"
+									process="dtlTransaccionesAprobadas" update=":formEliminarVenta" />
+
+
+								<p:tooltip for="btnIrEliminar" value="#{mensaje.eliminar}"
+									trackMouse="true" />
+
+
+								<p:commandButton id="btnIrAprobar"
+									rendered="#{loc.estadoTransaccion=='P'}"
+									style="background-origin: content-box; background-image: url('../imagenes/a_mayuscula.png'); background-size: cover; background-repeat:no-repeat; width:16px; height:16px; vertical-align:bottom; border:0; background-color:transparent"
+									value=""
+									action="#{administrarVenta.asignarVenta(loc,'APROBAR_VENTA')}"
+									process="dtlTransaccionesAprobadas" update=":formAprobar" />
+
+
+								<p:tooltip for="btnIrAprobar"
+									value="#{mensaje.aprobarVentaManualmente}" trackMouse="true" />
+
+							</p:column>
+
+
+							<p:columnGroup type="footer"
+								rendered="#{administrarVenta.venta.moneda!=null}">
+								<p:row>  
+
+									<p:column style="text-align:right; font-size:14px" colspan="5"
+										footerText="#{mensaje.TOTAL}" /> 
+									<p:column style="text-align:right; font-size:14px"
+										footerText="#{administrarVenta.totales.get('cantidad')} " />
+									<p:column style="text-align:right; font-size:14px"
+										rendered="#{administrarVenta.venta.moneda == 'COP'}"
+										footerText="#{administrarArbolito.getMoneda('COP',administrarVenta.totales.get('precioSinIva'))}" />
+
+									<p:column style="text-align:right; font-size:14px"
+										rendered="#{administrarVenta.venta.moneda == 'US'}"
+										footerText="#{administrarArbolito.getMoneda('US',administrarVenta.totales.get('precioSinIva'))}" />
+
+
+
+									<p:column style="text-align:right; font-size:14px"
+										footerText=" " />
+										
+									<p:column style="text-align:right; font-size:14px"
+										rendered="#{administrarVenta.venta.moneda == 'COP'}"
+										footerText="#{administrarArbolito.getMoneda('COP',administrarVenta.totales.get('gananciaConvenio'))}" />
+
+									<p:column style="text-align:right; font-size:14px"
+										rendered="#{administrarVenta.venta.moneda == 'US'}"
+										footerText="#{administrarArbolito.getMoneda('US',administrarVenta.totales.get('gananciaConvenio'))}" />	
+
+									<p:column style="text-align:right; font-size:14px"
+										rendered="#{administrarVenta.venta.moneda == 'COP'}"
+										footerText="#{administrarArbolito.getMoneda('COP',administrarVenta.totales.get('precioConIva'))}" />
+
+									<p:column style="text-align:right; font-size:14px"
+										rendered="#{administrarVenta.venta.moneda == 'US'}"
+										footerText="#{administrarArbolito.getMoneda('US',administrarVenta.totales.get('precioConIva'))}" />
+
+
+									<p:column style="text-align:right; font-size:14px" colspan="2"
+										footerText=" " />
+
+
+
+
+								</p:row>
+							</p:columnGroup>
+						</p:dataTable>
+
+					</p:tab>
+				</p:accordionPanel>
+
+			</p:outputPanel>
+		</h:form>
+		<ui:include src="/ventas/verVentaEfectuada.xhtml" />
+		<ui:include src="/ventas/eliminarVentaEfectuada.xhtml" />
+		<ui:include src="/ventas/aprobarVentaManual.xhtml" />
+
+
+		<p:spacer height="400" />
+
+	</ui:define>
+</ui:composition>

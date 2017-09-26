@@ -1,0 +1,318 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/plantillas/principal.xhtml">
+
+	<ui:define name="body">
+
+		<h:form id="form">
+			<p:growl id="messages" showDetail="true" globalOnly="true" />
+			<p:remoteCommand name="onload" process="@this"
+				action="#{administrarSesionCliente.getNoRolAdmitido()}"
+				autoRun="true" />
+			
+
+
+			<div class="row x_title">
+				<div class="col-md-6">
+					<p:outputLabel value="#{mensaje.moduloLotes}: "
+						styleClass="tituloPrincipal" />
+					<p:spacer width="2" />
+					<p:outputLabel value="#{mensaje.administracionLote}"
+						styleClass="tituloPrincipal" />
+				</div>
+			</div>
+
+			<div align="center" class="titulo"></div>
+
+			<p:outputPanel id="pnlLotes"
+				rendered="#{administrarLote.vistaActual==null or administrarLote.vistaActual == 'lotes'}">
+
+				<p:spacer height="10" />
+
+				<p:accordionPanel id="pnlCrearLote">
+					<p:tab title="#{mensaje.crearlote}" titleStyle="font-size:16px"
+						closable="true">
+
+
+
+						<p:panelGrid columns="5" cellpadding="0" cellspacing="0"
+							styleClass="ui-panelgrid-blank">
+
+							<p:outputLabel for="txtNombre" value="#{mensaje.nombre}"
+								style="font-weight:bold; font-size:14px" />
+							<p:inputText id="txtNombre"
+								value="#{administrarLote.lote.nombreLote}" required="true"
+								label="#{mensaje.nombre}" style="width:100%; font-size:14px" />
+							<p:graphicImage value="../imagenes/ayuda.png"
+								id="ayudaNombreLote" />
+							<p:tooltip value="#{mensaje.ayudaNombreLote}" trackMouse="true"
+								for="ayudaNombreLote" />
+							<p:message for="txtNombre" />
+
+
+
+
+							<p:outputLabel for="txtDescripcion"
+								value="#{mensaje.descripcion}"
+								style="font-weight:bold; font-size:14px" />
+
+							<p:editor value="#{administrarLote.lote.descripcionLote}"
+								id="txtDescripcion" style="font-size:14px" />
+							<p:graphicImage value="../imagenes/ayuda.png"
+								id="ayudaDescripcionLote" />
+							<p:tooltip value="#{mensaje.ayudaDescripcionLote}"
+								trackMouse="true" for="ayudaDescripcionLote" />
+							<p:message for="txtDescripcion" />
+
+							<p:outputLabel for="lstArbolito"
+								value="#{mensaje.arbolitoActivo}"
+								style="font-weight:bold; font-size:14px;" />
+							<p:selectOneMenu id="lstArbolito" required="true"
+								style="font-size:14px; width:100%"
+								value="#{administrarLote.lote.arbolito.id}"
+								label="#{mensaje.arbolito}">
+								<f:selectItems value="#{administrarLote.itemsArbolitos}" />
+							</p:selectOneMenu>
+
+							<p:graphicImage value="../imagenes/ayuda.png"
+								id="ayudaIndicativoArbolito" />
+							<p:tooltip value="#{mensaje.ayudaIndicativoInfinito}"
+								trackMouse="true" for="ayudaIndicativoArbolito" />
+							<p:message for="lstArbolito" />
+
+
+							<p:outputLabel for="lstIndicativo"
+								value="#{mensaje.indicativoInfinito}"
+								style="font-weight:bold; font-size:14px;" />
+							<p:selectOneMenu id="lstIndicativo" required="true"
+								style="font-size:14px;"
+								value="#{administrarLote.lote.indicativoInfinito}"
+								label="#{mensaje.indicativoInfinito}">
+								<f:selectItem itemLabel="#{mensaje.comboVacio}" itemValue="" />
+								<f:selectItem itemLabel="#{mensaje.SI}" itemValue="S" />
+								<f:selectItem itemLabel="#{mensaje.NO}" itemValue="N" />
+
+								<p:ajax event="change"
+									update="outInfinito1, outInfinito2, outInfinito3, outInfinito4, outInfinito5"
+									process="lstIndicativo" />
+							</p:selectOneMenu>
+							<p:graphicImage value="../imagenes/ayuda.png"
+								id="ayudaIndicativoInfinito" />
+							<p:tooltip value="#{mensaje.ayudaIndicativoInfinito}"
+								trackMouse="true" for="ayudaIndicativoInfinito" />
+							<p:message for="lstIndicativo" />
+
+							<p:outputPanel id="outInfinito1">
+								<p:outputLabel for="txtCantidad"
+									rendered="#{administrarLote.lote.indicativoInfinito == 'N'}"
+									value="#{mensaje.cantidadDisponible}"
+									style="font-weight:bold; font-size:14px" />
+							</p:outputPanel>
+							<p:outputPanel id="outInfinito2">
+								<p:inputText id="txtCantidad"
+									rendered="#{administrarLote.lote.indicativoInfinito == 'N'}"
+									value="#{administrarLote.lote.cantidadDisponible}"
+									required="true" label="#{mensaje.cantidadDisponible}"
+									style="font-size:14px" />
+							</p:outputPanel>
+
+							<p:outputPanel id="outInfinito3">
+								<p:graphicImage value="../imagenes/ayuda.png"
+									rendered="#{administrarLote.lote.indicativoInfinito == 'N'}"
+									id="ayudaCantidadDisponibleLote" />
+							</p:outputPanel>
+							<p:outputPanel id="outInfinito4">
+								<p:tooltip value="#{mensaje.ayudaCantidadDisponibleLote}"
+									rendered="#{administrarLote.lote.indicativoInfinito == 'N'}"
+									trackMouse="true" for="ayudaCantidadDisponibleLote" />
+							</p:outputPanel>
+							<p:outputPanel id="outInfinito5">
+								<p:message for="txtCantidad"
+									rendered="#{administrarLote.lote.indicativoInfinito == 'N'}" />
+							</p:outputPanel>
+
+
+
+						</p:panelGrid>
+						<p:spacer height="10" />
+						<div align="center">
+							<p:commandButton id="btnCrearLote"
+								style="font-size:14px; font-weight: normal !important;"
+								action="#{administrarLote.crearLote()}"
+								value="#{mensaje.guardar}" update=":form" />
+
+							<p:spacer width="10" />
+							<p:commandButton id="btnBorrarlote"
+								style="font-size:14px; font-weight: normal; text-decoration: none !important;"
+								action="#{administrarLote.cancelarLote()}" process="@this"
+								value="#{mensaje.cancelar}" update=":form">
+
+								<p:resetInput target=":form:pnlLotes" />
+
+							</p:commandButton>
+
+						</div>
+						<p:outputLabel value="#{mensaje.informacionRequerida}"
+							style="font-size:10px" />
+
+						<p:blockUI block=":form:pnlCrearLote"
+							trigger="btnCrearLote, btnBorrarlote">
+
+							<p:graphicImage value="../imagenes/cargando.gif" />
+
+
+						</p:blockUI>
+					</p:tab>
+				</p:accordionPanel>
+
+				<p:spacer height="30" />
+				<p:accordionPanel id="pnlDtlLotes">
+					<p:tab title="#{mensaje.listadoLotes}" titleStyle="font-size:16px"
+						closable="true">
+
+						<p:dataTable var="loc" id="dtlLotes"
+							value="#{administrarLote.lotes}" reflow="true" rows="10"
+							paginator="true" paginatorPosition="bottom"
+							draggableColumns="true"
+							emptyMessage="#{mensaje.noExistenciaLotes}">
+
+
+							<p:column headerText="#{mensaje.nombre}"
+								sortBy="#{loc.nombreLote}" filterBy="#{loc.nombreLote}"
+								style="font-size:14px">
+								<p:outputLabel value="#{loc.nombreLote}"
+									style="font-weight:normal; font-size:12px" />
+							</p:column>
+
+
+							<p:column headerText="#{mensaje.arbolito}"
+								sortBy="#{loc.arbolito.nombre}" style="font-size:14px">
+
+
+
+								<p:outputLabel value="#{loc.arbolito.nombre}"
+									style="font-weight:normal; font-size:12px" />
+
+
+							</p:column>
+
+
+							<p:column headerText="#{mensaje.indicativoInfinito}"
+								sortBy="#{loc.indicativoInfinito}" style="font-size:14px">
+
+
+
+								<p:outputLabel value="#{mensaje.SI}"
+									style="font-weight:normal; font-size:12px"
+									rendered="#{loc.indicativoInfinito == 'S'}" />
+								<p:outputLabel value="#{mensaje.NO}"
+									style="font-weight:normal; font-size:12px"
+									rendered="#{loc.indicativoInfinito == 'N'}" />
+
+
+							</p:column>
+
+							<p:column headerText="#{mensaje.cantidadDisponible}"
+								sortBy="#{loc.cantidadDisponible}"
+								style="font-size:14px; text-align:right;">
+								<p:outputLabel value="#{loc.cantidadDisponible}"
+									rendered="#{loc.indicativoInfinito == 'N'}"
+									style="font-weight:normal; font-size:12px" />
+
+								<p:outputLabel value="#{mensaje.noAplica}"
+									rendered="#{loc.indicativoInfinito == 'S'}"
+									style="font-weight:normal; font-size:12px" />
+							</p:column>
+
+
+
+							<p:column headerText="#{mensaje.lotesUsados}"
+								sortBy="#{loc.cantidadVendida}"
+								style="font-size:14px; text-align:right;">
+								<p:outputLabel value="#{loc.cantidadVendida}"
+									style="font-weight:normal; font-size:12px" />
+							</p:column>
+
+
+							<p:column headerText="#{mensaje.acciones}"
+								style="font-size:14px; text-align:center;">
+
+
+								<p:commandButton id="btnIrEditar"
+									style="background-origin: content-box; background-image: url('../imagenes/editar.png'); background-size: cover; background-repeat:no-repeat; width:16px; height:16px; vertical-align:bottom; border:0; background-color:transparent"
+									action="#{administrarLote.asignarLote(loc,'MODAL_EDITAR_LOTE')}"
+									value="" process=":form:pnlDtlLotes" update=":formEditar" />
+
+								<p:commandButton id="btnIrEliminar"
+									style="background-origin: content-box; background-image: url('../imagenes/borrar.png'); background-size: cover; background-repeat:no-repeat; width:16px; height:16px; vertical-align:bottom; border:0; background-color:transparent"
+									value=""
+									action="#{administrarLote.asignarLote(loc,'MODAL_ELIMINAR_LOTE')}"
+									process="dtlLotes" update=":formEliminar" />
+
+
+								<p:commandButton value=""
+									style="background-origin: content-box; background-image: url('../imagenes/f_minuscula.png'); background-size: cover; background-repeat:no-repeat; width:16px; height:16px; vertical-align:bottom; border:0; background-color:transparent"
+									id="btnIrPregunta" title="#{mensaje.fotosArbolitoLote}"
+									action="#{administrarLote.asignarLote(loc,'VISTA_FOTOS')}"
+									process="@this" update=":formAsignarArbolito, :form" />
+
+
+								<p:tooltip for="btnIrEliminar" value="#{mensaje.eliminar}"
+									trackMouse="true" />
+
+								<p:tooltip for="btnIrEditar" value="#{mensaje.editar}"
+									trackMouse="true" />
+
+
+
+
+
+							</p:column>
+
+							<p:columnGroup type="footer">
+								<p:row>
+
+									<p:column style="text-align:right; font-size:14px"
+										footerText="#{mensaje.TOTAL}" colspan="3" />
+									<p:column style="text-align:right; font-size:14px"
+										footerText="#{administrarLote.totales.get('cantidadDisponible')}" />
+
+									<p:column style="text-align:right; font-size:14px"
+										footerText="#{administrarLote.totales.get('arbolitosVendidos')}" />
+
+
+
+									<p:column style="text-align:right; font-size:14px" />
+
+
+
+
+								</p:row>
+							</p:columnGroup>
+
+						</p:dataTable>
+
+					</p:tab>
+				</p:accordionPanel>
+
+			</p:outputPanel>
+		</h:form>
+
+
+
+		<ui:include src="/lotes/crearFotoArbolLote.xhtml" />
+		<ui:include src="/lotes/editarFotoArbolLote.xhtml" />
+		<ui:include src="/lotes/eliminarFotoArbolLote.xhtml" />
+
+		<ui:include src="/lotes/editarLote.xhtml" />
+		<ui:include src="/lotes/eliminarLote.xhtml" />
+
+
+
+
+	</ui:define>
+</ui:composition>

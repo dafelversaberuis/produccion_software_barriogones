@@ -1,0 +1,288 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/plantillas/principalClienteIndex.xhtml">
+	<ui:define name="body">
+		<style type="text/css">
+#arbolito {
+	height: auto;
+	width: 100%;
+	background-repeat: no-repeat;
+}
+</style>
+		<h:form id="formCompras">
+			<p:growl id="messages" showDetail="true" globalOnly="true" />
+			<div id="wrapper">
+				<section id="project-single" class="page">
+				<div id="content">
+					<section class="section" id="about">
+					<div class="container">
+						<div class="row">
+							<div class="col-xs-12">
+								<div class="project-page-header">
+									<h1 class="project-title">#{mensaje.donarArbolVida}</h1>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="project-single-entry">
+
+						<div class="image-slider">
+							<ul data-timeout="5000">
+								<li><img
+									src="/barrigones/plantillas/images/backgrounds/background_1.jpg"
+									alt="imagen_subseccion" /></li>
+								<li><img
+									src="/barrigones/plantillas/images/backgrounds/background_2.jpg"
+									alt="imagen_subseccion" /></li>
+							</ul>
+						</div>
+					</div>
+					<!--/ .folio-single-entry-->
+
+
+					<div class="container">
+
+						<div class="row">
+							<div class="col-xs-12" align="center"
+								style="background: transparent;">
+								<hgroup class="section-title align-center">
+								<h2>#{mensaje.comoApoyar}</h2>
+								</hgroup>
+
+
+
+								<section class="simple-pricing-table col-4 clearfix">
+
+								<ui:repeat var="loc"
+									value="#{administrarSesionCliente.arbolitosActivos}">
+									<div class="column">
+										<header class="header">
+
+
+
+
+
+										<h5 class="title">
+											<p:outputPanel style="font-weight: bold; font-size:16px"
+												rendered="#{administrarSesionCliente.idioma=='ES'}">
+										#{loc.nombre}
+										</p:outputPanel>
+											<p:outputPanel style="font-weight: bold; font-size:16px"
+												rendered="#{administrarSesionCliente.idioma!='ES'}">
+										#{loc.nombreUS}
+										</p:outputPanel>
+										</h5>
+										<p:imageSwitch effect="fade" id="fadeEffect" speed="10000"
+											style="width: 100%; height: auto; vertical-align: bottom;">
+											<ui:repeat value="#{loc.TNombresFotos}" var="det">
+												<img src="imagenes/arbolitosApp/#{det}"
+													style="width: 100%; height: auto; vertical-align: bottom;" />
+
+											</ui:repeat>
+										</p:imageSwitch> </header>
+										<!-- .header -->
+
+										<div class="price">
+											<h2 class="cost">
+												<p:outputLabel value="#{loc.precioVentaPesosConIva}"
+													styleClass="cost"
+													rendered="#{administrarSesionCliente.moneda == null or administrarSesionCliente.moneda=='COP'}">
+													<f:convertNumber type="currency" currencySymbol="$" />
+												</p:outputLabel>
+												<p:outputLabel value="#{loc.precioVentaUSConIva}"
+													styleClass="cost"
+													rendered="#{administrarSesionCliente.moneda != null and administrarSesionCliente.moneda=='US'}">
+													<f:convertNumber type="currency" currencySymbol="$ " />
+												</p:outputLabel>
+											</h2>
+											<span class="description">#{administrarSesionCliente.moneda}</span>
+
+										</div>
+										<!--/ .price-->
+
+										<ul class="features">
+											<li>
+												<div align="center">
+													<p:outputPanel
+														style="font-size:16px; font-weight:normal; color: black"
+														rendered="#{administrarSesionCliente.idioma=='ES'}">
+										#{loc.descripcion}
+										</p:outputPanel>
+													<p:outputPanel
+														style="font-size:16px; font-weight:normal; color: black"
+														rendered="#{administrarSesionCliente.idioma!='ES'}">
+										#{loc.descripcionUS}
+										</p:outputPanel>
+												</div>
+											</li>
+										</ul>
+										<!-- .features -->
+
+
+
+										<footer class="footer"> <p:inputText
+											value="#{loc.tcantidadCarrito}" required="true"
+											id="txtCantidad" label="#{mensaje.cantidad}"
+											style="font-weight:normal; font-size:14px; width:60px; height:20px; color:#000000; text-align:center; background-color:white" />
+										<p:message for="txtCantidad" /> <br />
+										<p:commandLink styleClass="button default add-to-cart"
+											action="#{administrarSesionCliente.agregarCarrito(loc)}"
+											process=":formCompras" update=":formCompras">
+											#{mensaje.adoptarlo}</p:commandLink> </footer>
+										<!-- .footer -->
+									</div>
+								</ui:repeat> <ui:repeat var="loc"
+									value="#{administrarSesionCliente.bolsasActivas}">
+									<div class="column">
+										<header class="header">
+
+										<div style="text-align: center; width: 100%">
+
+
+											<h5 class="title">
+												<p:outputPanel style="font-weight: bold; font-size:16px"
+													rendered="#{administrarSesionCliente.idioma=='ES'}">
+										#{mensaje.bolsa} #{loc.arbolito.nombre}
+										</p:outputPanel>
+												<p:outputPanel style="font-weight: bold; font-size:16px"
+													rendered="#{administrarSesionCliente.idioma!='ES'}">
+										#{mensaje.bolsa} #{loc.arbolito.nombreUS}
+										</p:outputPanel>
+
+											</h5>
+
+											<img src="imagenes/arbolitosApp/arbolito1.png"
+												style="width: 100%; height: auto; z-index: 1000; vertical-align: bottom;" />
+											<div
+												style="width: 100%; height: auto; z-index: 1500; top: 74px; left: 0px; float: none; position: absolute; vertical-align: bottom;">
+												<img src="imagenes/arbolitosApp/bolsa.png"
+													style="width: 100%; height: auto; vertical-align: bottom;" />
+											</div>
+
+											<h5 class="title"
+												style="z-index: 2000; position: absolute; float: none; top: 350px; width: 100%;">
+
+												<p:outputLabel value="x"
+													style="font-weight: bold; font-size:50px" />
+												<p:outputLabel value="#{loc.cantidadDisponible}"
+													style="font-weight: bold; font-size:85px; "
+													rendered="#{10 > loc.cantidadDisponible.intValue()}" />
+												<p:outputLabel value="#{loc.cantidadDisponible}"
+													style="font-weight: bold; font-size:85px"
+													rendered="#{loc.cantidadDisponible.intValue()>=10 and 100> loc.cantidadDisponible.intValue()}" />
+
+												<p:outputLabel value="#{loc.cantidadDisponible}"
+													style="font-weight: bold; font-size:85px"
+													rendered="#{loc.cantidadDisponible.intValue()>=100}" />
+
+											</h5>
+										</div>
+										</header>
+										<!-- .header -->
+
+										<div class="price">
+											<h2 class="cost">
+												<p:outputLabel value="#{loc.precioVentaPesosConIva}"
+													styleClass="cost"
+													rendered="#{administrarSesionCliente.moneda == null or administrarSesionCliente.moneda=='COP'}">
+													<f:convertNumber type="currency" currencySymbol="$" />
+												</p:outputLabel>
+												<p:outputLabel value="#{loc.precioVentaUSConIva}"
+													styleClass="cost"
+													rendered="#{administrarSesionCliente.moneda != null and administrarSesionCliente.moneda=='US'}">
+													<f:convertNumber type="currency" currencySymbol="$ " />
+												</p:outputLabel>
+											</h2>
+											<span class="description">#{administrarSesionCliente.moneda}</span>
+
+										</div>
+										<!--/ .price-->
+
+										<ul class="features">
+											<li>
+												<div align="center">
+													<p:outputPanel
+														style="font-size:16px; font-weight:normal; color: black"
+														rendered="#{administrarSesionCliente.idioma=='ES'}">
+										#{loc.arbolito.descripcion}
+										</p:outputPanel>
+													<p:outputPanel
+														style="font-size:16px; font-weight:normal; color: black"
+														rendered="#{administrarSesionCliente.idioma!='ES'}">
+										#{loc.arbolito.descripcionUS}
+										</p:outputPanel>
+												</div>
+											</li>
+										</ul>
+										<!-- .features -->
+
+
+
+										<footer class="footer"> <p:inputText
+											value="#{loc.arbolito.tcantidadCarrito}" required="true"
+											id="txtCantidad" label="#{mensaje.cantidad}"
+											style="font-weight:normal; font-size:14px; width:60px; height:20px; color:#000000; text-align:center; background-color:white" />
+										<p:message for="txtCantidad" /> <br />
+										<p:commandLink styleClass="button default add-to-cart"
+											action="#{administrarSesionCliente.agregarCarrito(loc.arbolito)}"
+											process=":formCompras" update=":formCompras">
+											#{mensaje.adquirirBolsa}</p:commandLink> </footer>
+										<!-- .footer -->
+									</div>
+								</ui:repeat> </section>
+
+								<br /> <br />
+								<div align="center">
+									<p:commandLink
+										styleClass="button turquoise submit fa fa-shopping-cart"
+										style="font-size:18px; font-weight:normal !important; width:50%; height:30px"
+										ajax="false"
+										action="/arbolitos/adopcionCliente/pedidoActual.xhtml?faces-redirect=true"
+										value=" #{mensaje.procederConAdopacion}" />
+
+
+
+
+									<br /> <a
+										href="https://www.facebook.com/notes/fundación-federico-restrepo-carvajal/los-barrigones-fuente-de-vida/478260895717419"
+										target="_blank"
+										style="font-size: 12px; font-weight: normal !important;">#{mensaje.conocerAcercaProyecto}</a>
+								</div>
+
+
+							</div>
+
+						</div>
+						<!--/ .row-->
+
+
+
+
+
+
+
+
+
+
+					</div>
+					<!--/ .container--> <!--/ .project-similar--> </section>
+					<!--/ .section-->
+
+				</div>
+				</section>
+
+			</div>
+<!--
+			<p:outputLabel
+				value="#{despertarIdleDesdeIndex.getDespertarIdleOpenshift()}" />
+				-->
+		</h:form>
+
+
+
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,201 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/plantillas/principal.xhtml">
+
+	<ui:define name="body">
+
+		<h:form id="form">
+			<p:growl id="messages" showDetail="true" globalOnly="true" />
+			<p:remoteCommand name="onload" process="@this"
+				action="#{administrarSesionCliente.getNoRolAdmitido()}"
+				autoRun="true" />
+			
+
+
+			<div class="row x_title">
+				<div class="col-md-6">
+					<p:outputLabel value="#{mensaje.moduloParametros}: "
+						styleClass="tituloPrincipal" />
+					<p:spacer width="2" />
+					<p:outputLabel value="#{mensaje.conveniosEmpresas}"
+						styleClass="tituloPrincipal" />
+				</div>
+			</div>
+
+			<div align="center" class="titulo"></div>
+
+			<p:outputPanel id="pnlConvenio">
+
+				<p:spacer height="10" />
+
+				<p:accordionPanel id="pnlCrearConvenio">
+					<p:tab title="#{mensaje.crearConvenio}" titleStyle="font-size:16px"
+						closable="true">
+
+						<p:panelGrid columns="3" cellpadding="0" cellspacing="0"
+							styleClass="ui-panelgrid-blank">
+
+							<p:outputLabel for="txtNombre"
+								value="#{mensaje.nombreEmpresaConvenio}"
+								style="font-weight:bold; font-size:14px" />
+							<p:inputText id="txtNombre"
+								value="#{hacerMantenimiento.convenio.nombre}" required="true"
+								label="#{mensaje.nombre}" style="width:100%; font-size:14px" />
+
+
+							<p:message for="txtNombre" />
+
+
+							<p:outputLabel for="txtEncargado"
+								value="#{mensaje.personaEncargada}"
+								style="font-weight:bold; font-size:14px" />
+							<p:inputText id="txtEncargado"
+								value="#{hacerMantenimiento.convenio.encargado}" required="true"
+								label="#{mensaje.nombre}" style="width:100%; font-size:14px" />
+
+
+							<p:message for="txtEncargado" />
+
+
+
+							<p:outputLabel for="txtTelefonosContacto"
+								value="#{mensaje.telefonosContacto}"
+								style="font-weight:bold; font-size:14px" />
+							<p:inputText id="txtTelefonosContacto"
+								value="#{hacerMantenimiento.convenio.telefonos}" required="true"
+								label="#{mensaje.nombre}" style="width:100%; font-size:14px" />
+
+
+							<p:message for="txtTelefonosContacto" />
+
+
+
+							<p:outputLabel for="lstIVA" value="#{mensaje.comisionEmpresa}"
+								style="font-weight:bold; font-size:14px;" />
+							<p:selectOneMenu id="lstIVA" required="true"
+								style="font-size:14px;"
+								value="#{hacerMantenimiento.convenio.comision.id}"
+								label="#{mensaje.comisionEmpresa}">
+								<f:selectItems value="#{hacerMantenimiento.itemsIva}" />
+
+							</p:selectOneMenu>
+
+							<p:message for="lstIVA" />
+
+
+						</p:panelGrid>
+						<p:spacer height="10" />
+						<div align="center">
+							<p:commandButton id="btnCrearConvenio"
+								style="font-size:14px; font-weight: normal !important;"
+								action="#{hacerMantenimiento.crearConvenio()}"
+								value="#{mensaje.guardar}" update=":form" />
+
+							<p:spacer width="10" />
+							<p:commandButton id="btnBorrarConvenio"
+								style="font-size:14px; font-weight: normal; text-decoration: none !important;"
+								action="#{hacerMantenimiento.cancelarConvenio()}"
+								process="@this" value="#{mensaje.cancelar}" update=":form">
+
+								<p:resetInput target=":form:pnlConvenio" />
+
+							</p:commandButton>
+
+						</div>
+						<p:outputLabel value="#{mensaje.informacionRequerida}"
+							style="font-size:10px" />
+
+						<p:blockUI block=":form:pnlCrearConvenio"
+							trigger="btnCrearConvenio, btnBorrarConvenio">
+
+							<p:graphicImage value="../imagenes/cargando.gif" />
+
+
+						</p:blockUI>
+					</p:tab>
+				</p:accordionPanel>
+
+				<p:spacer height="30" />
+				<p:accordionPanel id="pnlDtlConvenio">
+					<p:tab title="#{mensaje.listadoConvenio}"
+						titleStyle="font-size:16px" closable="true">
+
+						<p:dataTable var="loc" id="dtlConvenio"
+							value="#{hacerMantenimiento.convenios}" reflow="true" rows="10"
+							paginator="true" paginatorPosition="bottom"
+							draggableColumns="true"
+							emptyMessage="#{mensaje.noExistenciaConvenios}">
+							<p:column headerText="#{mensaje.nombreEmpresaConvenio}"
+								sortBy="#{loc.nombre}" filterBy="#{loc.nombre}"
+								style="font-size:14px">
+								<p:outputLabel value="#{loc.nombre}" style="font-weight:normal" />
+							</p:column>
+							<p:column headerText="#{mensaje.personaEncargada}"
+								sortBy="#{loc.encargado}" filterBy="#{loc.encargado}"
+								style="font-size:14px">
+								<p:outputLabel value="#{loc.encargado}"
+									style="font-weight:normal" />
+							</p:column>
+							<p:column headerText="#{mensaje.telefonosContacto}"
+								sortBy="#{loc.telefonos}" filterBy="#{loc.telefonos}"
+								style="font-size:14px">
+								<p:outputLabel value="#{loc.telefonos}"
+									style="font-weight:normal" />
+							</p:column>
+
+
+							<p:column headerText="#{mensaje.comisionEmpresa}"
+								sortBy="#{loc.comision.valorIva}"
+								style="font-size:14px; text-align:right">
+								<p:outputLabel value="#{loc.comision.valorIva} %"
+									style="font-weight:normal" />
+							</p:column>
+
+
+							<p:column headerText="#{mensaje.acciones}"
+								style="font-size:14px; text-align:center;">
+
+
+
+								<p:commandButton id="btnIrEditar"
+									style="background-origin: content-box; background-image: url('../imagenes/editar.png'); background-size: cover; background-repeat:no-repeat; width:16px; height:16px; vertical-align:bottom; border:0; background-color:transparent"
+									action="#{hacerMantenimiento.asignarConvenio(loc,'MODAL_EDITAR_CONVENIO')}"
+									value="" process=":form:pnlDtlConvenio" update=":formEditar" />
+
+								<p:commandButton id="btnIrEliminar"
+									style="background-origin: content-box; background-image: url('../imagenes/borrar.png'); background-size: cover; background-repeat:no-repeat; width:16px; height:16px; vertical-align:bottom; border:0; background-color:transparent"
+									value=""
+									action="#{hacerMantenimiento.asignarConvenio(loc,'MODAL_ELIMINAR_CONVENIO')}"
+									process="dtlConvenio" update=":formEliminar" />
+
+
+
+								<p:tooltip for="btnIrEliminar" value="#{mensaje.eliminar}"
+									trackMouse="true" />
+
+								<p:tooltip for="btnIrEditar" value="#{mensaje.editar}"
+									trackMouse="true" />
+
+
+
+
+							</p:column>
+
+						</p:dataTable>
+
+					</p:tab>
+				</p:accordionPanel>
+
+			</p:outputPanel>
+		</h:form>
+
+		<ui:include src="/tablasSoporte/eliminarConvenio.xhtml" />
+		<ui:include src="/tablasSoporte/editarConvenio.xhtml" />
+		<p:spacer height="400" />
+
+	</ui:define>
+</ui:composition>

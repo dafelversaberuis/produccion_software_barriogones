@@ -1,0 +1,238 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<h:form id="formEditar">
+
+		<p:dialog header="#{mensaje.editarArbolito}"
+			widgetVar="panelEdicionArbolito"  resizable="true"
+			closable="false" responsive="true"  height="450">
+			<p:panel id="pnlEditarArbolito">
+				
+				
+				
+				
+				
+				
+				
+			
+				
+				<div align="center">
+
+
+
+					<p:panelGrid columns="5" cellpadding="0" cellspacing="0"
+						styleClass="ui-panelgrid-blank">
+
+						<p:outputLabel for="txtNombre" value="#{mensaje.nombreEnEspanol}"
+							style="font-weight:bold; font-size:14px" />
+						<p:inputText id="txtNombre"
+							value="#{administrarArbolito.arbolitoTransaccion.nombre}"
+							required="true" label="#{mensaje.nombreEnEspanol}"
+							style=" font-size:14px" />
+
+						<p:spacer width="1" />
+						<p:spacer width="1" />
+					
+						<p:message for="txtNombre" />
+
+						<p:outputLabel for="txtNombreUS" value="#{mensaje.nombreEnIngles}"
+							style="font-weight:bold; font-size:14px" />
+						<p:inputText id="txtNombreUS"
+							value="#{administrarArbolito.arbolitoTransaccion.nombreUS}"
+							required="true" label="#{mensaje.nombreEnIngles}"
+							style=" font-size:14px" />
+					
+						<p:graphicImage value="../../imagenes/ayuda.png"
+							id="ayudaNombresArbolitos" />
+						<p:tooltip value="#{mensaje.ayudaNombresArbolitos}"
+							trackMouse="true" for="ayudaNombresArbolitos" />
+							<p:message for="txtNombreUS" />
+
+
+						<p:outputLabel for="txtDescripcion"
+							value="#{mensaje.descripcionEnEspanol}"
+							style="font-weight:bold; font-size:14px" />
+
+						<p:inputTextarea
+							value="#{administrarArbolito.arbolitoTransaccion.descripcion}"
+							required="true" id="txtDescripcion" style="font-size:14px" />
+
+						<p:spacer width="1" />
+						<p:spacer width="1" />
+						<p:message for="txtDescripcion" />
+
+						<p:outputLabel for="txtDescripcionUS"
+							value="#{mensaje.descripcionEnIngles}"
+							style="font-weight:bold; font-size:14px" />
+						<p:inputTextarea
+							value="#{administrarArbolito.arbolitoTransaccion.descripcionUS}"
+							id="txtDescripcionUS" style="font-size:14px" required="true" />
+						
+						<p:graphicImage value="../../imagenes/ayuda.png"
+							id="ayudaDescripcionArbolitos" />
+						<p:tooltip value="#{mensaje.ayudaDescripcionArbolitos}"
+							trackMouse="true" for="ayudaDescripcionArbolitos" />
+
+<p:message for="txtDescripcionUS" />
+
+						<p:outputLabel for="lstIndicativo" value="#{mensaje.indicativo}"
+							style="font-weight:bold; font-size:14px;" />
+						<p:selectOneMenu id="lstIndicativo" required="true"
+							style="font-size:14px;"
+							value="#{administrarArbolito.arbolitoTransaccion.estadoVigencia}"
+							label="#{mensaje.indicativo}">
+							<f:selectItems value="#{consultarFuncionesAPI.itemsEstados}" />
+						</p:selectOneMenu>
+				
+						<p:graphicImage value="../../imagenes/ayuda.png"
+							id="ayudaIndicativoEstado" />
+						<p:tooltip value="#{mensaje.ayudaIndicativoEstado}"
+							trackMouse="true" for="ayudaIndicativoEstado" />
+
+<p:message for="lstIndicativo" />
+
+
+						<p:outputLabel for="lstIVA" value="#{mensaje.ivaAplicado}"
+							style="font-weight:bold; font-size:14px;" />
+						<p:selectOneMenu id="lstIVA" required="true"
+							style="font-size:14px;"
+							value="#{administrarArbolito.arbolitoTransaccion.iva.id}"
+							label="#{mensaje.ivaAplicado}">
+							<f:selectItems value="#{hacerMantenimiento.itemsIva}" />
+
+
+							<p:ajax event="change" process="@this"
+								update="txtPrecioConIva, txtPrecioUsConIva, @this"
+								listener="#{administrarArbolito.calcularPrecios('E')}" />
+
+						</p:selectOneMenu>
+						
+						<p:graphicImage value="../../imagenes/ayuda.png" id="ayudaIva" />
+						<p:tooltip value="#{mensaje.ayudaIva}" trackMouse="true"
+							for="ayudaIva" />
+								<p:message for="lstIVA" />
+
+
+						<p:outputLabel for="txtPrecio" value="#{mensaje.precioCopSinIva}"
+							style="font-weight:bold; font-size:14px" />
+						<p:inputText id="txtPrecio"
+							value="#{administrarArbolito.arbolitoTransaccion.precioVentaPesos}"
+							required="true" label="#{mensaje.precioCOP}"
+							style="font-size:14px">
+
+							<p:ajax event="change" process="@this"
+								update="txtPrecioConIva, txtPrecioUsConIva, @this"
+								listener="#{administrarArbolito.calcularPrecios('E')}" />
+
+						</p:inputText>
+
+						<p:spacer width="1" />
+						<p:spacer width="1" />
+						<p:message for="txtPrecio" />
+
+						<p:outputLabel for="txtPrecioUS" value="#{mensaje.precioUsSinIva}"
+							style="font-weight:bold; font-size:14px" />
+						<p:inputText id="txtPrecioUS"
+							value="#{administrarArbolito.arbolitoTransaccion.precioVentaUS}"
+							required="true" label="#{mensaje.precioUS}"
+							style="font-size:14px">
+
+							<p:ajax event="change" process="@this"
+								update="txtPrecioConIva, txtPrecioUsConIva, @this"
+								listener="#{administrarArbolito.calcularPrecios('E')}" />
+
+						</p:inputText>
+						
+						<p:graphicImage value="../../imagenes/ayuda.png"
+							id="ayudaPrecioArbolitos" />
+						<p:tooltip value="#{mensaje.ayudaPrecioArbolitos}"
+							trackMouse="true" for="ayudaPrecioArbolitos" />
+							<p:message for="txtPrecioUS" />
+
+
+						<p:outputLabel for="txtPrecioConIva"
+							value="#{mensaje.precioCopConIva}"
+							style="font-weight:bold; font-size:14px" />
+						<p:inputText id="txtPrecioConIva"
+							value="#{administrarArbolito.arbolitoTransaccion.precioVentaPesosConIva}"
+							label="#{mensaje.precioCopConIva}" disabled="true"
+							style="font-size:14px" />
+
+						<p:spacer width="1" />
+						<p:spacer width="1" />
+						<p:spacer width="1" />
+
+
+						<p:outputLabel for="txtPrecioUsConIva"
+							value="#{mensaje.precioUsConIva}"
+							style="font-weight:bold; font-size:14px" />
+						<p:inputText id="txtPrecioUsConIva"
+							value="#{administrarArbolito.arbolitoTransaccion.precioVentaUSConIva}"
+							required="true" label="#{mensaje.precioUsConIva}" disabled="true"
+							style="font-size:14px" />
+
+						<p:spacer width="1" />
+						<p:spacer width="1" />
+						<p:spacer width="1" />
+
+
+
+
+
+
+
+						<p:outputLabel for="txtCantidad"
+							value="#{mensaje.cantidadDisponible}"
+							style="font-weight:bold; font-size:14px" />
+						<p:inputText id="txtCantidad"
+							value="#{administrarArbolito.arbolitoTransaccion.cantidadDisponible}"
+							required="true" label="#{mensaje.cantidadDisponible}"
+							style="font-size:14px" />
+					
+						<p:graphicImage value="../../imagenes/ayuda.png"
+							id="ayudaCantidadDisponible" />
+						<p:tooltip value="#{mensaje.ayudaCantidadDisponible}"
+							trackMouse="true" for="ayudaCantidadDisponible" />
+<p:message for="txtCantidad" />
+
+
+
+					</p:panelGrid>
+
+
+
+				</div>
+				<br />
+				<br />
+				<div align="center">
+					<p:commandButton id="btnEditarArbolito" style="font-size:14px"
+						action="#{administrarArbolito.editarArbolito()}"
+						value="#{mensaje.editar}" process=":formEditar:pnlEditarArbolito"
+						update=":formEditar:pnlEditarArbolito, :form" />
+					<p:spacer width="10" />
+					<p:commandButton id="btnCancelarEdicionArbolito"
+						style="font-size:14px; font-weight: normal !important;"
+						action="#{administrarArbolito.cancelarArbolitoTransaccion('MODAL_EDITAR_ARBOLITO')}"
+						process="@this" value="#{mensaje.cancelar}" update=":form">
+
+					</p:commandButton>
+
+				</div>
+
+				<p:outputLabel value="#{mensaje.informacionRequerida}"
+					style="font-size:10px" />
+				<p:blockUI block=":formEditar:pnlEditarArbolito"
+					trigger="btnEditarArbolito, btnCancelarEdicionArbolito">
+					<p:graphicImage value="../../imagenes/cargando.gif" />
+				</p:blockUI>
+
+			</p:panel>
+		</p:dialog>
+		<p:blockUI block="pnlEditarArbolito" trigger="btnEditarArbolito" />
+
+	</h:form>
+</ui:composition>

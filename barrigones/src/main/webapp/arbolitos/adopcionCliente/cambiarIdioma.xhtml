@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<h:form id="formCambiarIdioma">
+
+
+		<p:dialog header="#{mensaje.idiomaPagina}" modal="false" 
+			widgetVar="panelCambiarIdioma" resizable="true" closable="true"
+			responsive="true">
+
+			<p:outputPanel id="pnlCambiarIdioma">
+				<div align="center">
+					<p:panelGrid columns="3" cellpadding="2" cellspacing="2"
+						style="width:100%" styleClass="ui-panelgrid-blank" layout="grid">
+
+						<p:outputLabel for="lstIdioma" value="#{mensaje.idiomaPagina}"
+							style="font-weight:normal; font-size:14px;" />
+
+						<p:selectOneMenu id="lstIdioma" required="true"
+							style="font-size:14px;"
+							value="#{administrarSesionCliente.idioma}"
+							label="#{mensaje.idioma}">
+							
+							<f:selectItem itemValue="ES"
+								itemLabel="#{mensaje.idiomaEspanol}" />
+							<f:selectItem itemValue="US" itemLabel="#{mensaje.idiomaIngles}" />
+
+						</p:selectOneMenu>
+
+
+						<p:message for="lstIdioma" />
+					</p:panelGrid>
+				</div>
+				<br />
+				<br />
+				<div align="center">
+					<p:commandButton id="btnCambiarIdioma" style="font-size:14px"
+						action="#{administrarSesionCliente.cambiarIdioma()}"
+						value="#{mensaje.aceptar}"
+						ajax="false"/>
+					<p:spacer width="10" />
+					<p:commandButton id="btnCancelarIdioma"
+						style="font-size:14px; font-weight: normal !important;"
+						action="#{consultarFuncionesAPI.cerrarModal('panelCambiarIdioma')}"
+						 value="#{mensaje.cancelar}" ajax="false">
+
+					</p:commandButton>
+
+				</div>
+				<br />
+				<p:outputLabel value="#{mensaje.informacionRequerida}"
+					style="font-size:10px" />
+				<p:blockUI block=":formCambiarIdioma:pnlCambiarIdioma"
+					trigger="btnCambiarIdioma, btnCancelarIdioma">
+					
+				</p:blockUI>
+
+			</p:outputPanel>
+		</p:dialog>
+	
+
+	</h:form>
+</ui:composition>

@@ -1,0 +1,121 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<h:form id="formLogueoGeneral">
+
+
+		<p:dialog modal="false" widgetVar="panelLogueoGeneral"
+			resizable="true" responsive="true">
+
+
+			<p:outputPanel>
+				<p:panel header="#{mensaje.cuentaExistente}" style="font-size:14px">
+					<p:outputPanel id="pnlCuentaExistente">
+						<p:panelGrid columns="2" style="width:100%" layout="grid" styleClass="ui-panelgrid-blank">
+							<p:outputLabel for="txtCorreoExistente" value="#{mensaje.correo}"
+								style="font-weight:bold; font-size:14px" />
+							<p:inputText id="txtCorreoExistente"
+								value="#{administrarSesionCliente.compradorAcceso.correoElectronico}"
+								required="true" label="#{mensaje.correo}"
+								style="width:100%; font-size:14px; height:50px" />
+
+<p:spacer width="1"/>
+							<p:message for="txtCorreoExistente" />
+
+
+							<p:outputLabel for="txtClaveExistente"
+								value="#{mensaje.contrasena}"
+								style="font-weight:bold; font-size:14px" />
+							<p:password id="txtClaveExistente"
+								value="#{administrarSesionCliente.compradorAcceso.clave}"
+								label="#{mensaje.contrasena}"
+								style="width:100%; font-size:14px; height:50px" />
+
+<p:spacer width="1"/>
+							<p:message for="txtClaveExistente" />
+
+						</p:panelGrid>
+					
+					
+						
+
+						<div align="center">
+
+							<p:commandButton id="btnCuentaExistente"
+								style="font-size:14px; font-weight:bold !important"
+								rendered="#{administrarSesionCliente.compradorSesion==null or administrarSesionCliente.compradorSesion.id==null}"
+								action="#{administrarSesionCliente.accederCompradorGeneral()}"
+								process="pnlCuentaExistente"
+								update="pnlCuentaExistente, :formCompras, :formCliente"
+								value="#{mensaje.acceder}" />
+
+							<br/>
+							<br/>
+							<p:commandLink id="btnRecordarClave"
+								style="font-size:14px; font-weight:bold !important"
+								rendered="#{administrarSesionCliente.compradorSesion==null or administrarSesionCliente.compradorSesion.id==null}"
+								action="#{administrarSesionCliente.recordarClave()}"
+								process="pnlCuentaExistente"
+								update="pnlCuentaExistente, :formCompras:messages"
+								value="#{mensaje.olvideMiContrasena}" />
+
+
+							<p:spacer width="10" />
+							<p:outputLabel value=" | " />
+							<p:spacer width="10" />
+
+
+							<p:commandLink id="btnRegistrarseNuevo"
+								style="font-size:14px; font-weight: bold !important;"
+								action="#{administrarSesionCliente.cerrarAbrirLoginRegistro('REGISTRO')}"
+								process="@this" value="#{mensaje.crearNuevaCuenta}"
+								update=":formCompras, :formLogueoGeneral, :formRegistroGeneral">
+
+							</p:commandLink>
+
+
+
+
+							<p:spacer width="10" />
+							<p:outputLabel value=" | " />  
+							<p:spacer width="10" />
+
+							<p:commandLink id="btnCancelarLogueoGeneral"
+								style="font-size:14px; font-weight: bold !important;"
+								action="#{consultarFuncionesAPI.cerrarModal('panelLogueoGeneral')}"
+								process="@this" value="#{mensaje.cancelar}"
+								update=":formCompras">
+
+							</p:commandLink>
+							
+							<br/>
+							
+							<p:commandLink id="btnLoguearAdministrador"
+								style="font-size:14px; font-weight: bold !important;"
+								action="#{administrarSesionCliente.cerrarAbrirLoginAdministrador('REGISTRO')}"
+								process="@this" value="#{mensaje.logueoAdministrador}"
+								update=":formCompras, :formLogueoGeneral, :formLogueoAdministrador">
+
+							</p:commandLink>
+							
+							
+
+
+							<p:blockUI block="pnlCuentaExistente"
+								rendered="#{administrarSesionCliente.compradorSesion==null or administrarSesionCliente.compradorSesion.id==null}"
+								trigger="btnCuentaExistente, btnRecordarClave">
+								<p:graphicImage value="/barrigones/imagenes/cargando.gif" />
+							</p:blockUI>
+							<br />
+						</div>
+					</p:outputPanel>
+				</p:panel>
+			</p:outputPanel>
+		</p:dialog>
+
+	</h:form>
+</ui:composition>

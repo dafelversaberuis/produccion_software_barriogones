@@ -1,0 +1,839 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/plantillas/principalClienteIndex.xhtml"
+	xmlns:o="http://omnifaces.org/ui">
+	<ui:define name="body">
+
+		<style type="text/css">
+.columna1 {
+	width: 50%;
+	vertical-align: text-top;
+}
+
+.columna2 {
+	width: 50%;
+	vertical-align: text-top;
+}
+
+.forma1 {
+	width: 5%;
+}
+
+.forma2 {
+	width: 90%;
+}
+
+.tabla td {
+	vertical-align: middle;
+	horizontal-align: center;
+}
+</style>
+
+
+		<h:form id="formCompras">
+
+			<p:remoteCommand name="onload"
+				action="#{administrarSesionCliente.getNologueoCliente()}"
+				autoRun="true" />
+			<div align="center">
+				<p:outputPanel style="width:90%"
+					rendered="#{administrarSesionCliente.compradorSesion!=null and administrarSesionCliente.compradorSesion.id!=null}">
+					<p:growl id="messages" showDetail="true" globalOnly="true" />
+					<div align="left">
+						<div class="row">
+
+
+							<br /> <br /> <br /><br />
+
+
+							<div class="col-xs-12">
+								<div class="project-page-header">
+									<h1 class="project-title">#{mensaje.administrarCuenta}</h1>
+								</div>
+							</div>
+
+
+
+
+
+
+
+
+							<p:tabView
+								activeIndex="#{administrarSesionCliente.vistaLogueado}">
+								<p:ajax event="tabChange"
+									listener="#{administrarSesionCliente.onTabChange}"
+									update=":formCompras" />
+
+								<p:tab title="#{mensaje.transaccionesElectronicas}"
+									id="TRANSACCIONES_ELECTRONICAS" titleStyle="font-size:18px">
+
+									<br />
+									<br />
+
+
+
+
+									<p:dataTable var="loc" id="dtlTransaccionesAprobadas"
+										rowIndexVar="item"
+										value="#{administrarSesionCliente.ventasActivas}"
+										reflow="true" rows="10" paginator="true"
+										paginatorPosition="bottom" draggableColumns="true"
+										emptyMessage="#{mensaje.noExistenciaVentasAprobadas}">
+										<p:column headerText="#"
+											style="font-size:14px; text-align:right; width:15px">
+											<p:outputLabel value="#{(item+1)}"
+												style="font-weight:normal; font-size:14px" />
+										</p:column>
+										<p:column headerText="#{mensaje.fechaTransaccion}"
+											sortBy="#{loc.fechaTransaccion}"
+											filterBy="#{loc.fechaTransaccion}" style="font-size:14px">
+											<p:outputLabel value="#{loc.fechaTransaccion}"
+												style="font-weight:normal; font-size:14px" />
+										</p:column>
+										<p:column headerText="#{mensaje.moneda}"
+											sortBy="#{loc.moneda}" style="font-size:14px; width:100px">
+											<p:outputLabel value="#{loc.moneda}"
+												style="font-weight:normal; font-size:14px" />
+
+										</p:column>
+
+										<p:column headerText="#{mensaje.itemsResumen}"
+											sortBy="#{loc.cantidadTotalVenta}"
+											style="font-size:14px; text-align:right">
+											<p:outputLabel value="#{loc.cantidadTotalVenta}"
+												style="font-weight:normal; font-size:14px" />
+
+										</p:column>
+
+										<p:column headerText="#{mensaje.precioSinImpuestos}"
+											sortBy="#{loc.valorTotalVenta}"
+											style="font-size:14px; text-align:right">
+											<p:outputLabel value="#{loc.valorTotalVenta}"
+												rendered="#{loc.moneda=='COP'}"
+												style="font-weight:normal; font-size:14px">
+
+												<f:convertNumber type="currency" currencySymbol="$ " />
+											</p:outputLabel>
+											<p:outputLabel value="#{loc.valorTotalVenta}"
+												rendered="#{loc.moneda!='COP'}"
+												style="font-weight:normal; font-size:14px">
+
+												<f:convertNumber type="currency" currencySymbol="US$ " />
+											</p:outputLabel>
+
+										</p:column>
+										<p:column headerText="#{mensaje.impuestos}"
+											sortBy="#{loc.valorTotalIva}"
+											style="font-size:14px; text-align:right">
+											<p:outputLabel value="#{loc.valorTotalIva}"
+												rendered="#{loc.moneda=='COP'}"
+												style="font-weight:normal; font-size:14px">
+												<f:convertNumber type="currency" currencySymbol="$ " />
+											</p:outputLabel>
+											<p:outputLabel value="#{loc.valorTotalIva}"
+												rendered="#{loc.moneda!='COP'}"
+												style="font-weight:normal; font-size:14px">
+												<f:convertNumber type="currency" currencySymbol="US$ " />
+											</p:outputLabel>
+
+										</p:column>
+										<p:column headerText="#{mensaje.totalTransaccion}"
+											sortBy="#{loc.valorTotalConIva}"
+											style="font-size:14px; text-align:right">
+											<p:outputLabel value="#{loc.valorTotalConIva}"
+												rendered="#{loc.moneda=='COP'}"
+												style="font-weight:bold; font-size:14px">
+												<f:convertNumber type="currency" currencySymbol="$ " />
+											</p:outputLabel>
+											<p:outputLabel value="#{loc.valorTotalConIva}"
+												rendered="#{loc.moneda!='COP'}"
+												style="font-weight:bold; font-size:14px">
+												<f:convertNumber type="currency" currencySymbol="US$ " />
+											</p:outputLabel>
+
+										</p:column>
+
+										<p:column headerText="#{mensaje.estadoTransaccion}"
+											style="font-size:14px; text-align:left">
+											<p:outputLabel value="#{mensaje.transaccionAprobada}"
+												style="font-weight:normal; font-size:14px"
+												rendered="#{loc.estadoTransaccion =='A'}" />
+											<p:outputLabel value="#{mensaje.transaccionPendiente}"
+												style="font-weight:normal; font-size:14px"
+												rendered="#{loc.estadoTransaccion!='A'}" />
+
+										</p:column>
+										<p:column headerText="#{mensaje.acciones}"
+											style="font-size:14px; text-align:center;">
+
+											<p:commandButton id="btnIrDetalle"
+												style="background-origin: content-box; background-image: url('../../imagenes/buscar.png'); background-size: cover; background-repeat:no-repeat; width:16px; height:16px; vertical-align:bottom; border:0; background-color:transparent"
+												value=""
+												action="#{administrarSesionCliente.asignarVenta(loc,'DETALLE_VENTA')}"
+												process="dtlTransaccionesAprobadas" update=":formVerVentas" />
+											<p:tooltip for="btnIrDetalle"
+												value="#{mensaje.verDetalleVentas}" trackMouse="true" />
+
+
+											<p:commandButton id="btnIrEliminar"
+												rendered="#{loc.estadoTransaccion=='P'}"
+												style="background-origin: content-box; background-image: url('../../imagenes/borrar.png'); background-size: cover; background-repeat:no-repeat; width:16px; height:16px; vertical-align:bottom; border:0; background-color:transparent"
+												value=""
+												action="#{administrarSesionCliente.asignarVenta(loc,'ELIMINAR_VENTA')}"
+												process="dtlTransaccionesAprobadas"
+												update=":formEliminarVenta" />
+
+
+											<p:tooltip for="btnIrEliminar" value="#{mensaje.eliminar}"
+												trackMouse="true" />
+
+										</p:column>
+									</p:dataTable>
+
+
+
+								</p:tab>
+								<p:tab title="#{mensaje.misArbolitos}"
+									titleStyle="font-size:18px" id="MIS_ARBOLITOS">
+									<br />
+								
+									<p:outputLabel value="#{mensaje.advertenicaMisArbolitos}"
+										style="font-size:14px" />
+
+
+									<p:outputPanel id="pnlMisArbolitosPadres"
+										rendered="#{administrarSesionCliente.vistaDetalleResumido==null or administrarSesionCliente.vistaDetalleResumido!= 'HISTORICO_HIJOS'}">
+										<p:accordionPanel id="pnlArbolitosAdoptados">
+											<p:tab title="#{mensaje.arbolitosAdoptadosAprobadosIndependiente}"
+												titleStyle="font-size:16px" closable="true">
+
+												<p:dataTable var="loc" id="dtlArbolitosAdoptados"
+													rowIndexVar="item"
+													value="#{administrarSesionCliente.historicosComprador}"
+													reflow="true" rows="10" paginator="true"
+													paginatorPosition="bottom" draggableColumns="true"
+													emptyMessage="#{mensaje.noExistenciaAdoptados}">
+
+													<p:column headerText="#"
+														style="font-size:14px; text-align:right; width:15px">
+														<p:outputLabel value="#{(item+1)}"
+															style="font-weight:normal; font-size:14px" />
+													</p:column>
+
+													<p:column headerText="#{mensaje.arbolito}"
+														rendered="#{administrarSesionCliente.idioma=='ES'}"
+														sortBy="#{loc.arbolito.nombre}"
+														filterBy="#{loc.arbolito.nombre}" style="font-size:14px">
+														<p:outputLabel value="#{loc.arbolito.nombre}"
+															style="font-weight:normal; font-size:14px" />
+													</p:column>
+													<p:column headerText="#{mensaje.arbolito}"
+														rendered="#{administrarSesionCliente.idioma!='ES'}"
+														sortBy="#{loc.arbolito.nombre}"
+														filterBy="#{loc.arbolito.nombre}" style="font-size:14px">
+														<p:outputLabel value="#{loc.arbolito.nombreUS}"
+															style="font-weight:normal; font-size:14px" />
+													</p:column>
+
+
+													<p:column headerText="#{mensaje.numeroArbolitos}"
+														sortBy="#{loc.arbolito.cantidadDisponible}"
+														style="font-size:14px">
+														<p:outputLabel value="#{loc.arbolito.cantidadDisponible}"
+															style="font-weight:normal; font-size:14px" />
+
+													</p:column>
+
+													<p:column headerText="#{mensaje.acciones}"
+														style="font-size:14px; text-align:center;">
+
+														<p:commandButton id="btnIrDetalleArboles"
+															style="background-origin: content-box; background-image: url('../../imagenes/buscar.png'); background-size: cover; background-repeat:no-repeat; width:16px; height:16px; vertical-align:bottom; border:0; background-color:transparent"
+															value="" title="#{mensaje.verDetalleArboles}"
+															action="#{administrarSesionCliente.asignarArbolitoResumido(loc,'HISTORICO_HIJOS')}"
+															process="dtlArbolitosAdoptados" update=":formCompras" />
+
+
+
+
+
+													</p:column>
+
+
+
+												</p:dataTable>
+											</p:tab>
+										</p:accordionPanel>
+
+										<br />
+										<br />
+										<p:accordionPanel id="pnlArbolitosQueTeRegalaron">
+											<p:tab title="#{mensaje.arbolitosQueTeRegalaron}"
+												titleStyle="font-size:16px" closable="true">
+
+												<p:dataTable var="loc" id="dtlArbolitosQueTeRegalaron"
+													rowIndexVar="item"
+													value="#{administrarSesionCliente.historicosRecibidos}"
+													reflow="true" rows="10" paginator="true"
+													paginatorPosition="bottom" draggableColumns="true"
+													emptyMessage="#{mensaje.noExistenciaQueTeRegalaron}">
+
+													<p:column headerText="#"
+														style="font-size:14px; text-align:right; width:15px">
+														<p:outputLabel value="#{(item+1)}"
+															style="font-weight:normal; font-size:14px" />
+													</p:column>
+
+													<p:column headerText="#{mensaje.arbolito}"
+														rendered="#{administrarSesionCliente.idioma=='ES'}"
+														sortBy="#{loc.arbolito.nombre}"
+														filterBy="#{loc.arbolito.nombre}" style="font-size:14px">
+														<p:outputLabel value="#{loc.arbolito.nombre}"
+															style="font-weight:normal; font-size:14px" />
+													</p:column>
+													<p:column headerText="#{mensaje.arbolito}"
+														rendered="#{administrarSesionCliente.idioma!='ES'}"
+														sortBy="#{loc.arbolito.nombre}"
+														filterBy="#{loc.arbolito.nombre}" style="font-size:14px">
+														<p:outputLabel value="#{loc.arbolito.nombreUS}"
+															style="font-weight:normal; font-size:14px" />
+													</p:column>
+
+
+													<p:column headerText="#{mensaje.numeroArboles}"
+														sortBy="#{loc.arbolito.cantidadDisponible}"
+														style="font-size:14px">
+														<p:outputLabel value="#{loc.arbolito.cantidadDisponible}"
+															style="font-weight:normal; font-size:14px" />
+
+													</p:column>
+
+													<p:column headerText="#{mensaje.acciones}"
+														style="font-size:14px; text-align:center;">
+
+														<p:commandButton
+															style="background-origin: content-box; background-image: url('../../imagenes/buscar.png'); background-size: cover; background-repeat:no-repeat; width:16px; height:16px; vertical-align:bottom; border:0; background-color:transparent"
+															value="" title="#{mensaje.verDetalleArboles}"
+															action="#{administrarSesionCliente.asignarArbolitoResumido(loc,'HISTORICO_HIJOS_RECIBIDOS')}"
+															process="dtlArbolitosQueTeRegalaron"
+															update=":formCompras" />
+
+
+
+
+
+													</p:column>
+
+
+
+												</p:dataTable>
+											</p:tab>
+										</p:accordionPanel>
+
+
+										<br />
+										<br />
+
+
+										<p:accordionPanel id="pnlArbolitosRegalados">
+											<p:tab title="#{mensaje.arbolitosRegalados}"
+												titleStyle="font-size:16px" closable="true">
+
+												<p:dataTable var="loc" id="dtlArbolitosRegalados"
+													rowIndexVar="item"
+													value="#{administrarSesionCliente.historicosRegalados}"
+													reflow="true" rows="10" paginator="true"
+													paginatorPosition="bottom" draggableColumns="true"
+													emptyMessage="#{mensaje.noExistenciaRegalados}">
+
+													<p:column headerText="#"
+														style="font-size:14px; text-align:right; width:15px">
+														<p:outputLabel value="#{(item+1)}"
+															style="font-weight:normal; font-size:14px" />
+													</p:column>
+
+													<p:column headerText="#{mensaje.arbolito}"
+														rendered="#{administrarSesionCliente.idioma=='ES'}"
+														sortBy="#{loc.arbolito.nombre}"
+														filterBy="#{loc.arbolito.nombre}" style="font-size:14px">
+														<p:outputLabel value="#{loc.arbolito.nombre}"
+															style="font-weight:normal; font-size:14px" />
+													</p:column>
+
+													<p:column headerText="#{mensaje.arbolito}"
+														rendered="#{administrarSesionCliente.idioma!='ES'}"
+														sortBy="#{loc.arbolito.nombre}"
+														filterBy="#{loc.arbolito.nombre}" style="font-size:14px">
+														<p:outputLabel value="#{loc.arbolito.nombreUS}"
+															style="font-weight:normal; font-size:14px" />
+													</p:column>
+
+
+													<p:column headerText="#{mensaje.regaladoA}"
+														sortBy="#{loc.correoReceptorRegalo}"
+														style="font-size:14px">
+														<p:outputLabel value="#{loc.correoReceptorRegalo}"
+															style="font-weight:normal; font-size:14px" />
+
+													</p:column>
+
+
+
+
+
+												</p:dataTable>
+											</p:tab>
+										</p:accordionPanel>
+										
+										<br />
+										<br />
+										<p:accordionPanel id="pnlArbolitosBolsas">
+											<p:tab title="#{mensaje.arbolitosAdquiridosBolsas}"
+												titleStyle="font-size:16px" closable="true">
+
+												<p:dataTable var="loc" id="dtlArbolitosAdquiridosBolsas"
+													rowIndexVar="item"
+													value="#{administrarSesionCliente.historicosBolsas}"
+													reflow="true" rows="10" paginator="true"
+													paginatorPosition="bottom" draggableColumns="true"
+													emptyMessage="#{mensaje.noExistenciaBolsas}">
+
+													<p:column headerText="#"
+														style="font-size:14px; text-align:right; width:15px">
+														<p:outputLabel value="#{(item+1)}"
+															style="font-weight:normal; font-size:14px" />
+													</p:column>
+
+													<p:column headerText="#{mensaje.arbolito}"
+														rendered="#{administrarSesionCliente.idioma=='ES'}"
+														sortBy="#{loc.arbolito.nombre}"
+														filterBy="#{loc.arbolito.nombre}" style="font-size:14px">
+														<p:outputLabel value="#{loc.arbolito.nombre}"
+															style="font-weight:normal; font-size:14px" />
+													</p:column>
+													<p:column headerText="#{mensaje.arbolito}"
+														rendered="#{administrarSesionCliente.idioma!='ES'}"
+														sortBy="#{loc.arbolito.nombre}"
+														filterBy="#{loc.arbolito.nombre}" style="font-size:14px">
+														<p:outputLabel value="#{loc.arbolito.nombreUS}"
+															style="font-weight:normal; font-size:14px" />
+													</p:column>
+
+
+													<p:column headerText="#{mensaje.numeroArboles}"
+														sortBy="#{loc.arbolito.cantidadDisponible}"
+														style="font-size:14px">
+														<p:outputLabel value="#{loc.arbolito.cantidadDisponible}"
+															style="font-weight:normal; font-size:14px" />
+
+													</p:column>
+
+												
+
+
+
+												</p:dataTable>
+											</p:tab>
+										</p:accordionPanel>
+										
+
+									</p:outputPanel>
+
+									<p:outputPanel id="pnlMisArbolitosHijos"
+										rendered="#{administrarSesionCliente.vistaDetalleResumido!=null and administrarSesionCliente.vistaDetalleResumido== 'HISTORICO_HIJOS'}">
+
+
+										<p:panel>
+											<div align="left">
+												<p:panelGrid columns="2" styleClass="ui-panelgrid-blank"
+													cellpadding="5">
+
+
+													<p:outputLabel value="#{mensaje.arbolito}"
+														style="font-weight:bold; font-size:14px" />
+
+													<p:outputLabel style="font-weight:normal; font-size:14px"
+														rendered="#{administrarSesionCliente.idioma=='ES'}"
+														value="#{administrarSesionCliente.historicoPapa.arbolito.nombre}" />
+
+													<p:outputLabel style="font-weight:normal; font-size:14px"
+														rendered="#{administrarSesionCliente.idioma!='ES'}"
+														value="#{administrarSesionCliente.historicoPapa.arbolito.nombreUS}" />
+
+													<p:outputLabel value="#{mensaje.numeroArboles}"
+														style="font-weight:bold; font-size:14px" />
+
+													<p:outputLabel style="font-weight:normal; font-size:14px"
+														value="#{administrarSesionCliente.historicoPapa.arbolito.cantidadDisponible}" />
+												</p:panelGrid>
+											</div>
+										</p:panel>
+
+
+										<br />
+										<ui:repeat var="det" varStatus="item"
+											value="#{administrarSesionCliente.historicosHijos}">
+
+											<p:panel id="toggleable"
+												header="#{mensaje.arbolitoNumero} #{(item.index+1)}"
+												toggleable="true" toggleSpeed="500" closeSpeed="500"
+												style="margin-bottom:20px; font-size:16px">
+
+
+												<f:facet name="options">
+													<p:menu style="width:300px">
+														<p:submenu label="#{mensaje.opciones}"
+															style="font-size:14px;">
+
+
+															<p:menuitem
+																value="#{mensaje.personalizarNombreArbolPlaca}"
+																style="font-size:14px"
+																rendered="#{det.estado.permitePersonalizacion=='S'}"
+																action="#{administrarSesionCliente.asignarArbolitoHijo(det,'PERSONALIZAR_ARBOLITO')}"
+																update=":formCompras, :formPersonalizarArbolito"
+																process="@this" />
+
+															<p:menuitem value="#{mensaje.correoPersonaRegalar}"
+																style="font-size:14px"
+																rendered="#{!(det.correoReceptorRegalo!=null and det.correoReceptorRegalo!='')}"
+																action="#{administrarSesionCliente.asignarArbolitoHijo(det,'REGALAR_ARBOLITO')}"
+																update=":formCompras, :formRegalar" process="@this" />
+
+
+
+
+
+														</p:submenu>
+													</p:menu>
+												</f:facet>
+
+												<h:panelGrid columns="2" columnClasses="columna1, columna2"
+													style="width:100%" styleClass="tabla">
+
+													<p:outputPanel>
+														<div align="center">
+
+
+
+															<p:commandLink style="font-size:32px; font-weight:bold"
+																rendered="#{det.tFotos!=null and det.tFotos.size()>1}"
+																onclick="PF('#{det.id}-arbol').previous();"
+																value="#{mensaje.simboloAnterior}" />
+
+															<p:spacer width="25"
+																rendered="#{det.tFotos!=null and det.tFotos.size()>1}" />
+
+															<p:commandLink style="font-size:32px; font-weight:bold"
+																rendered="#{det.tFotos!=null and det.tFotos.size()>1}"
+																onclick="PF('#{det.id}-arbol').next();"
+																value="#{mensaje.simboloSiguiente}" />
+
+															<p:spacer height="10"
+																rendered="#{det.tFotos!=null and det.tFotos.size()>1}" />
+
+
+
+															<p:imageSwitch effect="wipe" widgetVar="#{det.id}-arbol"
+																slideshowAuto="false"
+																rendered="#{det.tFotos!=null and det.tFotos.size()>0}">
+																<ui:repeat value="#{det.tFotos}" var="locDet">
+
+																	<li class="logo mix mix_all opacity2x"><img
+																		src="../../imagenes/arbolitosApp/#{locDet.fotoDecofificada}" />
+																		<div class="work-item">
+
+
+
+
+																			<div class="image-extra">
+																				<div class="extra-content">
+																					<div class="inner-extra">
+																						<h2 class="extra-title">#{locDet.titulo}</h2>
+
+																					</div>
+																					<!--/ .inner-extra-->
+																				</div>
+																				<!--/ .extra-content-->
+																			</div>
+																			<!--/ .image-extra-->
+																		</div> <!--/ .work-item--></li>
+
+
+
+																</ui:repeat>
+
+															</p:imageSwitch>
+
+
+															<p:outputLabel value="#{mensaje.aunSinFoto}"
+																style="fotn-size:14px; font-weight:normal"
+																rendered="#{!(det.tFotos!=null and det.tFotos.size()>0)}" />
+
+
+
+
+
+
+
+
+
+														</div>
+													</p:outputPanel>
+
+													<p:outputPanel>
+														<p:panelGrid columns="2">
+
+
+															<p:outputLabel style="font-weight:bold; font-size:14px"
+																value="#{mensaje.regaladoA}"
+																rendered="#{administrarSesionCliente.compradorSesion!=null and administrarSesionCliente.compradorSesion.correoElectronico!=null and det.correoReceptorRegalo!=null and det.correoReceptorRegalo!='' and det.correoReceptorRegalo.trim().toLowerCase()!=administrarSesionCliente.compradorSesion.correoElectronico.trim().toLowerCase()}" />
+
+															<p:outputLabel style="font-weight:normal; font-size:14px"
+																value="#{det.correoReceptorRegalo}"
+																rendered="#{administrarSesionCliente.compradorSesion!=null and administrarSesionCliente.compradorSesion.correoElectronico!=null and det.correoReceptorRegalo!=null and det.correoReceptorRegalo!='' and det.correoReceptorRegalo.trim().toLowerCase()!=administrarSesionCliente.compradorSesion.correoElectronico.trim().toLowerCase()}" />
+
+
+
+															<p:outputLabel style="font-weight:normal; font-size:14px"
+																value="#{det.venta.comprador.nombreCompleto}"
+																rendered="#{det.venta!=null and det.venta.comprador!=null and det.venta.comprador.id!=null and det.venta.comprador.id != administrarSesionCliente.compradorSesion.id}" />
+
+
+
+															<p:outputLabel style="font-weight:bold; font-size:14px"
+																value="#{mensaje.obsequiadoPor}"
+																rendered="#{!(administrarSesionCliente.compradorSesion!=null and administrarSesionCliente.compradorSesion.correoElectronico!=null and det.correoReceptorRegalo!=null and det.correoReceptorRegalo!='' and det.correoReceptorRegalo.trim().toLowerCase()!=administrarSesionCliente.compradorSesion.correoElectronico.trim().toLowerCase())}" />
+
+
+															<p:outputLabel style="font-weight:normal; font-size:14px"
+																value="#{det.venta.comprador.nombreCompleto}"
+																rendered="#{!(administrarSesionCliente.compradorSesion!=null and administrarSesionCliente.compradorSesion.correoElectronico!=null and det.correoReceptorRegalo!=null and det.correoReceptorRegalo!='' and det.correoReceptorRegalo.trim().toLowerCase()!=administrarSesionCliente.compradorSesion.correoElectronico.trim().toLowerCase())}" />
+
+
+
+															<p:outputLabel value="#{mensaje.loteUbicado}"
+																style="font-weight:bold; font-size:14px" />
+
+
+															<p:outputLabel style="font-weight:normal; font-size:14px"
+																value="#{det.lote.nombreLote}-#{det.numeroInterno}"
+																rendered="#{det.lote!=null and det.lote.id!=null}" />
+
+															<p:outputLabel style="font-weight:normal; font-size:14px"
+																value="-"
+																rendered="#{!(det.lote!=null and det.lote.id!=null)}" />
+
+
+															<p:outputLabel value="#{mensaje.estadoActualArbolito}"
+																style="font-weight:bold; font-size:14px" />
+
+															<p:outputLabel value="#{det.estado.tituloEstado}"
+																style="font-weight:normal; font-size:14px" />
+
+
+															<p:outputLabel value="#{mensaje.historiaEstados}"
+																style="font-weight:bold; font-size:14px" />
+
+															<p:commandButton id="btnIrDetalleEstados"
+																style="background-origin: content-box; background-image: url('../../imagenes/buscar.png'); background-size: cover; background-repeat:no-repeat; width:16px; height:16px; vertical-align:bottom; border:0; background-color:transparent"
+																value="" title="#{mensaje.verDetalleEstados}"
+																action="#{administrarSesionCliente.asignarArbolitoHijo(det,'ESTADOS')}"
+																update=":formCompras, :formVerEstados" process="@this" />
+
+
+															<p:outputLabel
+																value="#{mensaje.nombrePersonalizadoArbolito}"
+																style="font-weight:bold; font-size:14px" />
+
+															<p:outputLabel style="font-weight:normal; font-size:14px"
+																value="#{det.nombrePersonalizadoArbolito}"
+																rendered="#{det.nombrePersonalizadoArbolito!=null and det.nombrePersonalizadoArbolito!=''}" />
+
+															<p:outputLabel style="font-weight:normal; font-size:14px"
+																value="-"
+																rendered="#{!(det.nombrePersonalizadoArbolito!=null and det.nombrePersonalizadoArbolito!='')}" />
+
+															<p:outputLabel value="#{mensaje.mensajeDeSuPlaca}"
+																style="font-weight:bold; font-size:14px" />
+
+															<p:outputLabel style="font-weight:normal; font-size:14px"
+																value="#{det.mensajePlaca}"
+																rendered="#{det.mensajePlaca!=null and det.mensajePlaca!=''}" />
+
+															<p:outputLabel style="font-weight:normal; font-size:14px"
+																value="-"
+																rendered="#{!(det.mensajePlaca!=null and det.mensajePlaca!='')}" />
+
+														</p:panelGrid>
+														<br />
+
+													</p:outputPanel>
+												</h:panelGrid>
+
+
+											</p:panel>
+
+										</ui:repeat>
+
+
+										<div align="center">
+
+											<p:commandButton value="#{mensaje.regresar}"
+												update=":formCompras" style="font-size:14px"
+												action="#{administrarSesionCliente.asignarArbolitoResumido(null,'HISTORICO_PAPA')}" />
+
+										</div>
+
+
+
+									</p:outputPanel>
+
+
+
+
+
+								</p:tab>
+								<p:tab title="#{mensaje.redimirTarjetaImpresa}"
+									id="TARJETA_IMPRESA" titleStyle="font-size:18px">
+									<br />
+
+
+									<p:accordionPanel>
+										<p:tab titleStyle="font-size:16px" closable="true"
+											title="#{mensaje.tarjetaPromocional}">
+
+											<p:outputLabel value="#{mensaje.advetrenciaTarjeta}"
+												style="font-size:16px; font-weight:normal" />
+
+											<br />
+
+											<p:outputPanel id="pnlTarjeta">
+
+												<div align="center">
+													<p:panelGrid columns="1" style="width:300px"
+														styleClass="ui-panelgrid-blank">
+														<p:outputLabel for="txtTarjeta"
+															value="#{mensaje.codigoTarjeta}"
+															style="font-weight:bold; font-size:14px; text-align:center" />
+
+														<p:inputText id="txtTarjeta"
+															value="#{administrarSesionCliente.algoritmoTarjeta}"
+															 label="#{mensaje.codigoTarjeta}"
+															style="width:100%; font-size:22px; height:50px" />
+
+
+														<p:message for="txtTarjeta" />
+
+
+													</p:panelGrid>
+
+												</div>
+												<br />
+												<br />
+
+
+												<div align="center">
+
+													<p:commandButton id="btnTarjeta"
+														style="font-size:14px; font-weight:bold !important"
+														action="#{administrarSesionCliente.redimirTarjeta()}"
+														process="pnlTarjeta"
+														update="pnlTarjeta :formCompras, :formCliente"
+														value="#{mensaje.redimir}" />
+
+
+													<p:blockUI block="pnlTarjeta" trigger="btnTarjeta">
+														<p:graphicImage value="/barrigones/imagenes/cargando.gif" />
+													</p:blockUI>
+													<br />
+												</div>
+											</p:outputPanel>
+										</p:tab>
+									</p:accordionPanel>
+
+								</p:tab>
+
+								<p:tab title="#{mensaje.misDatos}" id="MI_CUENTA"
+									titleStyle="font-size:18px">
+									<br />
+
+									<p:panelGrid columns="1" style="width:100%"
+										styleClass="ui-panelgrid-blank"
+										rendered="#{administrarSesionCliente.compradorSesion!=null or administrarSesionCliente.compradorSesion.id!=null}">
+										<p:outputLabel
+											value="#{administrarSesionCliente.compradorSesion.nombreCompleto}"
+											style="font-size:32px; font-weight:normal" />
+										<p:outputLabel
+											value="#{administrarSesionCliente.compradorSesion.correoElectronico}"
+											style="font-size:32px;  font-weight:normal" />
+
+										<br />
+									</p:panelGrid>
+
+									<p:panelGrid columns="2" style="width:40%">
+
+										<p:outputLabel for="txtClaveNueva"
+											value="#{mensaje.nuevaContrasena}"
+											style="font-weight:bold; font-size:14px" />
+										<p:password id="txtClaveNueva" feedback="true"
+											value="#{administrarSesionCliente.claveCambio}"
+											label="#{mensaje.nuevaContrasena}"
+											style="width:100%; font-size:14px; height:50px"
+											promptLabel="#{mensaje.ingreseContrasena}"
+											weakLabel="#{mensaje.contrasenaDebil}"
+											goodLabel="#{mensaje.contrasenaBuena}"
+											strongLabel="#{mensaje.contrasenaFuerte}" />
+
+
+										<p:outputLabel for="txtClaveNueva2"
+											value="#{mensaje.repitaContrasena}"
+											style="font-weight:bold; font-size:14px" />
+										<p:password id="txtClaveNueva2" feedback="true"
+											value="#{administrarSesionCliente.claveCambioRepite}"
+											label="#{mensaje.repitaContrasena}"
+											style="width:100%; font-size:14px; height:50px"
+											promptLabel="#{mensaje.ingreseContrasena}"
+											weakLabel="#{mensaje.contrasenaDebil}"
+											goodLabel="#{mensaje.contrasenaBuena}"
+											strongLabel="#{mensaje.contrasenaFuerte}" />
+
+
+
+
+									</p:panelGrid>
+									<div align="center">
+										<br />
+
+										<p:commandButton id="btnCambiarClave" style="font-size:14px"
+											action="#{administrarSesionCliente.actualizarClave()}"
+											value="#{mensaje.cambiarContrasena}" process=":formCompras"
+											update=":formCompras" />
+
+									</div>
+
+
+								</p:tab>
+							</p:tabView>
+
+						</div>
+					</div>
+
+				</p:outputPanel>
+			</div>
+		</h:form>
+		<ui:include src="/arbolitos/adopcionCliente/verVenta.xhtml" />
+		<ui:include src="/arbolitos/adopcionCliente/eliminarVenta.xhtml" />
+		<ui:include
+			src="/arbolitos/adopcionCliente/regalarArbolitoLogueado.xhtml" />
+		<ui:include
+			src="/arbolitos/adopcionCliente/personalizarArbolitoLogueado.xhtml" />
+		<ui:include src="/arbolitos/adopcionCliente/verEstados.xhtml" />
+
+	</ui:define>
+</ui:composition>

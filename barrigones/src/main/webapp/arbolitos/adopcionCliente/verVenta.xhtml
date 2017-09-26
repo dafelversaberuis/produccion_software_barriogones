@@ -1,0 +1,260 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<h:form id="formVerVentas">
+		<div class="right_col">
+			<p:dialog widgetVar="panelDetalleVentas" resizable="true"
+				header="#{mensaje.transaccionElectronica}" responsive="true"
+				width="1100" closable="true">
+
+
+				<p:spacer height="2" />
+				<p:panel
+					rendered="#{administrarSesionCliente.ventaTransaccion!=null}">
+					<p:panelGrid columns="2" styleClass="ui-panelgrid-blank"
+						cellpadding="2">
+
+						<p:outputLabel value="#{mensaje.estadoTransaccion}"
+							style="font-weight:bold; font-size:14px" />
+
+						<p:outputLabel value="#{mensaje.transaccionAprobada}"
+							style="font-weight:normal; font-size:14px"
+							rendered="#{administrarSesionCliente.ventaTransaccion.estadoTransaccion =='A'}" />
+						<p:outputLabel value="#{mensaje.transaccionPendiente}"
+							style="font-weight:normal; font-size:14px"
+							rendered="#{administrarSesionCliente.ventaTransaccion.estadoTransaccion!='A'}" />
+
+						<p:outputLabel value="#{mensaje.fechaTransaccion}"
+							style="font-weight:bold; font-size:14px" />
+
+						<p:outputLabel
+							value="#{administrarSesionCliente.ventaTransaccion.fechaTransaccion}"
+							style="font-weight:normal; font-size:14px" />
+
+
+						<p:outputLabel value="#{mensaje.monedaTransaccion}"
+							style="font-weight:bold; font-size:14px" />
+						<p:outputLabel
+							value="#{administrarSesionCliente.ventaTransaccion.moneda}"
+							style="font-weight:normal; font-size:14px" />
+
+
+
+
+					</p:panelGrid>
+
+				</p:panel>
+				<p:spacer height="1" />
+
+				<p:outputPanel id="pnlDetalleVentas"
+					rendered="#{administrarSesionCliente.ventaTransaccion!=null}">
+					<p:accordionPanel>
+						<p:tab title="#{mensaje.listadoDetalleTransaccion}"
+							titleStyle="font-size:16px" closable="true">
+
+							<p:dataTable var="loc" id="dtlDetalleVentas"
+								value="#{administrarSesionCliente.detallesVentas}" reflow="true"
+								style="font-size:14px" paginatorPosition="bottom"
+								draggableColumns="true"
+								emptyMessage="#{mensaje.noExistenciaArbolitosSeleccionados}">
+
+
+								<p:column headerText="#{mensaje.arbolito} / #{mensaje.bolsa} "
+									sortBy="#{loc.arbolito.nombre}"
+									rendered="#{administrarSesionCliente.idioma=='ES'}"
+									style="font-size:14px">
+									<p:outputLabel value="#{loc.arbolito.nombre}"
+										rendered="#{loc.numeroArbolesBolsa==null}"
+										style="font-weight:normal; font-size:14px" />
+									<p:outputLabel value="#{mensaje.bolsa} #{loc.arbolito.nombre}"
+										rendered="#{loc.numeroArbolesBolsa!=null}"
+										style="font-weight:normal; font-size:14px" />
+
+								</p:column>
+
+									<p:column headerText="#{mensaje.arbolito} / #{mensaje.bolsa} "
+									sortBy="#{loc.arbolito.nombreUS}"
+									rendered="#{administrarSesionCliente.idioma=='US'}"
+									style="font-size:14px">
+
+
+									<p:outputLabel value="#{loc.arbolito.nombreUS}" rendered="#{loc.numeroArbolesBolsa==null}"
+										style="font-weight:normal; font-size:14px" />
+										
+									<p:outputLabel value="#{mensaje.bolsa} #{loc.arbolito.nombreUS} x #{(loc.numeroArbolesBolsa/loc.cantidadArbolitos)}" rendered="#{loc.numeroArbolesBolsa!=null}"
+										style="font-weight:normal; font-size:14px" />	  
+								</p:column>
+								
+								
+
+
+								<p:column headerText="#{mensaje.itemsResumen}"
+									sortBy="#{loc.cantidadArbolitos}"
+									style="font-size:14px; text-align:right">
+
+
+									<p:outputLabel value="#{loc.cantidadArbolitos}"
+										style="font-weight:normal; font-size:14px" />
+
+
+								</p:column>
+								
+								<p:column headerText="#{mensaje.arbolesAdoptados}"
+									sortBy="#{loc.cantidadArbolitos}"
+									style="font-size:14px; text-align:right">
+
+
+									<p:outputLabel value="#{loc.numeroArbolesBolsa}" rendered="#{loc.numeroArbolesBolsa!=null}"
+										style="font-weight:normal; font-size:14px" />
+									
+									<p:outputLabel value="#{loc.cantidadArbolitos}" rendered="#{loc.numeroArbolesBolsa==null}"
+										style="font-weight:normal; font-size:14px" />	
+
+
+								</p:column>
+
+
+								<p:column headerText="#{mensaje.precioSinIva}"
+									rendered="#{administrarSesionCliente.ventaTransaccion.moneda != 'COP'}"
+									sortBy="#{loc.valorTotal}"
+									style="font-size:14px; text-align:right">
+
+
+
+									<p:outputLabel value="#{loc.valorTotal}"
+										style="font-weight:normal; font-size:14px; text-align:right">
+
+										<f:convertNumber type="currency" currencySymbol="US$ " />
+									</p:outputLabel>
+
+
+								</p:column>
+								<p:column headerText="#{mensaje.precioSinIva}"
+									rendered="#{administrarSesionCliente.ventaTransaccion.moneda == 'COP'}"
+									sortBy="#{loc.valorTotal}"
+									style="font-size:14px; text-align:right">
+
+
+
+									<p:outputLabel value="#{loc.valorTotal}"
+										style="font-weight:normal; font-size:14px; text-align:right">
+
+										<f:convertNumber type="currency" currencySymbol="$ " />
+									</p:outputLabel>
+
+
+								</p:column>
+
+								<p:column headerText="#{mensaje.porcentajeIva}"
+									sortBy="#{loc.porcentajeIvaAplicado}"
+									style="font-size:14px; text-align:right">
+
+									<p:outputLabel value="#{loc.porcentajeIvaAplicado} %"
+										style="font-weight:normal; font-size:14px">
+
+									</p:outputLabel>
+
+								</p:column>
+
+								<p:column headerText="#{mensaje.precioTotal}"
+									rendered="#{administrarSesionCliente.ventaTransaccion.moneda != 'COP'}"
+									sortBy="#{loc.valorTotalConIva}"
+									style="font-size:14px; text-align:right">
+
+
+
+									<p:outputLabel value="#{loc.valorTotalConIva}"
+										style="font-weight:normal; font-size:14px">
+
+										<f:convertNumber type="currency" currencySymbol="US$ " />
+									</p:outputLabel>
+
+
+								</p:column>
+								<p:column headerText="#{mensaje.precioTotal}"
+									rendered="#{administrarSesionCliente.ventaTransaccion.moneda == 'COP'}"
+									sortBy="#{loc.valorTotalConIva}"
+									style="font-size:14px; text-align:right">
+
+
+
+									<p:outputLabel value="#{loc.valorTotalConIva}"
+										style="font-weight:normal; font-size:14px; text-align:right">
+
+										<f:convertNumber type="currency" currencySymbol="$ " />
+									</p:outputLabel>
+
+
+								</p:column>
+
+								<p:columnGroup type="footer"
+									rendered="#{administrarSesionCliente.ventaTransaccion!=null}">
+									<p:row>
+
+										<p:column style="text-align:right; font-size:14px"
+											footerText="#{mensaje.TOTAL}" />
+										<p:column style="text-align:right; font-size:14px"
+											footerText="#{administrarSesionCliente.ventaTransaccion.cantidadTotalVenta} " />
+<p:column style="text-align:right; font-size:14px"
+											footerText=" " />
+										<p:column style="text-align:right; font-size:14px"
+											rendered="#{administrarSesionCliente.ventaTransaccion.moneda == 'COP'}"
+											footerText="#{administrarArbolito.getMoneda('COP',administrarSesionCliente.ventaTransaccion.valorTotalVenta)}" />
+
+										<p:column style="text-align:right; font-size:14px"
+											rendered="#{administrarSesionCliente.ventaTransaccion.moneda != 'COP'}"
+											footerText="#{consultarFuncionesAPI.getMoneda('COP',administrarSesionCliente.ventaTransaccion.valorTotalVenta)}" />
+
+
+										<p:column style="text-align:right; font-size:14px"
+											footerText=" " />
+										<p:column style="text-align:right; font-size:14px"
+											rendered="#{administrarSesionCliente.ventaTransaccion.moneda == 'COP'}"
+											footerText="#{consultarFuncionesAPI.getMoneda('COP',administrarSesionCliente.ventaTransaccion.valorTotalConIva)}" />
+
+										<p:column style="text-align:right; font-size:14px"
+											rendered="#{administrarSesionCliente.ventaTransaccion.moneda != 'COP'}"
+											footerText="#{consultarFuncionesAPI.getMoneda('COP',administrarSesionCliente.ventaTransaccion.valorTotalConIva)}" />
+
+
+
+
+
+
+
+									</p:row>
+								</p:columnGroup>
+
+
+							</p:dataTable>
+
+
+						</p:tab>
+
+
+
+
+					</p:accordionPanel>
+
+				</p:outputPanel>
+
+				<div align="center">
+
+					<p:commandButton id="btnCancelarDetalle"
+						style="font-size:14px; font-weight: normal; text-decoration: none !important;"
+						action="#{consultarFuncionesAPI.cerrarModal('panelDetalleVentas')}"
+						value="#{mensaje.regresar}" process="@this" update=":formCompras">
+
+					</p:commandButton>
+
+
+				</div>
+			</p:dialog>
+
+		</div>
+	</h:form>
+</ui:composition>

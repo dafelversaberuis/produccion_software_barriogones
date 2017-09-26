@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<h:form id="formVerEstados">
+		<div class="right_col">
+			<p:dialog widgetVar="panelDetalleEstados" resizable="true"
+				width="450" header="#{mensaje.estadosArbolito}" responsive="true"
+				closable="true">
+
+
+				<p:spacer height="2" />
+
+
+
+				<p:dataTable var="loc" id="dtlDetalleVentas" rows="10"
+					value="#{administrarSesionCliente.historicoTransaccion.tEstadosHistoricos}"
+					reflow="true" style="font-size:14px" paginatorPosition="bottom"
+					draggableColumns="true" paginator="true" rowIndexVar="item"
+					emptyMessage="#{mensaje.noExistenciaEstadosArbolito}">
+
+
+					<p:column headerText="#"
+						style="font-size:14px; text-align:right; width:15px">
+						<p:outputLabel value="#{(item+1)}"
+							style="font-weight:normal; font-size:14px" />
+					</p:column>
+
+					<p:column headerText="#{mensaje.estadosArbolito}"
+					
+						rendered="#{administrarSesionCliente.idioma=='ES'}"
+						style="font-size:14px">
+						<p:outputLabel value="#{loc.estado.tituloEstado}"
+							style="font-weight:normal; font-size:14px" />
+
+
+					</p:column>
+
+				</p:dataTable>
+
+
+				<br />
+
+				<div align="center">
+
+					<p:commandButton id="btnCancelarDetalle"
+						style="font-size:14px; font-weight: normal; text-decoration: none !important;"
+						action="#{consultarFuncionesAPI.cerrarModal('panelDetalleEstados')}"
+						value="#{mensaje.regresar}" process="@this" update=":formCompras">
+
+					</p:commandButton>
+
+
+				</div>
+			</p:dialog>
+
+		</div>
+	</h:form>
+</ui:composition>

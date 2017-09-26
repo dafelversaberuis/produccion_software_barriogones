@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<h:form id="formEditar">
+
+		<p:dialog header="#{mensaje.editarEstado}"
+			widgetVar="panelEdicionEstado"  resizable="true"
+			closable="false" responsive="true">
+			<p:panel id="pnlEditarEstado">
+				<div align="center">
+
+
+					<p:panelGrid columns="5" cellpadding="0" cellspacing="0"
+						styleClass="ui-panelgrid-blank">
+
+						<p:outputLabel for="txtNombre" value="#{mensaje.nombre}"
+							style="font-weight:bold; font-size:14px" />
+						<p:inputText id="txtNombre"
+							value="#{hacerMantenimiento.estadoTransaccion.tituloEstado}"
+							required="true" label="#{mensaje.nombre}"
+							style="width:100%; font-size:14px" />
+						<p:graphicImage value="../imagenes/ayuda.png"
+							id="ayudaNombreEstado" />
+						<p:tooltip value="#{mensaje.ayudaNombreEstado}" trackMouse="true"
+							for="ayudaNombreEstado" />
+						<p:message for="txtNombre" />
+
+
+
+
+						<p:outputLabel for="lstEstadoInicial"
+							value="#{mensaje.estadoInicial}"
+							style="font-weight:bold; font-size:14px;" />
+						<p:selectOneMenu id="lstEstadoInicial" required="true"
+							style="font-size:14px;"
+							value="#{hacerMantenimiento.estadoTransaccion.estadoInicial}"
+							label="#{mensaje.estadoInicial}">
+							<f:selectItem itemValue="" itemLabel="#{mensaje.comboVacio}" />
+							<f:selectItem itemValue="S" itemLabel="#{mensaje.SI}" />
+							<f:selectItem itemValue="N" itemLabel="#{mensaje.NO}" />
+						</p:selectOneMenu>
+						<p:graphicImage value="../imagenes/ayuda.png"
+							id="ayudaEstadoInicial" />
+						<p:tooltip value="#{mensaje.ayudaEstadoInicial}" trackMouse="true"
+							for="ayudaEstadoInicial" />
+						<p:message for="lstEstadoInicial" />
+
+						<p:outputLabel for="lstIndicativo" value="#{mensaje.indicativo}"
+							style="font-weight:bold; font-size:14px;" />
+						<p:selectOneMenu id="lstIndicativo" required="true"
+							style="font-size:14px;"
+							value="#{hacerMantenimiento.estadoTransaccion.estadoVigencia}"
+							label="#{mensaje.indicativo}">
+							<f:selectItems value="#{consultarFuncionesAPI.itemsEstados}" />
+						</p:selectOneMenu>
+						<p:graphicImage value="../imagenes/ayuda.png"
+							id="ayudaIndicativoEstado" />
+						<p:tooltip value="#{mensaje.ayudaIndicativoEstado}"
+							trackMouse="true" for="ayudaIndicativoEstado" />
+						<p:message for="lstIndicativo" />
+
+						<p:outputLabel for="lstPermitePersonalizacion"
+							value="#{mensaje.permitePersonalizacion}"
+							style="font-weight:bold; font-size:14px;" />
+						<p:selectOneMenu id="lstPermitePersonalizacion" required="true"
+							style="font-size:14px;"
+							value="#{hacerMantenimiento.estadoTransaccion.permitePersonalizacion}"
+							label="#{mensaje.permitePersonalizacion}">
+							<f:selectItem itemValue="" itemLabel="#{mensaje.comboVacio}" />
+							<f:selectItem itemValue="S" itemLabel="#{mensaje.SI}" />
+							<f:selectItem itemValue="N" itemLabel="#{mensaje.NO}" />
+						</p:selectOneMenu>
+						<p:graphicImage value="../imagenes/ayuda.png"
+							id="ayudaPermitePersonalizacion" />
+						<p:tooltip value="#{mensaje.ayudaPermitePersonalizacion}"
+							trackMouse="true" for="ayudaPermitePersonalizacion" />
+						<p:message for="lstPermitePersonalizacion" />
+
+
+
+
+					</p:panelGrid>
+
+
+
+				</div>
+				<br />
+				<br />
+				<div align="center">
+					<p:commandButton id="btnEditarEstado" style="font-size:14px"
+						action="#{hacerMantenimiento.editarEstado()}"
+						value="#{mensaje.editar}" process=":formEditar:pnlEditarEstado"
+						update=":formEditar:pnlEditarEstado, :form" />
+					<p:spacer width="10" />
+					<p:commandButton id="btnCancelarEdicionEstado"
+						style="font-size:14px; font-weight: normal !important;"
+						action="#{hacerMantenimiento.cancelarEstadoTransaccion('MODAL_EDITAR_ESTADO')}"
+						process="@this" value="#{mensaje.cancelar}" update=":form">
+
+					</p:commandButton>
+
+				</div>
+
+				<p:outputLabel value="#{mensaje.informacionRequerida}"
+					style="font-size:10px" />
+				<p:blockUI block=":formEditar:pnlEditarEstado"
+					trigger="btnEditarEstado, btnCancelarEdicionEstado">
+					<p:graphicImage value="../imagenes/cargando.gif" />
+				</p:blockUI>
+
+			</p:panel>
+		</p:dialog>
+		<p:blockUI block="pnlEditarEstado" trigger="btnEditarEstado" />
+
+	</h:form>
+</ui:composition>

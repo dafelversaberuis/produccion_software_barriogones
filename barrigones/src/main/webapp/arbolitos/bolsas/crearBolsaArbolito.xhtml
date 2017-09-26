@@ -1,0 +1,366 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/plantillas/principal.xhtml">
+
+	<ui:define name="body">
+
+		<h:form id="form">
+			<p:growl id="messages" showDetail="true" globalOnly="true" />
+			<p:remoteCommand name="onload" process="@this"
+				action="#{administrarSesionCliente.getNoRolAdmitido()}"
+				autoRun="true" />
+
+
+
+			<div class="row x_title">
+				<div class="col-md-6">
+					<p:outputLabel value="#{mensaje.moduloArbolitos}: "
+						styleClass="tituloPrincipal" />
+					<p:spacer width="2" />
+					<p:outputLabel value="#{mensaje.bolsasArbolitos}"
+						styleClass="tituloPrincipal" />
+				</div>
+			</div>
+
+			<div align="center" class="titulo"></div>
+
+			<p:outputPanel id="pnlArbolitos">
+
+				<p:spacer height="10" />
+
+				<p:accordionPanel id="pnlCrearArbolito">
+					<p:tab title="#{mensaje.crearBolsaArbolitos}"
+						titleStyle="font-size:16px" closable="true">
+
+
+						<p:panelGrid columns="5" cellpadding="0" cellspacing="0"
+							styleClass="ui-panelgrid-blank">
+
+
+							<p:outputLabel for="lstArbolito" value="#{mensaje.arbolito}"
+								style="font-weight:bold; font-size:14px;" />
+							<p:selectOneMenu id="lstArbolito" required="true"
+								style="font-size:14px; width:100%"
+								value="#{administrarArbolito.bolsa.arbolito.id}"
+								label="#{mensaje.arbolito}">
+								<f:selectItems value="#{administrarLote.itemsArbolitos}" />
+							</p:selectOneMenu>
+							<p:message for="lstArbolito" />
+							<p:spacer width="1" />
+							<p:spacer width="1" />
+
+
+
+							<p:outputLabel for="txtCantidad"
+								value="#{mensaje.arbolitosBolsa}"
+								style="font-weight:bold; font-size:14px" />
+							<p:inputText id="txtCantidad"
+								value="#{administrarArbolito.bolsa.cantidadDisponible}"
+								required="true" label="#{mensaje.arbolitosBolsa}"
+								style="font-size:14px; width:50px" />
+
+							<p:message for="txtCantidad" />
+							<p:spacer width="1" />
+							<p:spacer width="1" />
+
+
+							<p:outputLabel for="lstIndicativo" value="#{mensaje.indicativo}"
+								style="font-weight:bold; font-size:14px;" />
+							<p:selectOneMenu id="lstIndicativo" required="true"
+								style="font-size:14px;"
+								value="#{administrarArbolito.bolsa.estadoVigencia}"
+								label="#{mensaje.indicativo}">
+								<f:selectItems value="#{consultarFuncionesAPI.itemsEstados}" />
+							</p:selectOneMenu>
+
+							<p:message for="lstIndicativo" />
+							<p:spacer width="1" />
+							<p:spacer width="1" />
+
+
+
+							<p:outputLabel for="lstIVA" value="#{mensaje.ivaAplicado}"
+								style="font-weight:bold; font-size:14px;" />
+							<p:selectOneMenu id="lstIVA" required="true"
+								style="font-size:14px;"
+								value="#{administrarArbolito.bolsa.iva.id}"
+								label="#{mensaje.ivaAplicado}">
+								<f:selectItems value="#{hacerMantenimiento.itemsIva}" />
+
+								<p:ajax event="change" process="@this"
+									update="txtPrecioConIva, txtPrecioUsConIva, @this"
+									listener="#{administrarArbolito.calcularPreciosBolsa('C')}" />
+
+							</p:selectOneMenu>
+
+
+							<p:message for="lstIVA" />
+							<p:spacer width="1" />
+							<p:spacer width="1" />
+
+
+
+
+
+
+
+							<p:outputLabel for="txtPrecio" value="#{mensaje.precioCopSinIva}"
+								style="font-weight:bold; font-size:14px" />
+							<p:inputText id="txtPrecio"
+								value="#{administrarArbolito.bolsa.precioVentaPesos}"
+								required="true" label="#{mensaje.precioCOP}"
+								style="font-size:14px">
+
+								<p:ajax event="change" process="@this"
+									update="txtPrecioConIva, txtPrecioUsConIva, @this"
+									listener="#{administrarArbolito.calcularPreciosBolsa('C')}" />
+
+							</p:inputText>
+
+							<p:message for="txtPrecio" />
+							<p:spacer width="1" />
+							<p:spacer width="1" />
+
+							<p:outputLabel for="txtPrecioUS"
+								value="#{mensaje.precioUsSinIva}"
+								style="font-weight:bold; font-size:14px" />
+							<p:inputText id="txtPrecioUS"
+								value="#{administrarArbolito.bolsa.precioVentaUS}"
+								required="true" label="#{mensaje.precioUS}"
+								style="font-size:14px">
+
+								<p:ajax event="change" process="@this"
+									update="txtPrecioConIva, txtPrecioUsConIva, @this"
+									listener="#{administrarArbolito.calcularPreciosBolsa('C')}" />
+
+							</p:inputText>
+
+							<p:message for="txtPrecioUS" />
+							<p:spacer width="1" />
+							<p:spacer width="1" />
+
+
+
+							<p:outputLabel for="txtPrecioConIva"
+								value="#{mensaje.precioCopConIva}"
+								style="font-weight:bold; font-size:14px" />
+							<p:inputText id="txtPrecioConIva"
+								value="#{administrarArbolito.bolsa.precioVentaPesosConIva}"
+								label="#{mensaje.precioCopConIva}" disabled="true"
+								style="font-size:14px" />
+
+							<p:spacer width="1" />
+							<p:spacer width="1" />
+							<p:spacer width="1" />
+
+
+
+							<p:outputLabel for="txtPrecioUsConIva"
+								value="#{mensaje.precioUsConIva}"
+								style="font-weight:bold; font-size:14px" />
+							<p:inputText id="txtPrecioUsConIva"
+								value="#{administrarArbolito.bolsa.precioVentaUSConIva}"
+								label="#{mensaje.precioUsConIva}" disabled="true"
+								style="font-size:14px" />
+							<p:spacer width="1" />
+							<p:spacer width="1" />
+							<p:spacer width="1" />
+
+
+
+
+
+
+
+						</p:panelGrid>
+						<p:spacer height="10" />
+						<div align="center">
+							<p:commandButton id="btnCrearArbolito"
+								style="font-size:14px; font-weight: normal !important;"
+								action="#{administrarArbolito.crearBolsa()}"
+								value="#{mensaje.guardar}" update=":form" />
+
+							<p:spacer width="10" />
+							<p:commandButton id="btnBorrarArbolito"
+								style="font-size:14px; font-weight: normal; text-decoration: none !important;"
+								action="#{administrarArbolito.cancelarBolsa()}" process="@this"
+								value="#{mensaje.cancelar}" update=":form">
+
+								<p:resetInput target=":form:pnlArbolitos" />
+
+							</p:commandButton>
+
+						</div>
+						<p:outputLabel value="#{mensaje.informacionRequerida}"
+							style="font-size:10px" />
+
+						<p:blockUI block=":form:pnlCrearArbolito"
+							trigger="btnCrearArbolito, btnBorrarArbolito">
+
+							<p:graphicImage value="../../imagenes/cargando.gif" />
+
+
+						</p:blockUI>
+					</p:tab>
+				</p:accordionPanel>
+
+				<p:spacer height="30" />
+				<p:accordionPanel id="pnlDtlArbolitos">
+					<p:tab title="#{mensaje.listadoBolsas}" titleStyle="font-size:16px"
+						closable="true">
+
+						<p:dataTable var="loc" id="dtlArbolitos"
+							value="#{administrarArbolito.bolsas}" reflow="true" rows="10"
+							paginator="true" paginatorPosition="bottom"
+							draggableColumns="true"
+							emptyMessage="#{mensaje.noExistenciaBolsas}">
+
+
+
+							<p:column headerText="#{mensaje.arbolito}"
+								sortBy="#{loc.arbolito.nombre}"
+								rendered="#{administrarSesionCliente.idioma=='ES'}"
+								filterBy="#{loc.arbolito.nombre}" filterMatchMode="contains"
+								style="font-size:14px">
+								<p:outputLabel value="#{loc.arbolito.nombre}"
+									style="font-weight:normal; font-size:12px" />
+							</p:column>
+							<p:column headerText="#{mensaje.arbolito}"
+								rendered="#{administrarSesionCliente.idioma!='ES'}"
+								sortBy="#{loc.arbolito.nombreUS}" style="font-size:14px"
+								filterBy="#{loc.arbolito.nombreUS}" filterMatchMode="contains">
+								<p:outputLabel value="#{loc.arbolito.nombreUS}"
+									style="font-weight:normal; font-size:12px" />
+							</p:column>
+
+
+
+
+
+							<p:column headerText="#{mensaje.indicativo}"
+								sortBy="#{loc.estadoVigencia}" style="font-size:14px">
+
+
+
+								<p:outputLabel value="#{mensaje.ESTADO_ACTIVO}"
+									style="font-weight:normal; font-size:12px"
+									rendered="#{loc.estadoVigencia == 'A'}" />
+								<p:outputLabel value="#{mensaje.ESTADO_INACTIVO}"
+									style="font-weight:normal; font-size:12px"
+									rendered="#{loc.estadoVigencia == 'I'}" />
+
+
+							</p:column>
+
+
+
+							<p:column headerText="#{mensaje.arbolitosBolsa}"
+								sortBy="#{loc.cantidadDisponible}"
+								style="font-size:14px; text-align:right;">
+								<p:outputLabel value="#{loc.cantidadDisponible}"
+									style="font-weight:normal; font-size:12px" />
+							</p:column>
+
+
+
+
+
+
+							<p:column headerText="#{mensaje.precioCopConIva}"
+								sortBy="#{loc.precioVentaPesosConIva}"
+								style="font-size:14px; text-align:right;">
+								<p:outputLabel value="#{loc.precioVentaPesosConIva}"
+									style="font-weight:normal; font-size:12px">
+
+									<f:convertNumber type="currency" currencySymbol="$ " />
+								</p:outputLabel>
+							</p:column>
+
+							<p:column headerText="#{mensaje.precioUsConIva}"
+								sortBy="#{loc.precioVentaUSConIva}"
+								style="font-size:14px; text-align:right;">
+								<p:outputLabel value="#{loc.precioVentaUSConIva}"
+									style="font-weight:normal; font-size:12px">
+
+									<f:convertNumber type="currency" currencySymbol="US$ " />
+								</p:outputLabel>
+							</p:column>
+
+
+
+
+
+
+
+
+							<p:column headerText="#{mensaje.acciones}"
+								style="font-size:14px; text-align:center;">
+
+
+
+								<p:commandButton id="btnIrEditar"
+									style="background-origin: content-box; background-image: url('../../imagenes/editar.png'); background-size: cover; background-repeat:no-repeat; width:16px; height:16px; vertical-align:bottom; border:0; background-color:transparent"
+									action="#{administrarArbolito.asignarBolsa(loc,'MODAL_EDITAR_BOLSA')}"
+									value="" process=":form:pnlDtlArbolitos" update=":formEditar" />
+
+								<p:commandButton id="btnIrEliminar"
+									style="background-origin: content-box; background-image: url('../../imagenes/borrar.png'); background-size: cover; background-repeat:no-repeat; width:16px; height:16px; vertical-align:bottom; border:0; background-color:transparent"
+									value=""
+									action="#{administrarArbolito.asignarBolsa(loc,'MODAL_ELIMINAR_BOLSA')}"
+									process="dtlArbolitos" update=":formEliminar" />
+
+
+
+
+								<p:tooltip for="btnIrEliminar" value="#{mensaje.eliminar}"
+									trackMouse="true" />
+
+								<p:tooltip for="btnIrEditar" value="#{mensaje.editar}"
+									trackMouse="true" />
+
+
+
+
+							</p:column>
+
+							<p:columnGroup type="footer">
+								<p:row>
+
+									<p:column style="text-align:right; font-size:14px"
+										footerText="#{mensaje.TOTAL}" colspan="2" />
+									<p:column style="text-align:right; font-size:14px"
+										footerText="#{administrarArbolito.totales.get('cantidad')}" />
+
+
+
+									<p:column style="text-align:right; font-size:14px" colspan="3" />
+
+
+
+
+								</p:row>
+							</p:columnGroup>
+
+						</p:dataTable>
+
+					</p:tab>
+				</p:accordionPanel>
+
+			</p:outputPanel>
+		</h:form>
+
+
+
+
+		<ui:include src="/arbolitos/bolsas/eliminarBolsaArbolito.xhtml" />
+		<ui:include src="/arbolitos/bolsas/editarBolsaArbolito.xhtml" />
+
+
+
+
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,181 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<h:form id="formEditar">
+
+		<p:dialog header="#{mensaje.editarBolsa}"
+			widgetVar="panelEdicionArbolito"  resizable="true"
+			closable="false" responsive="true" >
+			<p:panel id="pnlEditarArbolito">
+				<p:panelGrid columns="5" cellpadding="0" cellspacing="0"
+					styleClass="ui-panelgrid-blank">
+
+
+					<p:outputLabel for="lstArbolito" value="#{mensaje.arbolito}"
+						style="font-weight:bold; font-size:14px;" />
+					<p:selectOneMenu id="lstArbolito" required="true"
+						style="font-size:14px; width:100%" disabled="true"
+						value="#{administrarArbolito.bolsaTransaccion.arbolito.id}"
+						label="#{mensaje.arbolito}">
+						<f:selectItems
+							value="#{administrarVenta.itemsArbolitos}" />
+					</p:selectOneMenu>
+					<p:message for="lstArbolito" />
+					<p:spacer width="1" />
+					<p:spacer width="1" />
+
+
+
+					<p:outputLabel for="txtCantidad" value="#{mensaje.arbolitosBolsa}"
+						style="font-weight:bold; font-size:14px" />
+					<p:inputText id="txtCantidad" disabled="true"
+						value="#{administrarArbolito.bolsaTransaccion.cantidadDisponible}"
+						required="true" label="#{mensaje.arbolitosBolsa}"
+						style="font-size:14px" />
+
+					<p:message for="txtCantidad" />
+					<p:spacer width="1" />
+					<p:spacer width="1" />
+
+
+					<p:outputLabel for="lstIndicativo" value="#{mensaje.indicativo}"
+						style="font-weight:bold; font-size:14px;" />
+					<p:selectOneMenu id="lstIndicativo" required="true"
+						style="font-size:14px;"
+						value="#{administrarArbolito.bolsaTransaccion.estadoVigencia}"
+						label="#{mensaje.indicativo}">
+						<f:selectItems value="#{consultarFuncionesAPI.itemsEstados}" />
+					</p:selectOneMenu>
+
+					<p:message for="lstIndicativo" />
+					<p:spacer width="1" />
+					<p:spacer width="1" />
+
+
+
+					<p:outputLabel for="lstIVA" value="#{mensaje.ivaAplicado}"
+						style="font-weight:bold; font-size:14px;" />
+					<p:selectOneMenu id="lstIVA" required="true"
+						style="font-size:14px;"
+						value="#{administrarArbolito.bolsaTransaccion.iva.id}"
+						label="#{mensaje.ivaAplicado}">
+						<f:selectItems value="#{hacerMantenimiento.itemsIva}" />
+
+						<p:ajax event="change" process="@this"
+							update="txtPrecioConIva, txtPrecioUsConIva, @this"
+							listener="#{administrarArbolito.calcularPreciosBolsa('E')}" />
+
+					</p:selectOneMenu>
+
+
+					<p:message for="lstIVA" />
+					<p:spacer width="1" />
+					<p:spacer width="1" />
+
+
+
+
+
+
+
+					<p:outputLabel for="txtPrecio" value="#{mensaje.precioCopSinIva}"
+						style="font-weight:bold; font-size:14px" />
+					<p:inputText id="txtPrecio"
+						value="#{administrarArbolito.bolsaTransaccion.precioVentaPesos}"
+						required="true" label="#{mensaje.precioCOP}"
+						style="font-size:14px">
+
+						<p:ajax event="change" process="@this"
+							update="txtPrecioConIva, txtPrecioUsConIva, @this"
+							listener="#{administrarArbolito.calcularPreciosBolsa('E')}" />
+
+					</p:inputText>
+
+					<p:message for="txtPrecio" />
+					<p:spacer width="1" />
+					<p:spacer width="1" />
+
+					<p:outputLabel for="txtPrecioUS" value="#{mensaje.precioUsSinIva}"
+						style="font-weight:bold; font-size:14px" />
+					<p:inputText id="txtPrecioUS"
+						value="#{administrarArbolito.bolsaTransaccion.precioVentaUS}" required="true"
+						label="#{mensaje.precioUS}" style="font-size:14px">
+
+						<p:ajax event="change" process="@this"
+							update="txtPrecioConIva, txtPrecioUsConIva, @this"
+							listener="#{administrarArbolito.calcularPreciosBolsa('E')}" />
+
+					</p:inputText>
+
+					<p:message for="txtPrecioUS" />
+					<p:spacer width="1" />
+					<p:spacer width="1" />
+
+
+
+					<p:outputLabel for="txtPrecioConIva"
+						value="#{mensaje.precioCopConIva}"
+						style="font-weight:bold; font-size:14px" />
+					<p:inputText id="txtPrecioConIva"
+						value="#{administrarArbolito.bolsaTransaccion.precioVentaPesosConIva}"
+						label="#{mensaje.precioCopConIva}" disabled="true"
+						style="font-size:14px" />
+
+					<p:spacer width="1" />
+					<p:spacer width="1" />
+					<p:spacer width="1" />
+
+
+
+					<p:outputLabel for="txtPrecioUsConIva"
+						value="#{mensaje.precioUsConIva}"
+						style="font-weight:bold; font-size:14px" />
+					<p:inputText id="txtPrecioUsConIva"
+						value="#{administrarArbolito.bolsaTransaccion.precioVentaUSConIva}"
+						required="true" label="#{mensaje.precioUsConIva}" disabled="true"
+						style="font-size:14px" />
+					<p:spacer width="1" />
+					<p:spacer width="1" />
+					<p:spacer width="1" />
+
+
+
+
+
+
+
+				</p:panelGrid>
+				<br />
+				<br />
+				<div align="center">
+					<p:commandButton id="btnEditarArbolito" style="font-size:14px"
+						action="#{administrarArbolito.editarBolsa()}"
+						value="#{mensaje.editar}" process=":formEditar:pnlEditarArbolito"
+						update=":formEditar:pnlEditarArbolito, :form" />
+					<p:spacer width="10" />
+					<p:commandButton id="btnCancelarEdicionArbolito"
+						style="font-size:14px; font-weight: normal !important;"
+						action="#{administrarArbolito.cancelarBolsaTransaccion('MODAL_EDITAR_BOLSA')}"
+						process="@this" value="#{mensaje.cancelar}" update=":form">
+
+					</p:commandButton>
+
+				</div>
+
+				<p:outputLabel value="#{mensaje.informacionRequerida}"
+					style="font-size:10px" />
+				<p:blockUI block=":formEditar:pnlEditarArbolito"
+					trigger="btnEditarArbolito, btnCancelarEdicionArbolito">
+					<p:graphicImage value="../../imagenes/cargando.gif" />
+				</p:blockUI>
+
+			</p:panel>
+		</p:dialog>
+		<p:blockUI block="pnlEditarArbolito" trigger="btnEditarArbolito" />
+
+	</h:form>
+</ui:composition>

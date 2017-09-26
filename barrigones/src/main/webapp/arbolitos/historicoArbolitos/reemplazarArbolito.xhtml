@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<h:form id="formReemplazarArbolito">
+
+		<p:dialog header="#{mensaje.cambiarReemplazarArbolito}"  width="750"
+			widgetVar="panelReemplazarArbolito"  resizable="true"
+			closable="false" responsive="true">
+			<p:panel id="pnlReemplazarArbolito">
+				<div align="center">
+
+
+
+					<p:panelGrid columns="1" style="width:100%"
+						styleClass="ui-panelgrid-blank">
+
+						<p:outputLabel value="#{mensaje.advertenciaReemplazoArbolito}"
+							style="font-weight:normal; font-size:14px" />
+						<br />
+						<p:outputLabel value="#{mensaje.deseaReemplazarArbolito}"
+							rendered="#{administrarArbolito.historicoTransaccion.lote==null or administrarArbolito.historicoTransaccion.lote.id==null}"
+							style="font-weight:bold; font-size:14px" />
+
+
+						<p:outputLabel value="#{mensaje.despuesReemplazo}"
+							for="lstNuevoLote"
+							rendered="#{administrarArbolito.historicoTransaccion.lote!=null and administrarArbolito.historicoTransaccion.lote.id!=null}"
+							style="font-weight:bold; font-size:14px" />
+
+
+						<p:selectOneMenu id="lstNuevoLote"
+							rendered="#{administrarArbolito.historicoTransaccion.lote!=null and administrarArbolito.historicoTransaccion.lote.id!=null}"
+							style="font-size:12px; width:100%" required="true"
+							value="#{administrarArbolito.tipoAsignacion}">
+
+							<f:selectItem itemValue="" itemLabel="#{mensaje.comboVacio}" />
+							<f:selectItem itemValue="B"
+								itemLabel="#{mensaje.blancoNuevoLote}" />
+							<f:selectItem itemValue="M" itemLabel="#{mensaje.mismoLote}" />
+
+						</p:selectOneMenu>
+
+						<p:message for="lstNuevoLote"
+							rendered="#{administrarArbolito.historicoTransaccion.lote!=null and administrarArbolito.historicoTransaccion.lote.id!=null}" />
+
+
+					</p:panelGrid>
+
+					<p:commandButton id="btnReemplazar" style="font-size:14px"
+						action="#{administrarArbolito.reemplazarArbolito()}"
+						value="#{mensaje.aceptar}" process=":formReemplazarArbolito"
+						update=":formCompras, pnlReemplazarArbolito" />
+					<p:spacer width="10" />
+					<p:commandButton id="btnCancelarReemplazar"
+						style="font-size:14px; font-weight: normal !important;"
+						action="#{consultarFuncionesAPI.cerrarModal('panelReemplazarArbolito')}"
+						process="@this" value="#{mensaje.cancelar}" update=":formCompras">
+
+					</p:commandButton>
+
+					<p:blockUI block=":formReemplazarArbolito:pnlReemplazarArbolito"
+						trigger="btnReemplazar, btnCancelarReemplazar">
+						<p:graphicImage value="../../imagenes/cargando.gif" />
+					</p:blockUI>
+
+				</div>
+
+
+
+
+
+			</p:panel>
+		</p:dialog>
+
+
+	</h:form>
+</ui:composition>

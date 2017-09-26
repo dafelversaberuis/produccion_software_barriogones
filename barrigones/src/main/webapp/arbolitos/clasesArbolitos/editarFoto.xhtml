@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<h:form id="formEditarFoto">
+
+		<p:dialog header="#{mensaje.editarTituloFoto}"
+			widgetVar="panelEdicionFoto"  resizable="true"
+			closable="false" responsive="true">
+			<p:panel id="pnlEditarFoto">
+				<div align="center">
+
+
+					<p:panelGrid columns="3" cellpadding="0" cellspacing="0"
+						styleClass="ui-panelgrid-blank">
+
+						<p:outputLabel for="txtTitulo" value="#{mensaje.tituloFoto}"
+							style="font-weight:bold; font-size:14px;" />
+						<p:inputText id="txtTitulo" style="font-size:14px; width:100%"
+							value="#{administrarArbolito.fotoArbolitoTransaccion.titulo}"
+							required="true" label="#{mensaje.tituloFoto}" />
+						<p:message for="txtTitulo" />
+					</p:panelGrid>
+				</div>
+				<br />
+				<br />
+				<div align="center">
+					<p:commandButton id="btnEditarFoto" style="font-size:14px"
+						action="#{administrarArbolito.editarFotoArbolito()}"
+						value="#{mensaje.editar}" process=":formEditarFoto:pnlEditarFoto"
+						update=":formEditarFoto:pnlEditarFoto, :formAsignarArbolito:dtlArbolitos, :form" />
+					<p:spacer width="10" />
+					<p:commandButton id="btnCancelarEdicionFoto"
+						style="font-size:14px; font-weight: normal !important;"
+						action="#{administrarArbolito.cancelarFotoArbolitoTransaccion('MODAL_EDITAR_FOTO')}"
+						process="@this" value="#{mensaje.cancelar}"
+						update=":formAsignarArbolito:dtlArbolitos">
+
+					</p:commandButton>
+
+				</div>
+
+				<p:outputLabel value="#{mensaje.informacionRequerida}"
+					style="font-size:10px" />
+				<p:blockUI block=":formEditarFoto:pnlEditarFoto"
+					trigger="btnEditarFoto, btnCancelarEdicionFoto">
+					<p:graphicImage value="../../imagenes/cargando.gif" />
+				</p:blockUI>
+
+			</p:panel>
+		</p:dialog>
+		<p:blockUI block="pnlEditarFoto" trigger="btnEditarFoto" />
+
+	</h:form>
+</ui:composition>

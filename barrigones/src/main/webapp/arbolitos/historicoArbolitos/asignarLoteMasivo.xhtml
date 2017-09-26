@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<h:form id="formAsignarLoteMasivo">
+
+		<p:dialog header="#{mensaje.asignarLoteMasivo}" widgetVar="panelAsignarLoteMasivo" width="400"
+			 resizable="true" closable="false" responsive="true">
+			<p:panel id="pnlAsignarLoteMasivo">
+			<p:outputLabel value="#{mensaje.advertenciaAsignacionMasiva}"
+						style="font-weight:normal; font-size:14px" />
+					<br />
+				<div align="center">
+					
+					<p:panelGrid columns="5" style="width:100%"
+						styleClass="ui-panelgrid-blank">
+
+
+
+
+						<p:outputLabel for="lstTipoAsignacion"
+							value="#{mensaje.tipoAsignacion}"
+							style="font-weight:bold; font-size:14px" />
+
+						<p:selectOneMenu id="lstTipoAsignacion"
+							style="font-size:14px; width:100%" required="true"
+							value="#{administrarArbolito.tipoAsignacion}"
+							label="#{mensaje.tipoAsignacion}">
+
+							<f:selectItem itemValue="" itemLabel="#{mensaje.comboVacio}" />
+							<f:selectItem itemValue="M" itemLabel="#{mensaje.manual}" />
+							<f:selectItem itemValue="A" itemLabel="#{mensaje.automatico}" />
+
+							<p:ajax event="change" process="@this" 
+								update="pnlTipo1,pnlTipo2,pnlTipo3" />
+
+						</p:selectOneMenu>
+						<p:message for="lstTipoAsignacion" />
+						<p:graphicImage value="../../imagenes/ayuda.png"
+							id="ayudaTipoAsignacion" />
+						<p:tooltip value="#{mensaje.ayudaTipoAsignacion}"
+							trackMouse="true" for="ayudaTipoAsignacion" />
+
+
+
+						<p:outputPanel id="pnlTipo1"
+							>
+							<p:outputLabel for="lstLoteDisponible" value="#{mensaje.lote}" rendered="#{administrarArbolito.tipoAsignacion!=null and administrarArbolito.tipoAsignacion=='M'}"
+								style="font-weight:bold; font-size:14px" />
+						</p:outputPanel>
+						<p:outputPanel id="pnlTipo2"
+							>
+							<p:selectOneMenu id="lstLoteDisponible" rendered="#{administrarArbolito.tipoAsignacion!=null and administrarArbolito.tipoAsignacion=='M'}"
+								style="font-size:14px; width:100%" required="true"
+								value="#{administrarArbolito.historicoTransaccion.lote.nombreLote}"
+								label="#{mensaje.lote}">
+
+								<f:selectItems
+									value="#{administrarArbolito.getItemsLotesManualesMasivo()}" />
+
+							</p:selectOneMenu>
+						</p:outputPanel>
+
+						<p:outputPanel id="pnlTipo3"
+							>
+
+							<p:message for="lstLoteDisponible" rendered="#{administrarArbolito.tipoAsignacion!=null and administrarArbolito.tipoAsignacion=='M'}"/>
+
+						</p:outputPanel>
+
+
+
+					</p:panelGrid>
+
+					<p:commandButton id="btnAsignar" style="font-size:14px"
+						action="#{administrarArbolito.asignarLoteMasivo()}"
+						value="#{mensaje.aceptar}" process=":formAsignarLoteMasivo"
+						update=":formCompras, pnlAsignarLoteMasivo" />
+					<p:spacer width="10" />
+					<p:commandButton id="btnCancelarAsignacionLote"
+						style="font-size:14px; font-weight: normal !important;"
+						action="#{consultarFuncionesAPI.cerrarModal('panelAsignarLoteMasivo')}"
+						process="@this" value="#{mensaje.cancelar}" update=":formCompras">
+
+					</p:commandButton>
+
+					<p:blockUI block=":formAsignarLoteMasivo:pnlAsignarLoteMasivo"
+						trigger="btnAsignar, btnCancelarAsignacionLote">
+						<p:graphicImage value="../../imagenes/cargando.gif" />
+					</p:blockUI>
+
+				</div>
+
+
+
+
+
+			</p:panel>
+		</p:dialog>
+
+
+	</h:form>
+</ui:composition>

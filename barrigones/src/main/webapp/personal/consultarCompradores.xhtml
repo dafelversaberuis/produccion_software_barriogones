@@ -1,0 +1,152 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/plantillas/principal.xhtml">
+
+	<ui:define name="body">
+
+		<h:form id="form">
+
+			<p:growl id="messages" showDetail="true" globalOnly="true" />
+			<p:remoteCommand name="onload" process="@this"
+				action="#{administrarSesionCliente.getNoRolAdmitido()}"
+				autoRun="true" />
+
+			<div class="row x_title">
+				<div class="col-md-6">
+					<p:outputLabel value="#{mensaje.moduloPersonal}: "
+						styleClass="tituloPrincipal" />
+					<p:spacer width="2" />
+					<p:outputLabel value="#{mensaje.consultaCompradores}"
+						styleClass="tituloPrincipal" />
+				</div>
+			</div>
+
+			<div align="center" class="titulo"></div>
+
+			<p:outputPanel id="pnlComprador">
+
+				<p:spacer height="10" />
+
+				<p:outputPanel id="pnlConsultar">
+					<p:accordionPanel>
+						<p:tab title="#{mensaje.consultarVentasCriterios}"
+							titleStyle="font-size:16px" closable="true">
+
+							<p:panelGrid columns="2" cellpadding="0" cellspacing="0"
+								styleClass="ui-panelgrid-blank">
+
+
+
+
+								<p:outputLabel for="txtComprador"
+									value="#{mensaje.compradorParte}"
+									style="font-weight:bold; font-size:14px;" />
+								<p:inputText id="txtComprador"
+									value="#{administrarPersonal.comprador.nombreCompleto}"
+									label="#{mensaje.tarjeta}" style="font-size:14px;" />
+								<p:spacer width="1" />
+								<p:message for="txtComprador" />
+
+
+								<p:outputLabel for="txtCorreo" value="#{mensaje.correoParte}"
+									style="font-weight:bold; font-size:14px;" />
+								<p:inputText id="txtCorreo"
+									value="#{administrarPersonal.comprador.tCorreoConsulta}"
+									label="#{mensaje.correoParte}" style="font-size:14px;" />
+								<p:spacer width="1" />
+								<p:message for="txtCorreo" />
+
+
+
+
+							</p:panelGrid>
+
+							<p:spacer height="10" />
+							<div align="center">
+								<p:commandButton id="btnConsultar"
+									style="font-size:14px; font-weight: normal !important;"
+									action="#{administrarPersonal.consultarCompradores()}"
+									value="#{mensaje.consultar}"
+									update=":form:pnlConsultar, :form:pnlDtlCompradores"
+									process=":form:pnlConsultar" />
+
+								<p:spacer width="10" />
+								<p:commandButton id="btnBorrar"
+									style="font-size:14px; font-weight: normal; text-decoration: none !important;"
+									action="#{administrarPersonal.resetearConsultaComprador()}"
+									process="@this" value="#{mensaje.cancelar}"
+									update=":form:pnlConsultar, :form:pnlDtlCompradores">
+
+									<p:resetInput target=":form:pnlConsultar" />
+
+								</p:commandButton>
+
+							</div>
+
+							<p:blockUI block=":form:pnlConsultar"
+								trigger="btnConsultar, btnBorrar">
+
+								<p:graphicImage value="../imagenes/cargando.gif" />
+
+
+							</p:blockUI>
+						</p:tab>
+					</p:accordionPanel>
+				</p:outputPanel>
+				<p:spacer height="30" />
+				<p:outputPanel id="pnlDtlCompradores">
+					<p:accordionPanel>
+						<p:tab title="#{mensaje.listadoCompradores}"
+							titleStyle="font-size:16px" closable="true">
+
+							<p:dataTable var="loc" id="dtlComprador"
+								value="#{administrarPersonal.compradores}" reflow="true"
+								rows="10" paginator="true" paginatorPosition="bottom"
+								draggableColumns="true"
+								emptyMessage="#{mensaje.noExistenciaCompradores}">
+
+
+
+
+								<p:column headerText="#{mensaje.comprador}"
+									sortBy="#{loc.nombreCompleto}" filterBy="#{loc.nombreCompleto}"
+									style="font-size:14px">
+									<p:outputLabel value="#{loc.nombreCompleto}"
+										style="font-weight:normal;font-size:14px" />
+								</p:column>
+
+								<p:column headerText="#{mensaje.correo}"
+									sortBy="#{loc.correoElectronico}"
+									filterBy="#{loc.correoElectronico}" style="font-size:14px">
+									<p:outputLabel value="#{loc.correoElectronico}"
+										style="font-weight:normal;font-size:14px" />
+								</p:column>
+
+
+
+							</p:dataTable>
+
+
+
+						</p:tab>
+					</p:accordionPanel>
+				</p:outputPanel>
+
+			</p:outputPanel>
+
+
+
+		</h:form>
+		<br />
+
+
+
+
+		<p:spacer height="400" />
+
+	</ui:define>
+</ui:composition>

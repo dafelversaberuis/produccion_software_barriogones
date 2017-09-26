@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<h:form id="formCambiarMoneda">
+
+
+		<p:dialog header="#{mensaje.cambiarMoneda}" modal="false" 
+			widgetVar="panelCambiarMoneda" resizable="true" closable="true"
+			responsive="true">
+
+			<p:outputPanel id="pnlCambiarMoneda">
+				<div align="center">
+					<p:panelGrid columns="3" cellpadding="2" cellspacing="2"
+						style="width:100%" styleClass="ui-panelgrid-blank" layout="grid">
+
+						<p:outputLabel for="lstMoneda" value="#{mensaje.moneda}"
+							style="font-weight:normal; font-size:14px;" />
+
+						<p:selectOneMenu id="lstMoneda" required="true"
+							style="font-size:14px;"
+							value="#{administrarSesionCliente.moneda}"
+							label="#{mensaje.moneda}">
+							<f:selectItem itemValue="" itemLabel="#{mensaje.comboVacio}" />
+							<f:selectItem itemValue="COP"
+								itemLabel="#{mensaje.pesoColombiano}" />
+							<f:selectItem itemValue="US" itemLabel="#{mensaje.dolar}" />
+
+						</p:selectOneMenu>
+
+
+						<p:message for="lstMoneda" />
+					</p:panelGrid>
+				</div>
+				<br />
+				<br />
+				<div align="center">
+					<p:commandButton id="btnCambiarMoneda" style="font-size:14px"
+						action="#{administrarSesionCliente.cambiarMoneda()}"
+						value="#{mensaje.aceptar}"
+						process=":formCambiarMoneda:pnlCambiarMoneda"
+						update=":formCompras, :formCambiarMoneda:pnlCambiarMoneda" />
+					<p:spacer width="10" />
+					<p:commandButton id="btnCancelarMoneda"
+						style="font-size:14px; font-weight: normal !important;"
+						action="#{consultarFuncionesAPI.cerrarModal('panelCambiarMoneda')}"
+						process="@this" value="#{mensaje.cancelar}" update=":formCompras">
+
+					</p:commandButton>
+
+				</div>
+				<br />
+				<p:outputLabel value="#{mensaje.informacionRequerida}"
+					style="font-size:10px" />
+				<p:blockUI block=":formCambiarMoneda:pnlCambiarMoneda"
+					trigger="btnCambiarMoneda, btnCancelarMoneda">
+					
+				</p:blockUI>
+
+			</p:outputPanel>
+		</p:dialog>
+	
+
+	</h:form>
+</ui:composition>

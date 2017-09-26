@@ -1,0 +1,185 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<h:form id="formRegistroGeneral">
+
+
+		<p:dialog modal="false" widgetVar="panelRegistroGeneral" 
+			resizable="true" responsive="true" closable="false">
+
+
+			<p:outputPanel>
+				<p:panel header="#{mensaje.crearNuevaCuenta}" style="font-size:14px">
+					<p:outputPanel id="pnlNuevaCuenta">
+						<p:panelGrid columns="2" style="width:100%" layout="grid" styleClass="ui-panelgrid-blank"
+							rendered="#{administrarSesionCliente.vistaNuevaCuenta==null}">
+
+							<p:outputLabel for="txtNombre"
+								value="#{mensaje.nombreCompletoEmpresa}"
+								style="font-weight:bold; font-size:14px" />
+							<p:inputText id="txtNombre"
+								value="#{administrarSesionCliente.compradorSesion.nombreCompleto}"
+								required="true" label="#{mensaje.nombreEnEspanol}"
+								style="width:100%; font-size:14px; height:50px" />
+<p:spacer width="1" />
+							<p:message for="txtNombre" />
+
+							<p:outputLabel for="txtCorreo" value="#{mensaje.correo}"
+								style="font-weight:bold; font-size:14px" />
+							<p:inputText id="txtCorreo"
+								value="#{administrarSesionCliente.compradorSesion.correoElectronico}"
+								required="true" label="#{mensaje.correo}"
+								style="width:100%; font-size:14px; height:50px" />
+<p:spacer width="1" />
+
+							<p:message for="txtCorreo" />
+
+
+							<p:outputLabel for="txtClave" value="#{mensaje.contrasenaNueva}"
+								style="font-weight:bold; font-size:14px" />
+							<p:password id="txtClave" feedback="true"
+								value="#{administrarSesionCliente.compradorSesion.clave}"
+								required="true" label="#{mensaje.contrasenaNueva}"
+								style="width:100%; font-size:14px; height:50px"
+								promptLabel="#{mensaje.ingreseContrasena}"
+								weakLabel="#{mensaje.contrasenaDebil}"
+								goodLabel="#{mensaje.contrasenaBuena}"
+								strongLabel="#{mensaje.contrasenaFuerte}" />
+
+<p:spacer width="1" />
+							<p:message for="txtClave" />
+
+
+
+						</p:panelGrid>
+
+
+
+
+
+						<div align="center">
+							<p:panelGrid columns="1" style="width:100%; text-align:center"
+								rendered="#{administrarSesionCliente.vistaNuevaCuenta=='CUENTA_APTA'}">
+
+								<p:outputLabel value="#{mensaje.escribaCodigo}"
+									style="font-weight:normal; font-size:14px" />
+
+								<p:inputText id="txtCapchaCriolla"
+									value="#{administrarSesionCliente.compradorSesion.tnumeroEscrito}"
+									required="true" label="#{mensaje.nuevoCodigoVerificacion}"
+									style="font-size:14px; height:50px; width:40%" />
+								<p:message for="txtCapchaCriolla" />
+
+							</p:panelGrid>
+							<br />
+
+
+
+							<p:commandLink id="btnLogin2" 
+								rendered="#{administrarSesionCliente.vistaNuevaCuenta==null}"
+								style="font-size:14px; font-weight: bold !important;"
+								action="#{administrarSesionCliente.cerrarAbrirLoginRegistro('LOGIN')}"
+								process="@this" value="#{mensaje.login}"
+								update=":formCompras, :formLogueoGeneral, :formRegistroGeneral">
+
+							</p:commandLink>
+
+							<p:spacer width="10" />
+
+							<p:outputLabel value=" | "
+								rendered="#{administrarSesionCliente.vistaNuevaCuenta==null}" />
+
+
+							<p:spacer width="10" />
+							<p:commandButton id="btnVerificar"
+								rendered="#{administrarSesionCliente.vistaNuevaCuenta==null}"
+								style="font-size:14px; font-weight:bold !important"
+								action="#{administrarSesionCliente.verificarCuentaComprador()}"
+								process="pnlNuevaCuenta"
+								update="pnlNuevaCuenta, :formCompras:messages"
+								value="#{mensaje.continuarCreacion}" />
+
+
+
+
+
+							<p:blockUI block="pnlNuevaCuenta"
+								rendered="#{administrarSesionCliente.vistaNuevaCuenta==null}"
+								trigger="btnVerificar">
+								<p:graphicImage value="/barrigones/imagenes/cargando.gif" />
+							</p:blockUI>
+
+							<p:spacer width="10" />
+
+
+							<p:commandButton id="btnCrearCuenta"
+								rendered="#{administrarSesionCliente.vistaNuevaCuenta=='CUENTA_APTA'}"
+								style="font-size:14px; font-weight:bold !important"
+								action="#{administrarSesionCliente.crearCompradorTarjeta()}"
+								process="pnlNuevaCuenta"
+								update="pnlNuevaCuenta, :formCompras, :formCliente"
+								value="#{mensaje.crearCuenta}" />
+
+
+							<br /> <br />
+
+
+							<p:commandLink id="btnRegresarCuenta"
+								rendered="#{administrarSesionCliente.vistaNuevaCuenta=='CUENTA_APTA'}"
+								style="font-size:14px; font-weight:bold !important"
+								action="#{administrarSesionCliente.regresarCrearNueva()}"
+								process="@this" update="pnlNuevaCuenta"
+								value="#{mensaje.datosRegistro}" />
+
+							<p:spacer width="10" />
+
+							<p:outputLabel value=" | "
+								rendered="#{administrarSesionCliente.vistaNuevaCuenta=='CUENTA_APTA'}" />
+
+							<p:spacer width="10" />
+
+							<p:commandLink id="btnVolverEnviar"
+								rendered="#{administrarSesionCliente.vistaNuevaCuenta=='CUENTA_APTA'}"
+								style="font-size:14px; font-weight:bold !important"
+								action="#{administrarSesionCliente.enviarCaptchaCriolla()}"
+								process="@this" update="pnlNuevaCuenta, :formCompras:messages"
+								value="#{mensaje.volverEnviar}" />
+
+							<p:spacer width="10" />
+
+							<p:outputLabel value=" | "
+								rendered="#{administrarSesionCliente.vistaNuevaCuenta=='CUENTA_APTA'}" />
+
+							<p:spacer width="10" />
+
+
+							<p:commandLink id="btnLogin"
+								rendered="#{administrarSesionCliente.vistaNuevaCuenta=='CUENTA_APTA'}"
+								style="font-size:14px; font-weight: bold !important;"
+								action="#{administrarSesionCliente.cerrarAbrirLoginRegistro('LOGIN')}"
+								process="@this" value="#{mensaje.login}"
+								update=":formCompras, :formLogueoGeneral, :formRegistroGeneral">
+
+							</p:commandLink>
+
+
+							<p:blockUI block="pnlNuevaCuenta"
+								rendered="#{administrarSesionCliente.vistaNuevaCuenta=='CUENTA_APTA'}"
+								trigger="btnCrearCuenta, btnVolverEnviar">
+								<p:graphicImage value="/barrigones/imagenes/cargando.gif" />
+							</p:blockUI>
+
+						</div>
+
+
+					</p:outputPanel>
+				</p:panel>
+			</p:outputPanel>
+		</p:dialog>
+
+	</h:form>
+</ui:composition>

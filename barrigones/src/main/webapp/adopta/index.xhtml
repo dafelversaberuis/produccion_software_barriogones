@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/plantillas/principalClienteTarjeta.xhtml">
+	<ui:define name="body">
+		<style type="text/css">
+#arbolito {
+	height: auto;
+	width: 100%;
+	background-repeat: no-repeat;
+}
+</style>
+		<h:form id="formCompras">
+			<f:metadata>
+				<f:viewParam id="t" name="t" value="#{administrarSesionCliente.algoritmoTarjeta}" />
+				
+			</f:metadata>
+
+			<p:growl id="messages" showDetail="true" globalOnly="true" />
+			<div id="wrapper">
+				<section id="project-single" class="page">
+				<div id="content">
+					<section class="section" id="about">
+					<div class="container">
+						<div class="row">
+							<div class="col-xs-12">
+								<div class="project-page-header">
+									<h1 class="project-title">#{mensaje.redimirTarjetaImpresa}</h1>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="project-single-entry">
+
+						<div class="image-slider">
+							<ul data-timeout="5000">
+								<li><img
+									src="/barrigones/plantillas/images/backgrounds/background_1.jpg"
+									alt="imagen_subseccion" /></li>
+								<li><img
+									src="/barrigones/plantillas/images/backgrounds/background_2.jpg"
+									alt="imagen_subseccion" /></li>
+							</ul>
+						</div>
+					</div>
+					<!--/ .folio-single-entry-->
+
+
+
+					<div class="container">
+
+						<div class="row">
+							<div class="col-xs-12" align="center"
+								style="background: transparent;">
+								<hgroup class="section-title align-center">
+								<h2>#{mensaje.debesLoguearte}</h2>
+								<h2>#{mensaje.debesLoguearte2}</h2>
+								<h2>#{mensaje.debesLoguearte3}</h2>
+								</hgroup>
+
+
+
+							</div>
+						</div>
+					</div>
+					</section>
+				</div>
+				</section>
+			</div>
+		</h:form>
+		<h:form>
+
+
+			<p:remoteCommand name="onload"
+				action="#{consultarFuncionesAPI.abrirModal('panelLogueoGeneral')}"
+				autoRun="true" />
+
+
+
+		</h:form>
+	</ui:define>
+</ui:composition>

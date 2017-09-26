@@ -1,0 +1,1090 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/plantillas/principalClienteIndex2.xhtml"
+	xmlns:o="http://omnifaces.org/ui">
+	<ui:define name="body">
+		<style type="text/css">
+.ui-steps .ui-steps-item {
+	width: 24%;
+}
+
+.ui-state-highlight {
+	text-shadow: none !important;
+}
+
+.ui-steps.custom {
+	margin-bottom: 30px;
+}
+
+.ui-steps.custom .ui-steps-item .ui-menuitem-link {
+	height: 30px;
+	padding: 0 1em;
+}
+
+.ui-steps.custom .ui-steps-item .ui-steps-number {
+	background-color: #0081c2;
+	color: #FFFFFF;
+	display: inline-block;
+	width: 30px;
+	border-radius: 10px;
+	margin-top: -10px;
+	margin-bottom: 10px;
+}
+</style>
+		<h:form id="formCompras">
+			<p:growl id="messages" showDetail="true" globalOnly="true" />
+			<div class="row">
+
+
+
+				<br /> <br /> <br /> <br />
+
+
+
+
+
+
+
+				<div align="center">
+
+					<p:outputPanel id="pnlDetalleArbolitos" style="width:90%">
+						<div align="left">
+							<div class="col-xs-12">
+								<div class="project-page-header">
+									<h1 class="project-title">#{mensaje.pedidoActual}</h1>
+								</div>
+							</div>
+							<p:steps styleClass="custom" readonly="false"
+								activeIndex="#{administrarSesionCliente.vistaActual}">
+								<p:menuitem value="#{mensaje.arbolitosSeleccionados}"
+									actionListener="#{administrarSesionCliente.setVistaActual(0)}"
+									process="@this" update=":formCompras:pnlDetalleArbolitos"
+									style="font-size:14px; font-weight:bold">
+
+
+								</p:menuitem>
+								<p:menuitem value="#{mensaje.datosAdopta}"
+									style="font-size:14px"
+									action="#{administrarSesionCliente.setVistaActual(1)}"
+									update=":formCompras" process="@this" />
+								<p:menuitem value="#{mensaje.personalizacionArbolitos}"
+									action="#{administrarSesionCliente.setVistaActual(2)}"
+									update=":formCompras" process="@this" style="font-size:14px" />
+								<p:menuitem value="#{mensaje.opcionPago}" style="font-size:14px"
+									action="#{administrarSesionCliente.setVistaActual(3)}"
+									update=":formCompras" process="@this" />
+							</p:steps>
+
+							<br /> <br /> <br />
+
+							<p:accordionPanel id="pnlArbolitosSeleccionados"
+								rendered="#{administrarSesionCliente.vistaActual==0}">
+								<p:tab title="#{mensaje.arbolitosSeleccionados}"
+									titleStyle="font-size:16px" closable="true">
+
+									<p:dataTable var="loc" id="dtlArbolitosSeleccionados"
+										value="#{administrarSesionCliente.arbolitosCarrito}"
+										reflow="true" style="font-size:14px"
+										paginatorPosition="bottom" draggableColumns="true"
+										emptyMessage="#{mensaje.noExistenciaArbolitosSeleccionados}">
+
+
+										<p:column headerText="#{mensaje.arbolitoBolsa}"
+											sortBy="#{loc.nombre}"
+											rendered="#{administrarSesionCliente.idioma=='ES'}"
+											style="font-size:14px">
+
+											<p:outputLabel
+												value="#{mensaje.bolsa} #{loc.nombre} x #{loc.TBolsa.cantidadDisponible}"
+												rendered="#{loc.TBolsa!=null and loc.TBolsa.id!=null}"
+												style="font-weight:normal; font-size:14px" />
+
+
+											<p:outputLabel value="#{loc.nombre}"
+												rendered="#{!(loc.TBolsa!=null and loc.TBolsa.id!=null)}"
+												style="font-weight:normal; font-size:14px" />
+
+
+										</p:column>
+
+										<p:column headerText="#{mensaje.nombre}"
+											sortBy="#{loc.nombreUS}"
+											rendered="#{administrarSesionCliente.idioma=='US'}"
+											style="font-size:14px">
+
+
+											<p:outputLabel
+												value="#{mensaje.bolsa} #{loc.nombreUS} x #{loc.TBolsa.cantidadDisponible}"
+												rendered="#{loc.TBolsa!=null and loc.TBolsa.id!=null}"
+												style="font-weight:normal; font-size:14px" />
+
+
+											<p:outputLabel value="#{loc.nombreUS}"
+												rendered="#{!(loc.TBolsa!=null and loc.TBolsa.id!=null)}"
+												style="font-weight:normal; font-size:14px" />
+										</p:column>
+
+
+										<p:column headerText="#{mensaje.cantidad}"
+											sortBy="#{loc.tcantidadCarrito}"
+											style="font-size:14px; text-align:right">
+
+											<p:inputText value="#{loc.tcantidadCarrito}" required="true"
+												rendered="#{!(loc.TBolsa!=null and loc.TBolsa.id!=null)}"
+												id="txtCantidad" label="#{mensaje.cantidad}"
+												style="font-weight:normal; font-size:14px; width:100px; height:50px; color:#000000; text-align:center">
+												<p:ajax event="change"
+													update="dtlArbolitosSeleccionados, :formCompras:messages"
+													process="@this"
+													listener="#{administrarSesionCliente.calcularTotalTipo(loc)}" />
+
+											</p:inputText>
+
+											<p:message for="txtCantidad"
+												rendered="#{!(loc.TBolsa!=null and loc.TBolsa.id!=null)}" />
+
+											<p:blockUI block="dtlArbolitosSeleccionados"
+												rendered="#{!(loc.TBolsa!=null and loc.TBolsa.id!=null)}"
+												trigger="txtCantidad">
+
+												<p:graphicImage value="../../imagenes/cargando.gif" />
+
+
+											</p:blockUI>
+
+
+											<p:inputText value="#{loc.tcantidadCarrito}" required="true"
+												rendered="#{loc.TBolsa!=null and loc.TBolsa.id!=null}"
+												id="txtCantidadBolsa" label="#{mensaje.cantidad}"
+												style="font-weight:normal; font-size:14px; width:100px; height:50px; color:#000000; text-align:center">
+												<p:ajax event="change"
+													update="dtlArbolitosSeleccionados, :formCompras:messages"
+													process="@this"
+													listener="#{administrarSesionCliente.calcularTotalTipoBolsa(loc)}" />
+
+											</p:inputText>
+
+											<p:message for="txtCantidadBolsa"
+												rendered="#{loc.TBolsa!=null and loc.TBolsa.id!=null}" />
+
+											<p:blockUI block="dtlArbolitosSeleccionados"
+												rendered="#{loc.TBolsa!=null and loc.TBolsa.id!=null}"
+												trigger="txtCantidadBolsa">
+
+												<p:graphicImage value="../../imagenes/cargando.gif" />
+
+
+											</p:blockUI>
+
+
+										</p:column>
+
+										<p:column headerText="#{mensaje.precioUnidad}"
+											rendered="#{administrarSesionCliente.moneda == 'US'}"
+											sortBy="#{loc.precioVentaUSConIva}"
+											style="font-size:14px; text-align:right">
+
+
+
+											<p:outputLabel value="#{loc.precioVentaUSConIva}"
+												rendered="#{!(loc.TBolsa!=null and loc.TBolsa.id!=null)}"
+												style="font-weight:normal; font-size:14px">
+
+
+												<f:convertNumber type="currency" currencySymbol="US$ " />
+											</p:outputLabel>
+
+											<p:outputLabel value="#{loc.TBolsa.precioVentaUSConIva}"
+												rendered="#{loc.TBolsa!=null and loc.TBolsa.id!=null}"
+												style="font-weight:normal; font-size:14px">
+
+
+												<f:convertNumber type="currency" currencySymbol="US$ " />
+											</p:outputLabel>
+
+
+										</p:column>
+										<p:column headerText="#{mensaje.precioUnidad}"
+											rendered="#{administrarSesionCliente.moneda == 'COP'}"
+											sortBy="#{loc.precioVentaPesosConIva}"
+											style="font-size:14px; text-align:right">
+
+
+
+											<p:outputLabel value="#{loc.precioVentaPesosConIva}"
+												rendered="#{!(loc.TBolsa!=null and loc.TBolsa.id!=null)}"
+												style="font-weight:normal; font-size:14px">
+
+
+												<f:convertNumber type="currency" currencySymbol="$ " />
+											</p:outputLabel>
+
+											<p:outputLabel value="#{loc.TBolsa.precioVentaPesosConIva}"
+												rendered="#{loc.TBolsa!=null and loc.TBolsa.id!=null}"
+												style="font-weight:normal; font-size:14px">
+
+
+												<f:convertNumber type="currency" currencySymbol="$ " />
+											</p:outputLabel>
+
+
+										</p:column>
+
+										<p:column headerText="#{mensaje.precioTotal}"
+											rendered="#{administrarSesionCliente.moneda == 'US'}"
+											sortBy="#{loc.TPrecioTotalUSConIva}"
+											style="font-size:14px; text-align:right">
+
+
+
+											<p:outputLabel value="#{loc.TPrecioTotalUSConIva}"
+												style="font-weight:normal; font-size:14px">
+
+												<f:convertNumber type="currency" currencySymbol="US$ " />
+											</p:outputLabel>
+
+
+										</p:column>
+										<p:column headerText="#{mensaje.precioTotal}"
+											rendered="#{administrarSesionCliente.moneda == 'COP'}"
+											sortBy="#{loc.TPrecioTotalPesosConIva}"
+											style="font-size:14px; text-align:right">
+
+
+
+											<p:outputLabel value="#{loc.TPrecioTotalPesosConIva}"
+												style="font-weight:normal; font-size:14px; text-align:right">
+
+												<f:convertNumber type="currency" currencySymbol="$ " />
+											</p:outputLabel>
+
+
+										</p:column>
+
+										<p:column headerText="#{mensaje.acciones}"
+											style="font-size:14px; text-align:center;">
+
+
+
+
+											<p:commandButton id="btnIrEliminar"
+												style="background-origin: content-box; background-image: url('../../imagenes/borrar.png'); background-size: cover; background-repeat:no-repeat; width:16px; height:16px; vertical-align:bottom; border:0; background-color:transparent"
+												value=""
+												action="#{administrarSesionCliente.asignarArbolitoCarrito(loc,'ELIMINAR_ARBOL_CARRITO')}"
+												process="dtlArbolitosSeleccionados"
+												update=":formEliminarArbolito" />
+
+
+											<p:tooltip for="btnIrEliminar" value="#{mensaje.eliminar}"
+												trackMouse="true" />
+
+
+
+
+
+
+										</p:column>
+
+										<p:columnGroup type="footer">
+											<p:row>
+
+												<p:column style="text-align:right; font-size:14px"
+													footerText="#{mensaje.TOTAL}" />
+												<p:column style="text-align:right; font-size:14px"
+													footerText="#{administrarSesionCliente.totales.get('cantidadCarrito')} " />
+												<p:column style="text-align:right; font-size:14px"
+													footerText=" " />
+												<p:column style="text-align:right; font-size:14px"
+													rendered="#{administrarSesionCliente.moneda == 'COP'}"
+													footerText="#{administrarArbolito.getMoneda('COP',administrarSesionCliente.totales.get('precioPesosConIva'))}" />
+
+												<p:column style="text-align:right; font-size:14px"
+													rendered="#{administrarSesionCliente.moneda == 'US'}"
+													footerText="#{administrarArbolito.getMoneda('US',administrarSesionCliente.totales.get('precioUsConIva'))}" />
+
+												<p:column style="text-align:right; font-size:14px"
+													footerText=" " />
+
+
+
+
+
+
+
+											</p:row>
+										</p:columnGroup>
+
+
+									</p:dataTable>
+									<div align="center">
+										<p:panelGrid columns="3" styleClass="ui-panelgrid-blank">
+											<p:commandLink
+												value="#{mensaje.precioUS} #{mensaje.cambiarEnCarrito}"
+												rendered="#{administrarSesionCliente.moneda=='US'}"
+												process="@this" update=":formCompras"
+												action="#{consultarFuncionesAPI.abrirModal('panelCambiarMoneda')}" />
+											<p:commandLink
+												value="#{mensaje.precioCOP} #{mensaje.cambiarEnCarrito}"
+												rendered="#{administrarSesionCliente.moneda=='COP'}"
+												process="@this" update=":formCompras"
+												action="#{consultarFuncionesAPI.abrirModal('panelCambiarMoneda')}" />
+
+	
+
+										</p:panelGrid>
+
+										<p:spacer height="10" />
+
+									</div>
+
+
+									<div align="center">
+										<p:commandLink id="btnVaciarCarrito"
+											rendered="#{administrarSesionCliente.arbolitosCarrito!=null and administrarSesionCliente.arbolitosCarrito.size() >0}"
+											style="font-size:14px; font-weight:bold !important; "
+											action="#{administrarSesionCliente.asignarArbolitoCarrito(loc,'VACIAR_CARRITO')}"
+											process="@this" update=":formVaciarArbolito"
+											value="#{mensaje.vaciarCarrito}" />
+
+										<p:spacer width="10"
+											rendered="#{administrarSesionCliente.arbolitosCarrito!=null and administrarSesionCliente.arbolitosCarrito.size()>0}" />
+										<p:outputLabel value=" | "
+											rendered="#{administrarSesionCliente.arbolitosCarrito!=null and administrarSesionCliente.arbolitosCarrito.size() >0}" />
+										<p:spacer width="10"
+											rendered="#{administrarSesionCliente.arbolitosCarrito!=null and administrarSesionCliente.arbolitosCarrito.size()>0}" />
+
+										<p:commandLink
+											rendered="#{administrarSesionCliente.arbolitosCarrito!=null and administrarSesionCliente.arbolitosCarrito.size() >0}"
+											style="font-size:14px; font-weight:bold !important; "
+											ajax="false" action="/index.xhtml?faces-redirect=true"
+											value="#{mensaje.agregarOtrosArbolitos}" />
+
+										<p:commandLink
+											rendered="#{administrarSesionCliente.arbolitosCarrito==null or administrarSesionCliente.arbolitosCarrito.size() ==0}"
+											style="font-size:14px; font-weight:bold !important; "
+											ajax="false" action="/index.xhtml?faces-redirect=true"
+											value="#{mensaje.agregarArbolitos}" />
+
+										<p:spacer width="10"
+											rendered="#{administrarSesionCliente.arbolitosCarrito!=null and administrarSesionCliente.arbolitosCarrito.size()>0}" />
+										<p:outputLabel value=" | "
+											rendered="#{administrarSesionCliente.arbolitosCarrito!=null and administrarSesionCliente.arbolitosCarrito.size()>0}" />
+										<p:spacer width="10"
+											rendered="#{administrarSesionCliente.arbolitosCarrito!=null and administrarSesionCliente.arbolitosCarrito.size()>0}" />
+
+										<p:commandButton id="btnStep1"
+											rendered="#{administrarSesionCliente.arbolitosCarrito!=null and administrarSesionCliente.arbolitosCarrito.size()>0}"
+											style="font-size:14px; font-weight:normal !important"
+											action="#{administrarSesionCliente.setVistaActual(1)}"
+											process=":formCompras" update=":formCompras"
+											value="#{mensaje.siguientePaso}" />
+
+									</div>
+
+									<p:blockUI block="dtlArbolitosSeleccionados"
+										trigger="btnVaciarCarrito, btnStep1">
+										<p:graphicImage value="../../imagenes/cargando.gif" />
+									</p:blockUI>
+
+
+								</p:tab>
+
+
+
+
+							</p:accordionPanel>
+
+
+							<p:accordionPanel id="pnlDatosQuienAdopta"
+								rendered="#{administrarSesionCliente.vistaActual==1}">
+								<p:tab title="#{mensaje.datosAdopta}"
+									titleStyle="font-size:16px" closable="true">
+									<p:outputPanel id="pnlCuentaLogueada"
+										rendered="#{administrarSesionCliente.compradorSesion!=null and administrarSesionCliente.compradorSesion.id!=null}">
+										<div align="center">
+											<p:panelGrid columns="1" style="width:100%"
+												styleClass="ui-panelgrid-blank"
+												rendered="#{administrarSesionCliente.compradorSesion!=null or administrarSesionCliente.compradorSesion.id!=null}">
+												<p:outputLabel
+													value="#{administrarSesionCliente.compradorSesion.nombreCompleto}"
+													style="font-size:32px; font-weight:normal" />
+												<p:outputLabel
+													value="#{administrarSesionCliente.compradorSesion.correoElectronico}"
+													style="font-size:32px;  font-weight:normal" />
+
+												<br />
+												<p:commandLink id="btnUsarOtraCuenta"
+													rendered="#{administrarSesionCliente.compradorSesion!=null and administrarSesionCliente.compradorSesion.id!=null}"
+													style="font-size:14px; font-weight:normal !important"
+													action="#{administrarSesionCliente.usarOtraCuenta()}"
+													process="@this"
+													update="pnlCuentaLogueada, :formCompras, :formCliente"
+													value="#{mensaje.otraCuenta}" />
+
+												<br />
+											</p:panelGrid>
+
+
+											<p:commandButton id="btnStep1Logueada"
+												rendered="#{administrarSesionCliente.compradorSesion!=null and administrarSesionCliente.compradorSesion.id!=null}"
+												style="font-size:14px; font-weight:normal !important"
+												action="#{administrarSesionCliente.setVistaActual(0)}"
+												process="@this" update="pnlCuentaLogueada, :formCompras"
+												value="#{mensaje.anteriorPaso}" />
+
+											<p:spacer width="10"
+												rendered="#{administrarSesionCliente.compradorSesion!=null and administrarSesionCliente.compradorSesion.id!=null}" />
+
+											<p:outputLabel value=" | "
+												rendered="#{administrarSesionCliente.compradorSesion!=null and administrarSesionCliente.compradorSesion.id!=null}" />
+											<p:spacer width="10"
+												rendered="#{administrarSesionCliente.compradorSesion!=null and administrarSesionCliente.compradorSesion.id!=null}" />
+
+											<p:commandButton id="btnStep2Logueada"
+												style="font-size:14px; font-weight:normal !important"
+												action="#{administrarSesionCliente.setVistaActual(2)}"
+												process=":formCompras"
+												rendered="#{administrarSesionCliente.compradorSesion!=null and administrarSesionCliente.compradorSesion.id!=null}"
+												update="pnlCuentaLogueada, :formCompras"
+												value="#{mensaje.siguientePaso}" />
+
+
+											<p:blockUI block="pnlCuentaLogueada"
+												rendered="#{administrarSesionCliente.compradorSesion!=null and administrarSesionCliente.compradorSesion.id!=null}"
+												trigger="btnUsarOtraCuenta,  btnStep1Logueada, btnStep2Logueada">
+												<p:graphicImage value="../../imagenes/cargando.gif" />
+											</p:blockUI>
+
+
+										</div>
+
+									</p:outputPanel>
+									<p:outputLabel value="#{mensaje.elijaUnaOpcionCuenta}"
+										rendered="#{administrarSesionCliente.compradorSesion==null or administrarSesionCliente.compradorSesion.id==null}"
+										style="font-size:14px; font-weight:normal" />
+
+
+									<p:panelGrid columns="2" style="width:100%"
+										styleClass="ui-panelgrid-blank"
+										rendered="#{administrarSesionCliente.compradorSesion==null or administrarSesionCliente.compradorSesion.id==null}">
+
+										<p:panel header="#{mensaje.cuentaExistente}"
+											style="font-size:14px">
+											<p:outputPanel id="pnlCuentaExistente">
+												<p:panelGrid columns="3" style="width:100%">
+													<p:outputLabel for="txtCorreoExistente"
+														value="#{mensaje.correo}"
+														style="font-weight:bold; font-size:14px" />
+													<p:inputText id="txtCorreoExistente"
+														value="#{administrarSesionCliente.compradorAcceso.correoElectronico}"
+														required="true" label="#{mensaje.correo}"
+														style="width:100%; font-size:14px; height:50px" />
+
+
+													<p:message for="txtCorreoExistente" />
+
+
+													<p:outputLabel for="txtClaveExistente"
+														value="#{mensaje.contrasena}"
+														style="font-weight:bold; font-size:14px" />
+													<p:password id="txtClaveExistente"
+														value="#{administrarSesionCliente.compradorAcceso.clave}"
+														label="#{mensaje.contrasena}"
+														style="width:100%; font-size:14px; height:50px" />
+
+
+													<p:message for="txtClaveExistente" />
+
+												</p:panelGrid>
+												<br />
+												<br />
+												<br />
+												<br />
+												<br />
+
+												<div align="center">
+
+													<p:commandLink id="btnCuentaExistente"
+														style="font-size:14px; font-weight:bold !important"
+														rendered="#{administrarSesionCliente.compradorSesion==null or administrarSesionCliente.compradorSesion.id==null}"
+														action="#{administrarSesionCliente.accederComprador()}"
+														process="pnlCuentaExistente"
+														update="pnlCuentaExistente, :formCompras, :formCliente"
+														value="#{mensaje.acceder}" />
+
+													<p:spacer width="10" />
+													<p:outputLabel value=" | " />
+													<p:spacer width="10" />
+													<p:commandLink id="btnRecordarClave"
+														style="font-size:14px; font-weight:bold !important"
+														rendered="#{administrarSesionCliente.compradorSesion==null or administrarSesionCliente.compradorSesion.id==null}"
+														action="#{administrarSesionCliente.recordarClave()}"
+														process="pnlCuentaExistente"
+														update="pnlCuentaExistente, :formCompras:messages"
+														value="#{mensaje.olvideMiContrasena}" />
+
+													<p:blockUI block="pnlCuentaExistente"
+														rendered="#{administrarSesionCliente.compradorSesion==null or administrarSesionCliente.compradorSesion.id==null}"
+														trigger="btnCuentaExistente, btnRecordarClave">
+														<p:graphicImage value="../../imagenes/cargando.gif" />
+													</p:blockUI>
+													<br />
+												</div>
+											</p:outputPanel>
+										</p:panel>
+										<p:panel header="#{mensaje.crearNuevaCuenta}"
+											style="font-size:14px">
+											<p:outputPanel id="pnlNuevaCuenta">
+												<p:panelGrid columns="3" style="width:100%"
+													rendered="#{administrarSesionCliente.vistaNuevaCuenta==null}">
+
+													<p:outputLabel for="txtNombre"
+														value="#{mensaje.nombreCompletoEmpresa}"
+														style="font-weight:bold; font-size:14px" />
+													<p:inputText id="txtNombre"
+														value="#{administrarSesionCliente.compradorSesion.nombreCompleto}"
+														required="true" label="#{mensaje.nombreEnEspanol}"
+														style="width:100%; font-size:14px; height:50px" />
+
+													<p:message for="txtNombre" />
+
+													<p:outputLabel for="txtCorreo" value="#{mensaje.correo}"
+														style="font-weight:bold; font-size:14px" />
+													<p:inputText id="txtCorreo"
+														value="#{administrarSesionCliente.compradorSesion.correoElectronico}"
+														required="true" label="#{mensaje.correo}"
+														style="width:100%; font-size:14px; height:50px" />
+
+
+													<p:message for="txtCorreo" />
+
+
+													<p:outputLabel for="txtClave"
+														value="#{mensaje.contrasenaNueva}"
+														style="font-weight:bold; font-size:14px" />
+													<p:password id="txtClave" feedback="true"
+														value="#{administrarSesionCliente.compradorSesion.clave}"
+														required="true" label="#{mensaje.contrasenaNueva}"
+														style="width:100%; font-size:14px; height:50px"
+														promptLabel="#{mensaje.ingreseContrasena}"
+														weakLabel="#{mensaje.contrasenaDebil}"
+														goodLabel="#{mensaje.contrasenaBuena}"
+														strongLabel="#{mensaje.contrasenaFuerte}" />
+
+
+													<p:message for="txtClave" />
+
+
+
+												</p:panelGrid>
+
+
+
+
+
+												<div align="center">
+													<p:panelGrid columns="1"
+														style="width:100%; text-align:center"
+														rendered="#{administrarSesionCliente.vistaNuevaCuenta=='CUENTA_APTA'}">
+
+														<p:outputLabel value="#{mensaje.escribaCodigo}"
+															style="font-weight:normal; font-size:14px" />
+
+														<p:inputText id="txtCapchaCriolla"
+															value="#{administrarSesionCliente.compradorSesion.tnumeroEscrito}"
+															required="true"
+															label="#{mensaje.nuevoCodigoVerificacion}"
+															style="font-size:14px; height:50px; width:40%" />
+														<p:message for="txtCapchaCriolla" />
+
+													</p:panelGrid>
+													<br />
+													<p:commandLink id="btnVerificar"
+														rendered="#{administrarSesionCliente.vistaNuevaCuenta==null}"
+														style="font-size:14px; font-weight:bold !important"
+														action="#{administrarSesionCliente.verificarCuentaComprador()}"
+														process="pnlNuevaCuenta"
+														update="pnlNuevaCuenta, :formCompras:messages"
+														value="#{mensaje.continuarCreacion}" />
+
+													<p:blockUI block="pnlNuevaCuenta"
+														rendered="#{administrarSesionCliente.vistaNuevaCuenta==null}"
+														trigger="btnVerificar">
+														<p:graphicImage value="../../imagenes/cargando.gif" />
+													</p:blockUI>
+
+													<p:spacer width="10" />
+
+
+													<p:commandLink id="btnRegresarCuenta"
+														rendered="#{administrarSesionCliente.vistaNuevaCuenta=='CUENTA_APTA'}"
+														style="font-size:14px; font-weight:bold !important"
+														action="#{administrarSesionCliente.regresarCrearNueva()}"
+														process="@this" update="pnlNuevaCuenta"
+														value="#{mensaje.datosRegistro}" />
+
+													<p:spacer width="10" />
+
+													<p:outputLabel value=" | "
+														rendered="#{administrarSesionCliente.vistaNuevaCuenta=='CUENTA_APTA'}" />
+
+													<p:spacer width="10" />
+
+													<p:commandLink id="btnVolverEnviar"
+														rendered="#{administrarSesionCliente.vistaNuevaCuenta=='CUENTA_APTA'}"
+														style="font-size:14px; font-weight:bold !important"
+														action="#{administrarSesionCliente.enviarCaptchaCriolla()}"
+														process="@this"
+														update="pnlNuevaCuenta, :formCompras:messages"
+														value="#{mensaje.volverEnviar}" />
+
+													<p:spacer width="10" />
+
+													<p:outputLabel value=" | "
+														rendered="#{administrarSesionCliente.vistaNuevaCuenta=='CUENTA_APTA'}" />
+
+													<p:spacer width="10" />
+
+
+													<p:commandLink id="btnCrearCuenta"
+														rendered="#{administrarSesionCliente.vistaNuevaCuenta=='CUENTA_APTA'}"
+														style="font-size:14px; font-weight:bold !important"
+														action="#{administrarSesionCliente.crearComprador()}"
+														process="pnlNuevaCuenta"
+														update="pnlNuevaCuenta, :formCompras, :formCliente"
+														value="#{mensaje.crearCuenta}" />
+
+
+													<p:blockUI block="pnlNuevaCuenta"
+														rendered="#{administrarSesionCliente.vistaNuevaCuenta=='CUENTA_APTA'}"
+														trigger="btnCrearCuenta, btnVolverEnviar">
+														<p:graphicImage value="../../imagenes/cargando.gif" />
+													</p:blockUI>
+
+												</div>
+
+
+											</p:outputPanel>
+										</p:panel>
+									</p:panelGrid>
+
+									<p:outputPanel>
+										<br />
+
+										<div align="center">
+											<p:commandButton id="btnStep1NoLogueada"
+												rendered="#{administrarSesionCliente.vistaActual==1 and  (administrarSesionCliente.compradorSesion==null or administrarSesionCliente.compradorSesion.id==null)}"
+												style="font-size:14px; font-weight:normal !important"
+												action="#{administrarSesionCliente.setVistaActual(0)}"
+												process="@this" update=":formCompras"
+												value="#{mensaje.anteriorPaso}" />
+
+
+										</div>
+									</p:outputPanel>
+
+
+								</p:tab>
+							</p:accordionPanel>
+
+							<p:accordionPanel id="pnlPersonalizacionArbolitos"
+								rendered="#{administrarSesionCliente.vistaActual==2}">
+								<p:tab title="#{mensaje.personalizacionArbolitos}"
+									titleStyle="font-size:16px" closable="true">
+
+
+									<p:outputLabel
+										value="#{mensaje.mensajePersonalizacionArbolitos}"
+										style="font-size:16px; font-weight:normal" />
+
+									<br />
+									<br />
+									<div align="center">
+										<p:selectOneMenu style="font-size:14px; width:50%"
+											required="true" id="lstPersonalizacion"
+											value="#{administrarSesionCliente.tipoPersonalizacion}">
+											<f:selectItem itemLabel="#{mensaje.dejarloParaMasTarde}"
+												itemValue="L" />
+											<f:selectItem itemLabel="#{mensaje.mensajeParaTodosIgual}"
+												itemValue="T" />
+											<f:selectItem itemLabel="#{mensaje.mensajePorClase}"
+												itemValue="C" />
+											<f:selectItem itemLabel="#{mensaje.mensajeCadaUno}"
+												itemValue="U" />
+
+											<p:ajax event="change" process="lstPersonalizacion"
+												listener="#{administrarSesionCliente.cambiarPersonalizacion()}"
+												update="@this, pnlTipoPersonalizacion, :formCompras:messages" />
+
+										</p:selectOneMenu>
+
+										<p:message for="lstPersonalizacion" />
+
+									</div>
+
+									<br />
+									<br />
+
+									<p:outputPanel id="pnlTipoPersonalizacion">
+
+										<p:dataTable var="loc" rowIndexVar="item"
+											id="dtlArbolitosPersonalizados"
+											rendered="#{administrarSesionCliente.tipoPersonalizacion!=null and administrarSesionCliente.tipoPersonalizacion!='L'}"
+											value="#{administrarSesionCliente.arbolitosPersonalizados}"
+											reflow="true" style="font-size:14px"
+											paginatorPosition="bottom" draggableColumns="true"
+											emptyMessage="#{mensaje.noExistenciaPersonalizados}">
+
+
+											<p:column headerText="#{mensaje.itemArbolito}"
+												rendered="#{administrarSesionCliente.tipoPersonalizacion=='U'}"
+												style="font-size:14px; text-align:right">
+												<p:outputLabel value="#{item+1}"
+													style="font-weight:normal; font-size:14px" />
+
+
+											</p:column>
+
+
+
+											<p:column headerText="#{mensaje.arbolito}"
+												sortBy="#{loc.arbolito.nombre}"
+												rendered="#{(administrarSesionCliente.tipoPersonalizacion=='C' or administrarSesionCliente.tipoPersonalizacion=='U') and administrarSesionCliente.idioma=='ES'}"
+												style="font-size:14px">
+												<p:outputLabel value="#{loc.arbolito.nombre}"
+													style="font-weight:normal; font-size:14px" />
+
+
+											</p:column>
+
+											<p:column headerText="#{mensaje.arbolito}"
+												sortBy="#{loc.arbolito.nombreUS}"
+												rendered="#{(administrarSesionCliente.tipoPersonalizacion=='C' or administrarSesionCliente.tipoPersonalizacion=='U') and administrarSesionCliente.idioma=='US'}"
+												style="font-size:14px">
+
+
+												<p:outputLabel value="#{loc.arbolito.nombreUS}"
+													style="font-weight:normal; font-size:14px" />
+											</p:column>
+
+
+											<p:column headerText="#{mensaje.arbolito}"
+												rendered="#{administrarSesionCliente.tipoPersonalizacion=='T'}"
+												style="font-size:14px">
+
+
+												<p:outputLabel value="#{mensaje.todosArbolitosAdopcion}"
+													style="font-weight:normal; font-size:14px" />
+
+
+
+											</p:column>
+
+											<p:column headerText="#{mensaje.cantidadAdoptar}"
+												rendered="#{administrarSesionCliente.tipoPersonalizacion=='C'}"
+												sortBy="#{loc.arbolito.tcantidadCarrito}"
+												style="font-size:14px; text-align:right">
+
+												<p:outputLabel value="#{loc.arbolito.tcantidadCarrito}"
+													style="font-weight:normal; font-size:14px" />
+
+
+											</p:column>
+
+											<p:column headerText="#{mensaje.cantidadAdoptar}"
+												rendered="#{administrarSesionCliente.tipoPersonalizacion=='T'}"
+												style="font-size:14px; text-align:right">
+
+												<p:outputLabel
+													value="#{administrarSesionCliente.getNumeroArbolitosSolos()}"
+													style="font-weight:normal; font-size:14px" />
+
+
+											</p:column>
+
+
+
+											<p:column headerText="#{mensaje.nombreArbolito}"
+												sortBy="#{loc.nombrePersonalizadoArbolito}"
+												style="font-size:14px;">
+
+												<p:outputLabel value="#{loc.nombrePersonalizadoArbolito}"
+													style="font-weight:normal; font-size:14px" />
+
+												<p:outputLabel value="-"
+													rendered="#{loc.nombrePersonalizadoArbolito==null or loc.nombrePersonalizadoArbolito==''}"
+													style="font-weight:normal; font-size:14px" />
+
+											</p:column>
+
+
+
+											<p:column headerText="#{mensaje.correoPersonaRegalar}"
+												sortBy="#{loc.mensajePlaca}" style="font-size:14px;">
+
+												<p:outputLabel value="#{loc.correoReceptorRegalo}"
+													style="font-weight:normal; font-size:14px" />
+
+												<p:outputLabel value="#{mensaje.esTuyo}"
+													rendered="#{loc.correoReceptorRegalo==null or loc.correoReceptorRegalo==''}"
+													style="font-weight:normal; font-size:14px" />
+											</p:column>
+
+											<p:column headerText="#{mensaje.acciones}"
+												style="font-size:14px; text-align:center;">
+
+
+
+
+												<p:commandButton id="btnIrEditar"
+													style="background-origin: content-box; background-image: url('../../imagenes/p_minuscula.png'); background-size: cover; background-repeat:no-repeat; width:16px; height:16px; vertical-align:bottom; border:0; background-color:transparent"
+													action="#{administrarSesionCliente.asignarArbolitoPersonalizacion(loc,'PERSONALIZAR_ARBOLITO')}"
+													process="dtlArbolitosPersonalizados"
+													update=":formPersonalizarArbolito" value="" />
+
+												<p:spacer width="1" />
+
+
+												<p:commandButton id="btnIrEditarRegalar"
+													style="background-origin: content-box; background-image: url('../../imagenes/r_mayuscula.png'); background-size: cover; background-repeat:no-repeat; width:16px; height:16px; vertical-align:bottom; border:0; background-color:transparent"
+													action="#{administrarSesionCliente.asignarArbolitoPersonalizacion(loc,'REGALAR_ARBOLITO')}"
+													process="dtlArbolitosPersonalizados"
+													update=":formRegalarArbolitoAmigo" value="" />
+
+
+
+
+												<p:tooltip for="btnIrEditar"
+													value="#{mensaje.personalizarArbolito}" trackMouse="true" />
+
+
+												<p:tooltip for="btnIrEditarRegalar"
+													value="#{mensaje.regalarArbolito}" trackMouse="true" />
+
+
+
+											</p:column>
+
+
+
+										</p:dataTable>
+										<br />
+										<p:outputLabel
+											value="#{mensaje.menajeNumeroBolsas} #{administrarSesionCliente.getNumeroBolsas()}"
+											rendered="#{administrarSesionCliente.getNumeroBolsas()>0}"
+											style="font-weight:normal; font-size:14px" />
+										<br />
+										<p:outputLabel
+											value="#{mensaje.menajeArbolesBolsas} #{administrarSesionCliente.getNumeroArbolesConBolsa()}"
+											rendered="#{administrarSesionCliente.getNumeroBolsas()>0}"
+											style="font-weight:normal; font-size:14px" />
+
+									</p:outputPanel>
+
+									<p:blockUI block="pnlTipoPersonalizacion"
+										trigger="pnlTipoPersonalizacion">
+										<p:graphicImage value="../../imagenes/cargando.gif" />
+									</p:blockUI>
+
+
+									<br />
+									<div align="center">
+										<p:commandButton id="btnStep1Personalizada"
+											rendered="#{administrarSesionCliente.compradorSesion!=null and administrarSesionCliente.compradorSesion.id!=null}"
+											style="font-size:14px; font-weight:normal !important"
+											action="#{administrarSesionCliente.setVistaActual(1)}"
+											process="@this" update=":formCompras"
+											value="#{mensaje.anteriorPaso}" />
+
+										<p:spacer width="10" />
+
+										<p:outputLabel value=" | " />
+										<p:spacer width="10" />
+
+										<p:commandButton id="btnStep2Personalizada"
+											style="font-size:14px; font-weight:normal !important"
+											action="#{administrarSesionCliente.setVistaActual(3)}"
+											process="@this"
+											rendered="#{administrarSesionCliente.compradorSesion!=null and administrarSesionCliente.compradorSesion.id!=null}"
+											update=":formCompras" value="#{mensaje.siguientePaso}" />
+
+									</div>
+									<br />
+									<br />
+									<br />
+									<br />
+									<br />
+
+
+								</p:tab>
+							</p:accordionPanel>
+
+							<p:accordionPanel id="pnlResumenYPago"
+								rendered="#{administrarSesionCliente.vistaActual==3}">
+								<p:tab title="#{mensaje.opcionPago}" titleStyle="font-size:16px"
+									closable="true">
+
+									<p:panelGrid columns="2" style="width:100%"
+										styleClass="ui-panelgrid-blank">
+
+										<p:panel>
+
+											<p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+
+												<p:outputLabel value="#{mensaje.itemsCarritoAdopcion}"
+													style="font-size:14px; font-weight:normal" />
+												<p:outputLabel
+													value="#{administrarSesionCliente.totales.get('cantidadCarrito')}"
+													style="font-size:14px;" />
+
+												<p:outputLabel value="#{mensaje.resumenArbolitosAdoptados}"
+													style="font-size:14px; font-weight:normal" />
+												<p:outputLabel
+													value="#{administrarSesionCliente.getNumeroArbolitosSolos()}"
+													style="font-size:14px;" />
+
+												<p:outputLabel value="#{mensaje.numeroBolsas}"
+													style="font-size:14px; font-weight:normal" />
+												<p:outputLabel
+													value="#{administrarSesionCliente.getNumeroBolsas()}"
+													style="font-size:14px;" />
+
+												<p:outputLabel value="#{mensaje.numeroArbolesBolsas}"
+													style="font-size:14px; font-weight:normal" />
+												<p:outputLabel
+													value="#{administrarSesionCliente.getNumeroArbolesConBolsa()}"
+													style="font-size:14px;" />
+
+
+												<p:outputLabel value="#{mensaje.totalArbolesAdoptados}"
+													style="font-size:14px; font-weight:normal" />
+												<p:outputLabel
+													value="#{(administrarSesionCliente.getNumeroArbolitosSolos()+administrarSesionCliente.getNumeroArbolesConBolsa())}"
+													style="font-size:14px;" />
+
+												<p:outputLabel
+													value="#{mensaje.resumenArbolitosPersonalizados}"
+													style="font-size:14px; font-weight:normal" />
+												<p:outputLabel
+													value="#{administrarSesionCliente.resumenPersonalizacion.get('arbolitosPersonalizados')}"
+													style="font-size:14px;" />
+
+												<p:outputLabel value="#{mensaje.resumenArbolitosRegalados}"
+													style="font-size:14px; font-weight:normal" />
+												<p:outputLabel
+													value="#{administrarSesionCliente.resumenPersonalizacion.get('arbolitosRegalados')}"
+													style="font-size:14px;" />
+
+
+												<p:outputLabel value="#{mensaje.monedaTransaccion}"
+													style="font-size:14px; font-weight:normal" />
+												<p:outputLabel value="#{mensaje.pesoColombiano}"
+													style="font-size:14px;"
+													rendered="#{administrarSesionCliente.moneda=='COP'}" />
+												<p:outputLabel value="#{mensaje.dolar}"
+													style="font-size:14px;"
+													rendered="#{administrarSesionCliente.moneda=='US'}" />
+
+
+
+
+												<p:outputLabel value="#{mensaje.resumenPrecioArbolitos}"
+													style="font-size:14px; font-weight:normal" />
+												<p:outputLabel
+													value="#{administrarArbolito.getMoneda('COP',administrarSesionCliente.totales.get('precioPesosConIva'))}"
+													rendered="#{administrarSesionCliente.moneda == 'COP'}"
+													style="font-size:24px;" />
+												<p:outputLabel
+													value="#{administrarArbolito.getMoneda('US',administrarSesionCliente.totales.get('precioUsConIva'))}"
+													rendered="#{administrarSesionCliente.moneda == 'US'}"
+													style="font-size:24px;" />
+
+
+
+
+											</p:panelGrid>
+										</p:panel>
+										<p:panel>
+											<p:panelGrid columns="1" styleClass="ui-panelgrid-blank">
+
+												<p:outputLabel value="#{mensaje.resumen1}"
+													style="font-size:12px; font-weight:normal" />
+												<p:outputLabel value="#{mensaje.resumen2}"
+													style="font-size:12px; font-weight:normal" />
+												<p:outputLabel value="#{mensaje.resumen3}"
+													style="font-size:12px; font-weight:normal" />
+												<p:outputLabel value="#{mensaje.resumen4}"
+													style="font-size:12px; font-weight:normal" />
+												<p:outputLabel value="#{mensaje.resumen5}"
+													style="font-size:12px; font-weight:normal" />
+												<p:outputLabel value="#{mensaje.resumen6}"
+													style="font-size:12px; font-weight:normal" />
+												<p:outputLabel value="#{mensaje.resumen7}"
+													style="font-size:12px; font-weight:normal" />
+												<p:outputLabel value="#{mensaje.resumen8}"
+													style="font-size:12px; font-weight:normal" />
+
+
+											</p:panelGrid>
+										</p:panel>
+
+									</p:panelGrid>
+
+									<br />
+									<div align="center">
+										<p:commandButton id="btnStep1Resumen"
+											rendered="#{administrarSesionCliente.compradorSesion!=null and administrarSesionCliente.compradorSesion.id!=null}"
+											style="font-size:14px; font-weight:normal !important"
+											action="#{administrarSesionCliente.setVistaActual(2)}"
+											process="@this" update=":formCompras"
+											value="#{mensaje.anteriorPaso}" />
+
+										<p:spacer width="10" />
+										<p:outputLabel value=" | " />
+										<p:spacer width="10" />
+										<p:commandButton id="btnPago"
+											rendered="#{administrarSesionCliente.compradorSesion!=null and administrarSesionCliente.compradorSesion.id!=null}"
+											style="font-size:22px; font-weight:normal !important"
+											action="#{administrarSesionCliente.getRegistrarTransaccion()}"
+											process="@this" update=":formCompras"
+											value="#{mensaje.efectuarPago}" />
+
+										<p:spacer width="10" />
+
+
+
+
+									</div>
+								</p:tab>
+							</p:accordionPanel>
+
+						</div>
+					</p:outputPanel>
+
+				</div>
+
+			</div>
+		</h:form>
+
+		<ui:include
+			src="/arbolitos/adopcionCliente/eliminarArbolitoPedido.xhtml" />
+		<ui:include src="/arbolitos/adopcionCliente/vaciarCarrito.xhtml" />
+		<ui:include
+			src="/arbolitos/adopcionCliente/personalizarArbolito.xhtml" />
+
+		<ui:include src="/arbolitos/adopcionCliente/regalarArbolito.xhtml" />
+
+
+<form id="payment_form" name="payment_form"
+			action="https://test.secureacceptance.allegraplatform.com/CI_Secure_Acceptance/Payment"
+			method="post"/>
+		
+
+
+
+	</ui:define>
+</ui:composition>

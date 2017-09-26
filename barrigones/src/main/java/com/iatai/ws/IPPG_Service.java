@@ -1,0 +1,16 @@
+/**
+ * IPPG_Service.java
+ *
+ * This file was auto-generated from WSDL
+ * by the Apache Axis 1.4 Apr 22, 2006 (06:55:48 PDT) WSDL2Java emitter.
+ */
+
+package com.iatai.ws;
+
+public interface IPPG_Service extends javax.xml.rpc.Service {
+    public java.lang.String getIPPGPortAddress();
+
+    public com.iatai.ws.IPPG_PortType getIPPGPort() throws javax.xml.rpc.ServiceException;
+
+    public com.iatai.ws.IPPG_PortType getIPPGPort(java.net.URL portAddress) throws javax.xml.rpc.ServiceException;
+}

@@ -1,0 +1,485 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/plantillas/principal.xhtml">
+
+	<ui:define name="body">
+
+		<h:form id="form">
+
+			<p:growl id="messages" showDetail="true" globalOnly="true" />
+
+
+			<div class="row x_title">
+				<div class="col-md-6">
+					<p:outputLabel value="#{mensaje.moduloVentas}: "
+						styleClass="tituloPrincipal" />
+					<p:spacer width="2" />
+					<p:outputLabel value="#{mensaje.ventaTarjetas}"
+						styleClass="tituloPrincipal" />
+				</div>
+			</div>
+
+			<div align="center" class="titulo"></div>
+
+			<p:outputPanel id="pnlTarjeta">
+
+				<p:spacer height="10" />
+				<p:outputPanel id="pnlCrearTarjeta">
+					<p:accordionPanel activeIndex="1">
+						<p:tab title="#{mensaje.crearTarjeta}" titleStyle="font-size:16px"
+							closable="true">
+
+							<p:panelGrid columns="5" cellpadding="0" cellspacing="0"
+								styleClass="ui-panelgrid-blank">
+
+
+								<p:outputLabel for="lstIdiomaTarjeta"
+									value="#{mensaje.idiomaTarjeta}"
+									style="font-weight:bold; font-size:14px" />
+
+								<p:selectOneMenu id="lstIdiomaTarjeta" style="font-size:14px;"
+									required="true"
+									value="#{administrarVenta.tarjeta.idiomaTarjeta}"
+									label="#{mensaje.idiomaTarjeta}">
+									<f:selectItem itemValue="" itemLabel="#{mensaje.comboVacio}" />
+									<f:selectItem itemValue="ES"
+										itemLabel="#{mensaje.idiomaEspanol}" />
+									<f:selectItem itemValue="US"
+										itemLabel="#{mensaje.idiomaIngles}" />
+
+								</p:selectOneMenu>
+
+								<p:spacer width="1" />
+								<p:spacer width="1" />
+
+								<p:message for="lstIdiomaTarjeta" />
+
+
+								<p:outputLabel for="lstMoneda" value="#{mensaje.moneda}"
+									style="font-weight:bold; font-size:14px" />
+
+								<p:selectOneMenu id="lstMoneda" style="font-size:14px;"
+									required="true"
+									value="#{administrarVenta.tarjeta.tVenta.moneda}"
+									label="#{mensaje.moneda}">
+									<f:selectItem itemValue="" itemLabel="#{mensaje.comboVacio}" />
+									<f:selectItem itemValue="COP"
+										itemLabel="#{mensaje.pesoColombiano}" />
+									<f:selectItem itemValue="US" itemLabel="#{mensaje.dolar}" />
+
+								</p:selectOneMenu>
+								<p:spacer width="1" />
+								<p:spacer width="1" />
+
+								<p:message for="lstMoneda" />
+
+
+
+								<p:outputLabel for="lstConvenio"
+									value="#{mensaje.convenioComision}"
+									style="font-weight:bold; font-size:14px;" />
+								<p:selectOneMenu id="lstConvenio" required="true"
+									style="font-size:14px; width:100%"
+									value="#{administrarVenta.tarjeta.convenio.id}"
+									label="#{mensaje.convenioComision}">
+									<f:selectItems value="#{hacerMantenimiento.itemsConvenios}" />
+								</p:selectOneMenu>
+
+								<p:graphicImage value="../imagenes/ayuda.png"
+									id="ayudaConvenioComision" />
+								<p:tooltip value="#{mensaje.ayudaConvenioComision}"
+									trackMouse="true" for="ayudaConvenioComision" />
+								<p:message for="lstConvenio" />
+
+
+
+								<p:outputLabel for="lstArbolito" value="#{mensaje.arbolito}"
+									style="font-weight:bold; font-size:14px;" />
+								<p:selectOneMenu id="lstArbolito" required="true"
+									style="font-size:14px; width:100%"
+									value="#{administrarVenta.tarjeta.arbolito.id}"
+									label="#{mensaje.arbolito}">
+									<f:selectItems
+										value="#{administrarLote.itemsArbolitosDisponibles}" />
+								</p:selectOneMenu>
+
+								<p:spacer width="1" />
+								<p:spacer width="1" />
+								<p:message for="lstArbolito" />
+
+
+
+
+								<p:outputLabel for="txtCantidad"
+									value="#{mensaje.cantidadTarjetas}"
+									style="font-weight:bold; font-size:14px;" />
+								<p:inputText id="txtCantidad"
+									value="#{administrarVenta.tarjeta.tCantidadTarjetas}"
+									required="true" label="#{mensaje.cantidadTarjetas}"
+									style="font-size:14px;  width:50px" />
+								<p:spacer width="1" />
+								<p:spacer width="1" />
+								<p:message for="txtCantidad" />
+
+
+
+							</p:panelGrid>
+							<p:spacer height="10" />
+							<div align="center">
+								<p:commandButton id="btnCrearTarjeta"
+									style="font-size:14px; font-weight: normal !important;"
+									action="#{administrarVenta.crearTarjeta()}"
+									process=":form:pnlCrearTarjeta" value="#{mensaje.guardar}"
+									update=":form:pnlConsultar, :form:pnlCrearTarjeta, :form:pnlDtlTarjetas, :formImprimir, :form:messages" />
+
+								<p:spacer width="10" />
+								<p:commandButton id="btnBorrarTarjeta"
+									style="font-size:14px; font-weight: normal; text-decoration: none !important;"
+									action="#{administrarVenta.cancelarTarjeta()}" process="@this"
+									value="#{mensaje.cancelar}"
+									update=":form:pnlCrearTarjeta, :form:pnlDtlTarjetas, :formImprimir">
+
+									<p:resetInput target=":form:pnlCrearTarjeta" />
+
+								</p:commandButton>
+
+							</div>
+							<p:outputLabel value="#{mensaje.informacionRequerida}"
+								style="font-size:10px" />
+
+							<p:blockUI block=":form:pnlCrearTarjeta"
+								trigger="btnCrearTarjeta, btnBorrarTarjeta">
+
+								<p:graphicImage value="../imagenes/cargando.gif" />
+
+
+							</p:blockUI>
+						</p:tab>
+					</p:accordionPanel>
+				</p:outputPanel>
+
+				<p:spacer height="30" />
+				<p:outputPanel id="pnlConsultar">
+					<p:accordionPanel>
+						<p:tab title="#{mensaje.consultarVentasCriterios}"
+							titleStyle="font-size:16px" closable="true">
+
+							<p:panelGrid columns="4" cellpadding="0" cellspacing="0"
+								styleClass="ui-panelgrid-blank">
+
+								<p:outputLabel for="calFechaDesde" value="#{mensaje.fechaDesde}"
+									style="font-weight:bold; font-size:14px" />
+
+								<p:calendar id="calFechaDesde"
+									value="#{administrarVenta.tarjetaTransaccion.tFechaDesde}"
+									pattern="yyyy-MM-dd" mask="true" style="font-size:14px" />
+								<p:spacer width="1" />
+								<p:message for="calFechaDesde" />
+
+
+
+
+								<p:outputLabel for="calFechaHasta" value="#{mensaje.fechaHasta}"
+									style="font-weight:bold; font-size:14px" />
+
+								<p:calendar id="calFechaHasta"
+									value="#{administrarVenta.tarjetaTransaccion.tFechaHasta}"
+									pattern="yyyy-MM-dd" mask="true" style="font-size:14px" />
+								<p:spacer width="1" />
+								<p:message for="calFechaHasta" />
+
+
+
+
+
+								<p:outputLabel for="lstIdiomaTarjeta2"
+									value="#{mensaje.idiomaTarjeta}"
+									style="font-weight:bold; font-size:14px" />
+
+								<p:selectOneMenu id="lstIdiomaTarjeta2" style="font-size:14px;"
+									value="#{administrarVenta.tarjetaTransaccion.idiomaTarjeta}"
+									label="#{mensaje.idiomaTarjeta}">
+									<f:selectItem itemValue="" itemLabel="#{mensaje.comboVacio}" />
+									<f:selectItem itemValue="ES"
+										itemLabel="#{mensaje.idiomaEspanol}" />
+									<f:selectItem itemValue="US"
+										itemLabel="#{mensaje.idiomaIngles}" />
+
+								</p:selectOneMenu>
+
+								<p:spacer width="1" />
+
+
+								<p:message for="lstIdiomaTarjeta2" />
+
+
+
+
+
+
+
+
+								<p:outputLabel for="lstMoneda2" value="#{mensaje.moneda}"
+									style="font-weight:bold; font-size:14px" />
+
+								<p:selectOneMenu id="lstMoneda2" style="font-size:14px;"
+									value="#{administrarVenta.tarjetaTransaccion.tVenta.moneda}"
+									label="#{mensaje.moneda}">
+									<f:selectItem itemValue="" itemLabel="#{mensaje.comboVacio}" />
+									<f:selectItem itemValue="COP"
+										itemLabel="#{mensaje.pesoColombiano}" />
+									<f:selectItem itemValue="US" itemLabel="#{mensaje.dolar}" />
+
+								</p:selectOneMenu>
+								<p:spacer width="1" />
+
+
+								<p:message for="lstMoneda2" />
+
+
+
+								<p:outputLabel for="lstConvenio2"
+									value="#{mensaje.convenioComision}"
+									style="font-weight:bold; font-size:14px;" />
+								<p:selectOneMenu id="lstConvenio2"
+									style="font-size:14px; width:100%"
+									value="#{administrarVenta.tarjetaTransaccion.convenio.id}"
+									label="#{mensaje.arbolito}">
+									<f:selectItems value="#{hacerMantenimiento.itemsConvenios}" />
+								</p:selectOneMenu>
+
+								<p:spacer width="1" />
+								<p:message for="lstConvenio2" />
+
+
+
+								<p:outputLabel for="lstArbolito2" value="#{mensaje.arbolito}"
+									style="font-weight:bold; font-size:14px;" />
+								<p:selectOneMenu id="lstArbolito2"
+									style="font-size:14px; width:100%"
+									value="#{administrarVenta.tarjetaTransaccion.arbolito.id}"
+									label="#{mensaje.arbolito}">
+									<f:selectItems value="#{administrarLote.itemsArbolitos}" />
+								</p:selectOneMenu>
+
+								<p:spacer width="1" />
+
+								<p:message for="lstArbolito2" />
+
+
+								<p:outputLabel for="lstUsada" value="#{mensaje.usada}"
+									style="font-weight:bold; font-size:14px" />
+
+								<p:selectOneMenu id="lstUsada" style="font-size:14px;"
+									value="#{administrarVenta.tarjetaTransaccion.usada}"
+									label="#{mensaje.usada}">
+									<f:selectItem itemValue="" itemLabel="#{mensaje.comboVacio}" />
+									<f:selectItem itemValue="S" itemLabel="#{mensaje.SI}" />
+									<f:selectItem itemValue="N" itemLabel="#{mensaje.NO}" />
+
+								</p:selectOneMenu>
+								<p:spacer width="1" />
+								<p:message for="lstUsada" />
+
+
+								<p:outputLabel for="txtTarjeta" value="#{mensaje.tarjeta}"
+									style="font-weight:bold; font-size:14px;" />
+								<p:inputText id="txtTarjeta"
+									value="#{administrarVenta.tarjetaTransaccion.algoritmo}"
+									label="#{mensaje.tarjeta}" style="font-size:14px;" />
+								<p:spacer width="1" />
+								<p:message for="txtTarjeta" />
+
+
+
+
+							</p:panelGrid>
+
+							<p:spacer height="10" />
+							<div align="center">
+								<p:commandButton id="btnConsultar"
+									style="font-size:14px; font-weight: normal !important;"
+									action="#{administrarVenta.consultarTarjetas()}"
+									value="#{mensaje.consultar}"
+									update=":form:pnlConsultar, :form:pnlDtlTarjetas, :formImprimir"
+									process=":form:pnlConsultar" />
+
+								<p:spacer width="10" />
+								<p:commandButton id="btnBorrar"
+									style="font-size:14px; font-weight: normal; text-decoration: none !important;"
+									action="#{administrarVenta.cancelarTarjetaTransaccion()}"
+									process="@this" value="#{mensaje.cancelar}"
+									update=":form:pnlConsultar, :form:pnlDtlTarjetas, :formImprimir">
+
+									<p:resetInput target=":form:pnlConsultar" />
+
+								</p:commandButton>
+
+							</div>
+
+							<p:blockUI block=":form:pnlConsultar"
+								trigger="btnConsultar, btnBorrar">
+
+								<p:graphicImage value="../imagenes/cargando.gif" />
+
+
+							</p:blockUI>
+						</p:tab>
+					</p:accordionPanel>
+				</p:outputPanel>
+				<p:spacer height="30" />
+				<p:outputPanel id="pnlDtlTarjetas">
+					<p:accordionPanel>
+						<p:tab title="#{mensaje.listadoTarjetas}"
+							titleStyle="font-size:16px" closable="true">
+
+							<p:dataTable var="loc" id="dtlConvenio"
+								value="#{administrarVenta.tarjetas}" reflow="true" rows="10"
+								paginator="true" paginatorPosition="bottom"
+								draggableColumns="true"
+								emptyMessage="#{mensaje.noExistenciaTarjetas}">
+
+
+								<p:column headerText="#{mensaje.fechaRegistro}"
+									sortBy="#{loc.fechaRegistro}" filterBy="#{loc.fechaRegistro}"
+									style="font-size:14px">
+									<p:outputLabel value="#{loc.fechaRegistro}"
+										style="font-weight:normal;font-size:14px" />
+								</p:column>
+
+								<p:column headerText="#{mensaje.tarjeta}"
+									sortBy="#{loc.algoritmo}" filterBy="#{loc.algoritmo}"
+									style="font-size:14px">
+									<p:outputLabel value="#{loc.algoritmo}"
+										style="font-weight:normal;font-size:14px" />
+								</p:column>
+
+								<p:column headerText="#{mensaje.idiomaTarjeta}"
+									sortBy="#{loc.idiomaTarjeta}" style="font-size:14px">
+									<p:outputLabel value="#{mensaje.idiomaEspanol}"
+										rendered="#{loc.idiomaTarjeta=='ES'}"
+										style="font-weight:normal;font-size:14px" />
+
+									<p:outputLabel value="#{mensaje.idiomaIngles}"
+										rendered="#{loc.idiomaTarjeta!='ES'}"
+										style="font-weight:normal;font-size:14px" />
+								</p:column>
+
+								<p:column headerText="#{mensaje.convenio}"
+									sortBy="#{loc.convenio.nombre}"
+									filterBy="#{loc.convenio.nombre}" style="font-size:14px">
+									<p:outputLabel value="#{loc.convenio.nombre}"
+										style="font-weight:normal;font-size:14px" />
+								</p:column>
+
+								<p:column headerText="#{mensaje.arbolito}"
+									rendered="#{administrarSesionCliente.idioma=='ES'}"
+									sortBy="#{loc.arbolito.nombre}"
+									filterBy="#{loc.arbolito.nombre}" style="font-size:14px">
+									<p:outputLabel value="#{loc.arbolito.nombre}"
+										style="font-weight:normal;font-size:14px" />
+								</p:column>
+
+								<p:column headerText="#{mensaje.arbolito}"
+									rendered="#{administrarSesionCliente.idioma!='ES'}"
+									sortBy="#{loc.arbolito.nombreUS}"
+									filterBy="#{loc.arbolito.nombreUS}" style="font-size:14px">
+									<p:outputLabel value="#{loc.arbolito.nombreUS}"
+										style="font-weight:normal;font-size:14px" />
+								</p:column>
+
+								<p:column headerText="#{mensaje.comisionAplicada}"
+									sortBy="#{loc.porcentajeComisionAplicado}"
+									style="font-size:14px; text-align:right">
+									<p:outputLabel value="#{loc.porcentajeComisionAplicado} %"
+										style="font-weight:normal;font-size:14px" />
+								</p:column>
+
+
+
+								<p:column headerText="#{mensaje.valorTarjeta}"
+									sortBy="#{loc.tVenta.valorTotalConIva}"
+									style="font-size:14px; text-align:right">
+									<p:outputLabel value="#{loc.tVenta.valorTotalConIva}"
+										rendered="#{loc.tVenta.moneda=='COP'}"
+										style="font-weight:bold; font-size:14px">
+										<f:convertNumber type="currency" currencySymbol="$ " />
+									</p:outputLabel>
+									<p:outputLabel value="#{loc.tVenta.valorTotalConIva}"
+										rendered="#{loc.tVenta.moneda!='COP'}"
+										style="font-weight:bold; font-size:14px">
+										<f:convertNumber type="currency" currencySymbol="US$ " />
+									</p:outputLabel>
+
+								</p:column>
+
+
+								<p:column headerText="#{mensaje.usada}" sortBy="#{loc.usada}"
+									style="font-size:14px; ">
+									<p:outputLabel value="#{mensaje.SI}"
+										rendered="#{loc.usada=='S'}"
+										style="font-weight:normal;font-size:14px" />
+
+									<p:outputLabel value="#{mensaje.NO}"
+										rendered="#{loc.usada=='N'}"
+										style="font-weight:normal;font-size:14px" />
+								</p:column>
+								
+								
+								<p:column headerText="#{mensaje.acciones}"
+								style="font-size:14px; text-align:center;">
+								
+
+								<p:commandButton id="btnIrEliminar"
+									style="background-origin: content-box; background-image: url('../imagenes/borrar.png'); background-size: cover; background-repeat:no-repeat; width:16px; height:16px; vertical-align:bottom; border:0; background-color:transparent"
+									value="" rendered="#{loc!=null and loc.usada!='S'}"
+									action="#{administrarVenta.asignarTarjeta(loc)}"
+									process=":form:pnlDtlTarjetas" update=":formEliminarVenta" />
+    
+
+								<p:tooltip for="btnIrEliminar" value="#{mensaje.eliminar}" rendered="#{loc!=null and loc.usada!='S'}"
+									trackMouse="true" />
+  
+<p:outputLabel value=" --- " rendered="#{!(loc!=null and loc.usada!='S')}"/>
+
+							
+
+							</p:column>
+
+
+
+							</p:dataTable>
+
+
+
+						</p:tab>
+					</p:accordionPanel>
+				</p:outputPanel>
+
+			</p:outputPanel>
+
+
+
+		</h:form>
+		<br />
+
+		<h:form id="formImprimir">
+			<div align="center">
+				<p:commandButton value="#{mensaje.imprimir}" style="font-size:14px"
+					rendered="#{administrarVenta.tarjetas!=null and administrarVenta.tarjetas.size()>0}"
+					actionListener="#{administrarVenta.listarTarjetas('pdf')}"
+					ajax="false" />
+			</div>
+		</h:form>
+
+
+		<ui:include src="/ventas/eliminarTarjeta.xhtml" />
+
+		<p:spacer height="400" />
+
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,213 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/plantillas/principal.xhtml">
+
+	<ui:define name="body">
+
+		<h:form id="form">
+			<p:growl id="messages" showDetail="true" globalOnly="true" />
+			<p:remoteCommand name="onload" process="@this"
+				action="#{administrarSesionCliente.getNoRolAdmitido()}"
+				autoRun="true" />
+			
+
+
+			<div class="row x_title">
+				<div class="col-md-6">
+					<p:outputLabel value="#{mensaje.moduloParametros}: "
+						styleClass="tituloPrincipal" />
+					<p:spacer width="2" />
+					<p:outputLabel value="#{mensaje.administrarEstados}"
+						styleClass="tituloPrincipal" />
+				</div>
+			</div>
+
+			<div align="center" class="titulo"></div>
+
+			<p:outputPanel id="pnlEstado">
+
+				<p:spacer height="10" />
+
+				<p:accordionPanel id="pnlCrear">
+					<p:tab title="#{mensaje.crearEstado}" titleStyle="font-size:16px"
+						closable="true">
+
+						<p:panelGrid columns="5" cellpadding="0" cellspacing="0"
+							styleClass="ui-panelgrid-blank">
+
+							<p:outputLabel for="txtNombre" value="#{mensaje.nombre}"
+								style="font-weight:bold; font-size:14px" />
+							<p:inputText id="txtNombre"
+								value="#{hacerMantenimiento.estado.tituloEstado}"
+								required="true" label="#{mensaje.nombre}"
+								style="width:100%; font-size:14px" />
+							<p:graphicImage value="../imagenes/ayuda.png"
+								id="ayudaNombreEstado" />
+							<p:tooltip value="#{mensaje.ayudaNombreEstado}" trackMouse="true"
+								for="ayudaNombreEstado" />
+							<p:message for="txtNombre" />
+
+
+
+
+							<p:outputLabel for="lstEstadoInicial"
+								value="#{mensaje.estadoInicial}"
+								style="font-weight:bold; font-size:14px;" />
+							<p:selectOneMenu id="lstEstadoInicial" required="true"
+								style="font-size:14px;"
+								value="#{hacerMantenimiento.estado.estadoInicial}"
+								label="#{mensaje.estadoInicial}">
+								<f:selectItem itemValue="" itemLabel="#{mensaje.comboVacio}" />
+								<f:selectItem itemValue="S" itemLabel="#{mensaje.SI}" />
+								<f:selectItem itemValue="N" itemLabel="#{mensaje.NO}" />
+							</p:selectOneMenu>
+							<p:graphicImage value="../imagenes/ayuda.png"
+								id="ayudaEstadoInicial" />
+							<p:tooltip value="#{mensaje.ayudaEstadoInicial}"
+								trackMouse="true" for="ayudaEstadoInicial" />
+							<p:message for="lstEstadoInicial" />
+
+
+							<p:outputLabel for="lstPermitePersonalizacion"
+								value="#{mensaje.permitePersonalizacion}"
+								style="font-weight:bold; font-size:14px;" />
+							<p:selectOneMenu id="lstPermitePersonalizacion" required="true"
+								style="font-size:14px;"
+								value="#{hacerMantenimiento.estado.permitePersonalizacion}"
+								label="#{mensaje.permitePersonalizacion}">
+								<f:selectItem itemValue="" itemLabel="#{mensaje.comboVacio}" />
+								<f:selectItem itemValue="S" itemLabel="#{mensaje.SI}" />
+								<f:selectItem itemValue="N" itemLabel="#{mensaje.NO}" />
+							</p:selectOneMenu>
+							<p:graphicImage value="../imagenes/ayuda.png"
+								id="ayudaPermitePersonalizacion" />
+							<p:tooltip value="#{mensaje.ayudaPermitePersonalizacion}"
+								trackMouse="true" for="ayudaPermitePersonalizacion" />
+							<p:message for="lstPermitePersonalizacion" />
+
+
+						</p:panelGrid>
+						<p:spacer height="10" />
+						<div align="center">
+							<p:commandButton id="btnCrear"
+								style="font-size:14px; font-weight: normal !important;"
+								action="#{hacerMantenimiento.crearEstado()}"
+								value="#{mensaje.guardar}" update=":form" />
+
+							<p:spacer width="10" />
+							<p:commandButton id="btnBorrar"
+								style="font-size:14px; font-weight: normal; text-decoration: none !important;"
+								action="#{hacerMantenimiento.cancelarEstado()}" process="@this"
+								value="#{mensaje.cancelar}" update=":form">
+
+								<p:resetInput target=":form:pnlEstado" />
+
+							</p:commandButton>
+
+						</div>
+						<p:outputLabel value="#{mensaje.informacionRequerida}"
+							style="font-size:10px" />
+
+						<p:blockUI block=":form:pnlCrear" trigger="btnCrear, btnBorrar">
+
+							<p:graphicImage value="../imagenes/cargando.gif" />
+
+
+						</p:blockUI>
+					</p:tab>
+				</p:accordionPanel>
+
+				<p:spacer height="30" />
+				<p:accordionPanel id="pnlDtlEstados">
+					<p:tab title="#{mensaje.listadoEstados}"
+						titleStyle="font-size:16px" closable="true">
+
+						<p:dataTable var="loc" id="dtlEstados"
+							value="#{hacerMantenimiento.estados}" reflow="true" rows="10"
+							paginator="true" paginatorPosition="bottom"
+							draggableColumns="true"
+							emptyMessage="#{mensaje.noExistenciaEstados}">
+							<p:column headerText="#{mensaje.nombre}"
+								sortBy="#{loc.tituloEstado}" filterBy="#{loc.tituloEstado}"
+								style="font-size:14px">
+								<p:outputLabel value="#{loc.tituloEstado}"
+									style="font-weight:normal; font-size:12px" />
+							</p:column>
+							<p:column headerText="#{mensaje.indicativo}"
+								sortBy="#{loc.estadoVigencia}" style="font-size:14px">
+								<p:outputLabel value="#{mensaje.ESTADO_ACTIVO}"
+									style="font-weight:normal; font-size:12px"
+									rendered="#{loc.estadoVigencia == 'A'}" />
+								<p:outputLabel value="#{mensaje.ESTADO_INACTIVO}"
+									style="font-weight:normal; font-size:12px"
+									rendered="#{loc.estadoVigencia == 'I'}" />
+							</p:column>
+
+							<p:column headerText="#{mensaje.estadoInicial}"
+								sortBy="#{loc.estadoInicial}" style="font-size:14px">
+								<p:outputLabel value="#{mensaje.SI}"
+									rendered="#{loc.estadoInicial=='S'}"
+									style="font-weight:normal; font-size:12px" />
+								<p:outputLabel value="#{mensaje.NO}"
+									rendered="#{loc.estadoInicial=='N'}"
+									style="font-weight:normal; font-size:12px" />
+							</p:column>
+
+							<p:column headerText="#{mensaje.permitePersonalizacion}"
+								sortBy="#{loc.permitePersonalizacion}" style="font-size:14px">
+								<p:outputLabel value="#{mensaje.SI}"
+									rendered="#{loc.permitePersonalizacion=='S'}"
+									style="font-weight:normal; font-size:12px" />
+								<p:outputLabel value="#{mensaje.NO}"
+									rendered="#{loc.permitePersonalizacion=='N'}"
+									style="font-weight:normal; font-size:12px" />
+							</p:column>
+
+
+							<p:column headerText="#{mensaje.acciones}"
+								style="font-size:14px; text-align:center;">
+
+
+
+								<p:commandButton id="btnIrEditar"
+									style="background-origin: content-box; background-image: url('../imagenes/editar.png'); background-size: cover; background-repeat:no-repeat; width:16px; height:16px; vertical-align:bottom; border:0; background-color:transparent"
+									action="#{hacerMantenimiento.asignarEstado(loc,'MODAL_EDITAR_ESTADO')}"
+									value="" process=":form:pnlDtlEstados" update=":formEditar" />
+
+								<p:commandButton id="btnIrEliminar"
+									style="background-origin: content-box; background-image: url('../imagenes/borrar.png'); background-size: cover; background-repeat:no-repeat; width:16px; height:16px; vertical-align:bottom; border:0; background-color:transparent"
+									value=""
+									action="#{hacerMantenimiento.asignarEstado(loc,'MODAL_ELIMINAR_ESTADO')}"
+									process="dtlEstados" update=":formEliminar" />
+
+
+
+								<p:tooltip for="btnIrEliminar" value="#{mensaje.eliminar}"
+									trackMouse="true" />
+
+								<p:tooltip for="btnIrEditar" value="#{mensaje.editar}"
+									trackMouse="true" />
+
+
+
+
+							</p:column>
+
+						</p:dataTable>
+
+					</p:tab>
+				</p:accordionPanel>
+
+			</p:outputPanel>
+		</h:form>
+
+		<ui:include src="/tablasSoporte/eliminarEstado.xhtml" />
+		<ui:include src="/tablasSoporte/editarEstado.xhtml" />
+		<p:spacer height="400" />
+
+	</ui:define>
+</ui:composition>

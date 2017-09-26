@@ -1,0 +1,325 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1, maximum-scale=1" />
+	<link rel="shortcut icon"
+		href="/barrigones/plantillas/images/favicon.png" />
+	<link rel="apple-touch-icon"
+		href="/barrigones/plantillas/images/apple-touch-icon.png" />
+	<link rel="apple-touch-icon" sizes="72x72"
+		href="/barrigones/plantillas/images/apple-touch-icon-72x72.png" />
+	<link rel="apple-touch-icon" sizes="114x114"
+		href="/barrigones/plantillas/images/apple-touch-icon-114x114.png" />
+	<meta name="author" content="Quimerapps, adopta un árbol por la vida" />
+	<title>Fundación Federico Restrepo Carvajal</title>
+	<meta name="description"
+		content="Somos una organización que aporta a la preservación del medioambiente, crea espacios de sano esparcimiento para los niños y jóvenes de Santander e impulsa y promueve la investigación científica en el campo de la Ortopedia y Traumatología." />
+	<meta name="keywords"
+		content="Fundación Federico Restrepo Carvajal, tenis de mesa, tenis, medioambiente, niños y jóvenes, deporte, vereda Llanadas, Mesa de los Santos, donación, ortopedia, traumatología, investigación, innovemos, vida sana, vida, ambiental, árbol, siembra." />
+	<link
+		href='http://fonts.googleapis.com/css?family=Roboto:100,300,300italic,400,700|Julius+Sans+One|Roboto+Condensed:300,400'
+		rel='stylesheet' type='text/css' />
+	<link rel="stylesheet" href="/barrigones/plantillas/css/style.css" />
+	<link rel="stylesheet" href="/barrigones/plantillas/css/grid.css" />
+	<link rel="stylesheet" href="/barrigones/plantillas/css/layout.css" />
+	<link rel="stylesheet" href="/barrigones/plantillas/css/fontello.css" />
+	<link rel="stylesheet"
+		href="/barrigones/plantillas/css/animation.css" />
+	<link rel="stylesheet"
+		href="/barrigones/plantillas/js/fancybox/jquery.fancybox.css" />
+	<script src="/barrigones/plantillas/js/jquery.modernizr.js"></script>
+	<style type="text/css">
+.ui-growl-title {
+	font: 14px "Lucida Console", Monaco, monospace;
+}
+
+.ui-growl-message p {
+	font: 16px "Lucida Console", Monaco, monospace;
+}
+</style>
+</h:head>
+
+<body data-spy="scroll" data-target="#navigation" class="page-template">
+	<div class="loader"></div>
+	<header id="header"> <h:form id="formCliente">
+		<f:view locale="#{administrarSesionCliente.locale}" />
+		<p:remoteCommand name="onload" 
+			action="#{administrarSesionCliente.getNologueoAdministrador()}"
+			autoRun="true" />
+		<div class="header-in">
+
+			<h1 id="logo" style="font-size: 0 !important;">
+				<a href="http://www.fundacionfrc.com" target="_blank"><img
+					src="/barrigones/plantillas/images/logo.svg" alt="" width="210px" /></a>
+			</h1>
+
+			<a id="responsive-nav-button" class="responsive-nav-button" href="#"></a>
+
+			<nav id="navigation" class="navigation">
+
+			<ul>
+
+
+
+				<li class=""><a href="#" class="">#{mensaje.arbolitos}</a>
+					<ul class="">
+
+						<li><p:commandLink ajax="false"
+								value="#{mensaje.administracionClasesArbolitos}"
+								title="#{mensaje.administracionClasesArbolitos}"
+								action="/arbolitos/clasesArbolitos/crearArbolito.xhtml?faces-redirect=true" /></li>
+
+
+						<li><p:commandLink value="#{mensaje.bolsasArbolitos}"
+								title="#{mensaje.bolsasArbolitos}" ajax="false"
+								action="/arbolitos/bolsas/crearBolsaArbolito.xhtml?faces-redirect=true" /></li>
+
+						<li><p:commandLink
+								value="#{mensaje.administracionGeneralLote}"
+								title="#{mensaje.administracionGeneralLote}"
+								action="/lotes/crearLote.xhtml?faces-redirect=true" ajax="false" /></li>
+
+
+
+
+						<li><p:commandLink
+								value="#{mensaje.administracionArbolitosAdoptados}"
+								action="/arbolitos/historicoArbolitos/consultarHistoricoArbolito.xhtml?faces-redirect=true"
+								ajax="false" /></li>
+
+
+
+					</ul></li>
+
+
+
+
+
+				<li class=""><a href="#" class="">#{mensaje.ventas}</a>
+					<ul class="">
+
+						<li><p:commandLink value="#{mensaje.ventaTarjetas}"
+								title="#{mensaje.ventaTarjetas}"
+								action="/ventas/crearTarjeta.xhtml?faces-redirect=true"
+								ajax="false" /></li>
+
+
+						<li><p:commandLink value="#{mensaje.consultarDetalleVentas}"
+								title="#{mensaje.consultarDetalleVentas}"
+								action="/ventas/consultarVentas.xhtml?faces-redirect=true"
+								ajax="false" /></li>
+
+						<li><p:commandLink
+								value="#{mensaje.consultarDetalleTransaccionesAprobadas}"
+								title="#{mensaje.consultarDetalleTransaccionesAprobadas}"
+								action="/ventas/consultarDetalleVentas.xhtml?faces-redirect=true"
+								ajax="false" /></li>
+
+
+					</ul></li>
+
+
+				<li class=""><a href="#" class="">#{mensaje.parametrosGenerales}</a>
+					<ul class="">
+
+						<li><p:commandLink value="#{mensaje.iva}"
+								title="#{mensaje.iva}"
+								action="/tablasSoporte/crearIva.xhtml?faces-redirect=true"
+								ajax="false" /></li>
+						<li><p:commandLink value="#{mensaje.estados}"
+								title="#{mensaje.estados}"
+								action="/tablasSoporte/crearEstado.xhtml?faces-redirect=true"
+								ajax="false" /></li>
+
+
+						<li><p:commandLink value="#{mensaje.conveniosEmpresas}"
+								title="#{mensaje.conveniosEmpresas}"
+								action="/tablasSoporte/crearConvenio.xhtml?faces-redirect=true"
+								ajax="false" /></li>
+
+
+					</ul></li>
+					
+					
+					<li class=""><a href="#" class="">#{mensaje.personal}</a>
+					<ul class="">
+
+						<li><p:commandLink value="#{mensaje.administradoresSoftware}" ajax="false"
+						title="#{mensaje.administradoresSoftware}"
+						action="/personal/crearAdministrador.xhtml?faces-redirect=true" /></li>
+						
+						
+						<li><p:commandLink value="#{mensaje.compradores}" ajax="false"
+						title="#{mensaje.compradores}"
+						action="/personal/consultarCompradores.xhtml?faces-redirect=true" /></li>
+
+
+					</ul></li>
+
+
+
+				
+						
+						
+						
+						
+
+
+				<li><p:commandLink value="#{mensaje.idiomaPagina}"
+						process="@this"
+						action="#{consultarFuncionesAPI.abrirModal('panelCambiarIdioma')}" /></li>
+
+				<li class="current-menu-item"><p:commandLink
+						value="#{mensaje.cerrarSesion}" ajax="false"
+						title="#{mensaje.cerrarSesion}"
+						action="#{administrarSesionCliente.getCerrarSesion()}" /></li>
+
+
+			</ul>
+
+			</nav>
+		</div>
+	</h:form> </header>
+	<div id="wrapper" align="center">
+
+		<div style="width: 90%;" align="left">
+			<br /> <br /> <br /> <br />
+			<ui:insert name="body" />
+			<br /> <br /> <br />
+
+		</div>
+		<footer id="footer"> <section
+			class="section parallax parallax-bg-4">
+
+		<div class="full-bg-image"></div>
+		<div class="container">
+			<div class="row">
+				<div align="left">
+					<div class="col-md-6 opacity">
+						<div class="widget widget_text opacity">
+							<p>#{mensaje.presentacionFundacion}</p>
+						</div>
+						<div class="widget widget_contacts opacity">
+							<ul class="contact-details">
+								<li>#{mensaje.direccionFundacion}</li>
+								<li>#{mensaje.telefonoFundacion}</li>
+								<li>#{mensaje.emailFundacion}</li>
+							</ul>
+
+
+							<div class="copyright">
+								<br /> <a target="_blank">Software:
+									#{mensaje.adoptaUnArbolVida} - #{mensaje.disenadoPor}</a>
+							</div>
+						</div>
+
+					</div>
+				</div>
+				<div class="col-md-6">
+
+					<div class="widget widget_social opacity">
+						<ul class="social-icons">
+							<li class="twitter"><a
+								href="https://twitter.com/FundacionFRC" target="_blank"><i
+									class="icon-twitter"></i>Twitter</a></li>
+							<li class="facebook"><a
+								href="https://www.facebook.com/fundacionfrc" target="_blank"><i
+									class="icon-facebook"></i>Facebook</a></li>
+							<li class="youtube"><a
+								href="https://www.youtube.com/channel/UCJq5MDiLWLg8ZFD2dE3WgYQ"
+								target="_blank"><i class="icon-youtube"></i>Youtube</a></li>
+							<li class="instagram"><a href="http://www.fundacionfrc.com"
+								target="_blank"><i class="icon-chrome"></i>Web</a></li>
+						</ul>
+					</div>
+
+					<!-- 
+					<h:form>
+						<p:themeSwitcher id="advanced" style="width:165px" effect="fade"
+							value="#{themeSwitcherView.tema}" var="t">
+							<f:selectItem itemLabel="Seleccione" itemValue="" />
+							
+							<f:selectItem itemLabel="bluesky" itemValue="bluesky" />
+							<f:selectItem itemLabel="afternoon" itemValue="afternoon" />
+							<f:selectItem itemLabel="afterwork" itemValue="afterwork" />
+							<f:selectItem itemLabel="aristo" itemValue="aristo" />
+				
+							<f:selectItem itemLabel="blitzer" itemValue="blitzer" />
+					
+							<f:selectItem itemLabel="casablanca" itemValue="casablanca" />
+							<f:selectItem itemLabel="cupertino" itemValue="cupertino" />
+							<f:selectItem itemLabel="cruze" itemValue="cruze" />
+							<f:selectItem itemLabel="dark-hive" itemValue="dark-hive" />
+						
+							<f:selectItem itemLabel="dot-luv" itemValue="dot-luv" />
+							<f:selectItem itemLabel="eggplant" itemValue="eggplant" />
+							<f:selectItem itemLabel="excite-bike" itemValue="excite-bike" />
+							<f:selectItem itemLabel="flick" itemValue="flick" />
+							<f:selectItem itemLabel="glass-x" itemValue="glass-x" />
+							<f:selectItem itemLabel="home" itemValue="home" />
+							<f:selectItem itemLabel="hot-sneaks" itemValue="hot-sneaks" />
+							<f:selectItem itemLabel="humanity" itemValue="humanity" />
+							<f:selectItem itemLabel="le-frog" itemValue="le-frog" />
+							<f:selectItem itemLabel="midnight" itemValue="midnight" />
+							<f:selectItem itemLabel="mint-choc" itemValue="mint-choc" />
+			
+							<f:selectItem itemLabel="overcast" itemValue="overcast" />
+							<f:selectItem itemLabel="pepper-grinder"
+								itemValue="pepper-grinder" />
+							<f:selectItem itemLabel="redmond" itemValue="redmond" />
+							<f:selectItem itemLabel="rocket" itemValue="rocket" />
+							<f:selectItem itemLabel="sam" itemValue="sam" />
+							<f:selectItem itemLabel="smoothness" itemValue="smoothness" />
+							<f:selectItem itemLabel="south-street" itemValue="south-street" />
+							<f:selectItem itemLabel="start" itemValue="start" />
+							<f:selectItem itemLabel="sunny" itemValue="sunny" />
+							<f:selectItem itemLabel="swanky-purse" itemValue="swanky-purse" />
+							<f:selectItem itemLabel="trontastic" itemValue="trontastic" />
+							<f:selectItem itemLabel="ui-darkness" itemValue="ui-darkness" />
+							<f:selectItem itemLabel="ui-lightness" itemValue="ui-lightness" />
+							<f:selectItem itemLabel="vader" itemValue="vader" />
+							<p:ajax process="@this" />
+						</p:themeSwitcher>
+					</h:form>
+					-->
+				</div>
+			</div>
+
+		</div>
+
+		</section> </footer>
+	</div>
+
+
+
+
+
+
+
+
+
+
+
+	<script src="/barrigones/plantillas/js/jquery.queryloader2.js"></script>
+	<script src="/barrigones/plantillas/js/jquery.easing.1.3.min.js"></script>
+	<script src="/barrigones/plantillas/js/jquery.cycle.all.min.js"></script>
+	<script src="/barrigones/plantillas/js/jquery.smoothscroll.js"></script>
+	<script src="/barrigones/plantillas/js/waypoints.min.js"></script>
+
+
+	<script
+		src="/barrigones/plantillas/js/fancybox/jquery.fancybox.pack.js"></script>
+	<script src="/barrigones/plantillas/js/config.js"></script>
+	<script src="/barrigones/plantillas/js/custom.js"></script>
+	<ui:include src="/arbolitos/adopcionCliente/cambiarIdioma.xhtml" />
+
+</body>
+</html>

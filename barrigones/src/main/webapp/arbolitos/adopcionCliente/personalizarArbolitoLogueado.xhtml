@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<h:form id="formPersonalizarArbolito">
+
+		<p:dialog header="#{mensaje.personalizacionArbolitos}"
+			widgetVar="panelPersonalizacionArbolito"   
+			resizable="true" closable="false" responsive="true">
+			<p:panel id="pnlPersonalizarArbolito">
+				<div align="center">
+
+					<p:panelGrid columns="3" style="width:100%"
+						styleClass="ui-panelgrid-blank">
+
+						<p:outputLabel for="txtNombreArbolitoPersonalizado"
+							value="#{mensaje.nombreArbolitoPersonalizado}"
+							style="font-weight:bold; font-size:14px" />
+
+						<p:inputText id="txtNombreArbolitoPersonalizado"
+							value="#{administrarSesionCliente.historicoTransaccion.nombrePersonalizadoArbolito}"
+							label="#{mensaje.nombreArbolito}"
+							style="width:100%; font-size:14px;" />
+						<p:message for="txtNombreArbolitoPersonalizado" />
+
+						
+
+					</p:panelGrid>
+
+					<p:commandButton id="btnPersonalizarArbolito"
+						style="font-size:14px"
+						action="#{administrarSesionCliente.actualizarPersonalizacion()}"
+						value="#{mensaje.aceptar}" process="formPersonalizarArbolito"
+						update=":formCompras, pnlPersonalizarArbolito" />
+					<p:spacer width="10" />
+					<p:commandButton id="btnCancelarPersonalizacionArbolito"
+						style="font-size:14px; font-weight: normal !important;"
+						action="#{consultarFuncionesAPI.cerrarModal('panelPersonalizacionArbolito')}"
+						process="@this" value="#{mensaje.cancelar}" update=":formCompras">
+
+					</p:commandButton>
+
+					<p:blockUI
+						block=":formPersonalizarArbolito:pnlPersonalizarArbolito"
+						trigger="btnPersonalizarArbolito, btnCancelarPersonalizacionArbolito">
+						<p:graphicImage value="../../imagenes/cargando.gif" />
+					</p:blockUI>
+
+				</div>
+
+
+
+
+
+			</p:panel>
+		</p:dialog>
+
+
+	</h:form>
+</ui:composition>

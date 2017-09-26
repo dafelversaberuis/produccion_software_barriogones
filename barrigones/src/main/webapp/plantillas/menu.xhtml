@@ -1,0 +1,150 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	<h:form>
+		<p:spacer height="30" />
+		<div align="center">
+			<h4>#{mensaje.menu}</h4>
+			<p:tieredMenu style="width:90%">
+
+				<p:submenu label="#{mensaje.arbolitos}" icon="ui-icon-extlink">
+					<p:menuitem value="#{mensaje.administracionClasesArbolitos}"
+						outcome="/arbolitos/clasesArbolitos/crearArbolito.xhtml" />
+						
+						
+						<p:menuitem value="#{mensaje.bolsasArbolitos}"
+						outcome="/arbolitos/bolsas/crearBolsaArbolito.xhtml" />	
+						
+						<p:menuitem value="#{mensaje.administracionGeneralLote}"
+						outcome="/lotes/crearLote.xhtml" />
+
+					<p:menuitem value="#{mensaje.administracionArbolitosAdoptados}"
+						outcome="/arbolitos/historicoArbolitos/consultarHistoricoArbolito.xhtml" />
+						
+					
+
+
+				</p:submenu>
+				
+				<p:submenu label="#{mensaje.ventas}" icon="ui-icon-extlink">
+
+					<p:menuitem value="#{mensaje.ventaTarjetas}"
+						outcome="/ventas/crearTarjeta.xhtml" />
+
+
+					<p:menuitem value="#{mensaje.consultarDetalleVentas}"
+						outcome="/ventas/consultarVentas.xhtml" />
+
+					<p:menuitem
+						value="#{mensaje.consultarDetalleTransaccionesAprobadas}"
+						outcome="/ventas/consultarDetalleVentas.xhtml" />
+
+				</p:submenu>
+				
+				<p:submenu label="#{mensaje.parametrosGenerales}"
+					icon="ui-icon-extlink">
+					<p:menuitem value="#{mensaje.iva}"
+						outcome="/tablasSoporte/crearIva.xhtml" />
+					<p:menuitem value="#{mensaje.estados}"
+						outcome="/tablasSoporte/crearEstado.xhtml" />
+
+
+					<p:menuitem value="#{mensaje.conveniosEmpresas}"
+						outcome="/tablasSoporte/crearConvenio.xhtml" />
+
+
+				</p:submenu>
+
+			
+
+				<p:submenu label="#{mensaje.personal}" icon="ui-icon-extlink">
+					<p:menuitem value="#{mensaje.administradoresSoftware}"
+						outcome="/personal/crearAdministrador.xhtml" />
+
+				</p:submenu>
+
+				
+
+				
+
+
+			</p:tieredMenu>
+		</div>
+		<p:spacer height="20" />
+		<div align="center">
+			<p:commandButton value="#{mensaje.cerrarSesion}"
+				style="font-size:14px"
+				action="#{administrarSesionCliente.getCerrarSesion()}" />
+
+
+			<br />
+
+			<p:themeSwitcher id="advanced" style="width:165px" effect="fade" value="#{themeSwitcherView.tema}"
+				var="t">
+				<f:selectItem itemLabel="Seleccione" itemValue="" />
+				<f:selectItem itemLabel="afterdark" itemValue="afterdark" />
+				<f:selectItem itemLabel="bluesky" itemValue="bluesky" />
+			
+				<f:selectItem itemLabel="afternoon" itemValue="afternoon"/>
+				<f:selectItem itemLabel="afterwork" itemValue="afterwork"/>
+				<f:selectItem itemLabel="aristo" itemValue="aristo"/>
+				<f:selectItem itemLabel="black-tie" itemValue="black-tie"/>
+				<f:selectItem itemLabel="blitzer" itemValue="blitzer"/>
+				<f:selectItem itemLabel="bootstrap" itemValue="bootstrap"/>
+				<f:selectItem itemLabel="casablanca" itemValue="casablanca"/>
+				<f:selectItem itemLabel="cupertino" itemValue="cupertino"/>
+				<f:selectItem itemLabel="cruze" itemValue="cruze"/>
+				<f:selectItem itemLabel="dark-hive" itemValue="dark-hive"/>
+				<f:selectItem itemLabel="delta" itemValue="delta"/>
+				<f:selectItem itemLabel="dot-luv" itemValue="dot-luv"/>
+				<f:selectItem itemLabel="eggplant" itemValue="eggplant"/>
+				<f:selectItem itemLabel="excite-bike" itemValue="excite-bike"/>
+				<f:selectItem itemLabel="flick" itemValue="flick"/>
+				<f:selectItem itemLabel="glass-x" itemValue="glass-x"/>
+				<f:selectItem itemLabel="home" itemValue="home"/>
+				<f:selectItem itemLabel="hot-sneaks" itemValue="hot-sneaks"/>
+				<f:selectItem itemLabel="humanity" itemValue="humanity"/>
+				<f:selectItem itemLabel="le-frog" itemValue="le-frog"/>
+				<f:selectItem itemLabel="midnight" itemValue="midnight"/>
+				<f:selectItem itemLabel="mint-choc" itemValue="mint-choc"/>
+				<f:selectItem itemLabel="omega" itemValue="omega"/>
+				<f:selectItem itemLabel="overcast" itemValue="overcast"/>
+				<f:selectItem itemLabel="pepper-grinder" itemValue="pepper-grinder"/>
+				<f:selectItem itemLabel="redmond" itemValue="redmond"/>
+				<f:selectItem itemLabel="rocket" itemValue="rocket"/>
+				<f:selectItem itemLabel="sam" itemValue="sam"/>
+				<f:selectItem itemLabel="smoothness" itemValue="smoothness"/>
+				<f:selectItem itemLabel="south-street" itemValue="south-street"/>
+				<f:selectItem itemLabel="start" itemValue="start"/>
+				<f:selectItem itemLabel="sunny" itemValue="sunny"/>
+				<f:selectItem itemLabel="swanky-purse" itemValue="swanky-purse"/>
+				<f:selectItem itemLabel="trontastic" itemValue="trontastic"/>
+				<f:selectItem itemLabel="ui-darkness" itemValue="ui-darkness"/>
+				<f:selectItem itemLabel="ui-lightness" itemValue="ui-lightness"/>
+				<f:selectItem itemLabel="vader" itemValue="vader"/>
+			
+
+			
+				
+			</p:themeSwitcher>
+		</div>
+
+
+
+
+		<!-- 
+			<p:ajaxStatus onstart="PF('statusDialog').show()"
+			onsuccess="PF('statusDialog').hide()" />
+			<p:dialog widgetVar="statusDialog" 
+			draggable="false" closable="false" resizable="false"
+			showHeader="false">
+			<p:graphicImage value="../imagenes/cargando.gif" />
+			</p:dialog>
+								
+		-->
+
+	</h:form>
+</ui:composition>

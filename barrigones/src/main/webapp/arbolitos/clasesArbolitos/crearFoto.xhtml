@@ -1,0 +1,180 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui">
+	<h:form id="formAsignarArbolito">
+		<p:outputPanel id="pnlArbolitos"
+			rendered="#{administrarArbolito.vistaActual == 'VISTA_FOTOS'}">
+			<p:spacer height="5" />
+			<p:panel>
+				<div align="left">
+					<p:panelGrid columns="2" styleClass="ui-panelgrid-blank"
+						cellpadding="5">
+						<p:outputLabel value="#{mensaje.arbolito}"
+							style="font-weight:bold; font-size:14px" />
+
+						<p:outputLabel style="font-weight:normal; font-size:14px"
+							value="#{administrarArbolito.arbolitoTransaccion.nombre} (#{administrarArbolito.arbolitoTransaccion.nombreUS})" />
+
+
+					</p:panelGrid>
+				</div>
+			</p:panel>
+
+			<p:spacer height="5" />
+
+			<p:outputPanel id="pnlCrearArbolitoTest">
+				<p:accordionPanel id="pnlArbolitoAcordion">
+					<p:tab title="#{mensaje.crearFotoArbolito}" id="tabArbolito"
+						titleStyle="font-size:16px" closable="true">
+
+						<p:panelGrid columns="5" style="width:100%"
+							styleClass="ui-panelgrid-blank">
+
+
+							<p:outputLabel for="txtTitulo" value="#{mensaje.tituloFoto}"
+								style="font-weight:bold; font-size:14px;" />
+							<p:inputText id="txtTitulo" style="font-size:14px; width:100%"
+								value="#{administrarArbolito.fotoArbolito.titulo}"
+								required="true" label="#{mensaje.tituloFoto}" />
+							<p:spacer width="1" />
+							<p:spacer width="1" />
+							<p:message for="txtTitulo" />
+
+
+							<p:outputLabel for="fileCrear" value="#{mensaje.imagenOFoto}"
+								style="font-weight:bold; font-size:14px" />
+
+							<p:outputPanel id="pnlCargado">
+								<p:fileUpload id="fileCrear" cancelLabel="true"
+									dragDropSupport="true" style="width:100%;"
+									rendered="#{administrarArbolito.file==null}"
+									fileUploadListener="#{administrarArbolito.recibirFotoArbolito}"
+									multiple="false" fileLimit="1"
+									fileLimitMessage="#{mensaje.soloUnaFoto}"
+									label="#{mensaje.busqueArchivo}" required="true"
+									mode="advanced" update=":form:messages, pnlCargado" auto="true"
+									sizeLimit="1000000"
+									invalidSizeMessage="#{mensaje.excedeTamano}"
+									invalidFileMessage="#{mensaje.extensionIncorrecta}"
+									allowTypes="/(\.|\/)(jpg|jp?g|gif|png)$/" />
+
+								<p:panelGrid columns="2">
+									<p:outputLabel value="#{administrarArbolito.file.fileName}"
+										rendered="#{administrarArbolito.fotoArbolito.foto != null}" />
+
+									<p:commandLink value="#{mensaje.limpiar}"
+										action="#{administrarArbolito.limpiarArchivoCargado()}"
+										process="@this" update="pnlCargado"
+										rendered="#{administrarArbolito.fotoArbolito.foto  != null}" />
+								</p:panelGrid>
+							</p:outputPanel>
+
+							<p:graphicImage value="../../imagenes/ayuda.png"
+								id="ayudaCargarArchivo" />
+							<p:tooltip value="#{mensaje.ayudaCargarArchivo}"
+								trackMouse="true" for="ayudaCargarArchivo" />
+							<p:spacer width="1" />
+						</p:panelGrid>
+
+						<p:spacer height="10" />
+						<div align="center">
+							<p:commandButton id="btnCrearArbolitoTest"
+								style="font-size:14px; font-weight: normal !important;"
+								action="#{administrarArbolito.crearFotoArbolito()}"
+								process=":formAsignarArbolito" value="#{mensaje.guardar}"
+								update=":formAsignarArbolito, :form" />
+							<p:spacer width="10" />
+							<p:commandButton id="btnRegresarAAgrupador"
+								style="font-size:14px; font-weight: normal !important;"
+								action="#{administrarArbolito.cancelarArbolitoTransaccion(null)}"
+								process="@this" value="#{mensaje.regresar}"
+								update=":formAsignarArbolito, :form">
+
+								<p:resetInput target=":formAsignarArbolito:pnlCrearArbolitoTest" />
+							</p:commandButton>
+						</div>
+
+						<p:outputLabel value="#{mensaje.informacionRequerida}"
+							style="font-size:10px" />
+
+						<p:blockUI block=":formAsignarArbolito:pnlCrearArbolitoTest"
+							trigger="btnCrearArbolitoTest, btnRegresarAAgrupador">
+
+							<p:graphicImage value="../../imagenes/cargando.gif" />
+
+
+						</p:blockUI>
+
+					</p:tab>
+				</p:accordionPanel>
+			</p:outputPanel>
+
+			<p:spacer height="5" />
+
+			<p:outputPanel id="dtlArbolitos">
+				<p:accordionPanel id="pnlArbolitosAcordion">
+					<p:tab title="#{mensaje.listadoFotosArbolito}"
+						titleStyle="font-size:16px" closable="true">
+
+						<p:dataTable var="det"
+							value="#{administrarArbolito.fotosArbolito}" reflow="true"
+							rows="1" paginator="true" paginatorPosition="bottom"
+							draggableColumns="true"
+							emptyMessage="#{mensaje.noExistenFotosArbolito}">
+
+							<p:column headerText="#{mensaje.tituloFoto}"
+								sortBy="#{det.titulo}" filterBy="#{det.titulo}"
+								style="font-size:14px">
+								<p:outputLabel value="#{det.titulo}"
+									style="font-weight:normal; font-size:12px" />
+
+							</p:column>
+							<p:column headerText="#{mensaje.imagenOFoto}" style="font-size:14px">
+								
+								
+								<img src="../../imagenes/arbolitosApp/#{det.fotoDecofificada}" />
+								
+							</p:column>
+
+
+							<p:column headerText="#{mensaje.acciones}"
+								style="font-size:14px; text-align:center;">
+
+								<p:commandButton id="btnIrEditar"
+									style="background-origin: content-box; background-image: url('../../imagenes/editar.png'); background-size: cover; background-repeat:no-repeat; width:16px; height:16px; vertical-align:bottom; border:0; background-color:transparent"
+									action="#{administrarArbolito.asignarFotoArbolito(det,'MODAL_EDITAR_FOTO')}"
+									value="" process=":formAsignarArbolito:dtlArbolitos"
+									update=":formEditarFoto" />
+
+								<p:commandButton id="btnIrEliminar"
+									style="background-origin: content-box; background-image: url('../../imagenes/borrar.png'); background-size: cover; background-repeat:no-repeat; width:16px; height:16px; vertical-align:bottom; border:0; background-color:transparent"
+									value=""
+									action="#{administrarArbolito.asignarFotoArbolito(det,'MODAL_ELIMINAR_FOTO')}"
+									process=":formAsignarArbolito:dtlArbolitos"
+									update=":formEliminarFoto" />
+
+
+
+								<p:tooltip for="btnIrEliminar" value="#{mensaje.eliminar}"
+									trackMouse="true" />
+
+								<p:tooltip for="btnIrEditar" value="#{mensaje.editar}"
+									trackMouse="true" />
+
+
+
+
+							</p:column>
+
+						</p:dataTable>
+
+					</p:tab>
+				</p:accordionPanel>
+			</p:outputPanel>
+		</p:outputPanel>
+	</h:form>
+
+</ui:composition>

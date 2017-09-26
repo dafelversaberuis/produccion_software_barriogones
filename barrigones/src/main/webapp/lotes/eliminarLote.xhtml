@@ -1,0 +1,116 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+
+	<h:form id="formEliminar">
+		<p:dialog header="#{mensaje.eliminarLote}" closable="false"
+			widgetVar="panelEliminacionLote"  resizable="true"  width="850" height="450"
+			responsive="true">
+			<p:outputPanel id="outputpanelEliminacion">
+
+				<div align="center">
+
+					<p:panelGrid columns="5" cellpadding="0" cellspacing="0"
+						styleClass="ui-panelgrid-blank">
+
+						<p:outputLabel for="txtNombre" value="#{mensaje.nombre}"
+							style="font-weight:bold; font-size:14px" />
+						<p:inputText id="txtNombre"
+							value="#{administrarLote.loteTransaccion.nombreLote}"
+							disabled="true" label="#{mensaje.nombre}"
+							style="width:100%; font-size:14px" />
+						<p:spacer width="1" />
+						<p:spacer width="1" />
+						<p:spacer width="1" />
+
+
+
+
+						<p:outputLabel for="txtDescripcion" value="#{mensaje.descripcion}"
+							style="font-weight:bold; font-size:14px" />
+
+						<p:editor
+							value="#{administrarLote.loteTransaccion.descripcionLote}"
+							id="txtDescripcion" style="font-size:14px" disabled="true" />
+						<p:spacer width="1" />
+						<p:spacer width="1" />
+						<p:spacer width="1" />
+
+						<p:outputLabel for="lstArbolito" value="#{mensaje.arbolito}"
+							style="font-weight:bold; font-size:14px;" />
+						<p:selectOneMenu id="lstArbolito" disabled="true"
+							style="font-size:14px; width:100%"
+							value="#{administrarLote.loteTransaccion.arbolito.id}"
+							label="#{mensaje.arbolito}">
+							<f:selectItems value="#{administrarLote.itemsArbolitos}" />
+						</p:selectOneMenu>
+
+						<p:spacer width="1" />
+						<p:spacer width="1" />
+						<p:spacer width="1" />
+
+
+						<p:outputLabel for="lstIndicativo"
+							value="#{mensaje.indicativoInfinito}"
+							style="font-weight:bold; font-size:14px;" />
+						<p:selectOneMenu id="lstIndicativo" disabled="true"
+							style="font-size:14px;"
+							value="#{administrarLote.loteTransaccion.indicativoInfinito}"
+							label="#{mensaje.indicativoInfinito}">
+							<f:selectItem itemLabel="#{mensaje.comboVacio}" itemValue="" />
+							<f:selectItem itemLabel="#{mensaje.SI}" itemValue="S" />
+							<f:selectItem itemLabel="#{mensaje.NO}" itemValue="N" />
+
+
+						</p:selectOneMenu>
+						<p:spacer width="1" />
+						<p:spacer width="1" />
+						<p:spacer width="1" />
+
+						<p:outputPanel id="outInfinito1">
+							<p:outputLabel for="txtCantidad"
+								rendered="#{administrarLote.loteTransaccion.indicativoInfinito == 'N'}"
+								value="#{mensaje.cantidadDisponible}"
+								style="font-weight:bold; font-size:14px" />
+						</p:outputPanel>
+						<p:outputPanel id="outInfinito2">
+							<p:inputText id="txtCantidad"
+								rendered="#{administrarLote.loteTransaccion.indicativoInfinito == 'N'}"
+								value="#{administrarLote.loteTransaccion.cantidadDisponible}"
+								disabled="true" label="#{mensaje.cantidadDisponible}"
+								style="font-size:14px" />
+						</p:outputPanel>
+
+						<p:spacer width="1" />
+						<p:spacer width="1" />
+						<p:spacer width="1" />
+
+
+
+					</p:panelGrid>
+
+				</div>
+				<div align="center">
+					<p:commandButton value="#{mensaje.eliminar}" style="font-size:14px"
+						action="#{administrarLote.eliminarLote()}"
+						update=":form, :formEliminar" />
+
+					<p:spacer width="10" />
+					<p:commandButton id="btnCancelarEliminarLote"
+						style="font-size:14px; font-weight: normal !important;"
+						action="#{administrarLote.cancelarLoteTransaccion('MODAL_ELIMINAR_LOTE')}"
+						process="@this" value="#{mensaje.cancelar}" update=":form">
+
+					</p:commandButton>
+
+				</div>
+			</p:outputPanel>
+		</p:dialog>
+
+
+	</h:form>
+</ui:composition>

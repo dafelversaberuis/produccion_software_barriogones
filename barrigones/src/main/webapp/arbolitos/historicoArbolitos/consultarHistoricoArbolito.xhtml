@@ -1,0 +1,465 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/plantillas/principal.xhtml">
+
+	<ui:define name="body">
+
+		<h:form id="formCompras">
+			<p:growl id="messages" showDetail="true" globalOnly="true" />
+			<p:remoteCommand name="onload" process="@this"
+				action="#{administrarSesionCliente.getNoRolAdmitido()}"
+				autoRun="true" />
+			
+
+
+			<div class="row x_title">
+				<div class="col-md-6">
+					<p:outputLabel value="#{mensaje.moduloArbolitos}: "
+						styleClass="tituloPrincipal" />
+					<p:spacer width="2" />
+					<p:outputLabel value="#{mensaje.administracionArbolitosAdoptados}"
+						styleClass="tituloPrincipal" />
+				</div>
+			</div>
+
+			<div align="center" class="titulo"></div>
+
+			<p:outputPanel id="pnlVenta"
+				rendered="#{administrarArbolito.vistaActual==null or administrarArbolito.vistaActual == 'HISTORICOS'}">
+
+				<p:spacer height="10" />
+
+				<p:accordionPanel id="pnlCrear">
+					<p:tab title="#{mensaje.consultarCriterios}"
+						titleStyle="font-size:16px" closable="true">
+
+						<p:panelGrid columns="4" cellpadding="0" cellspacing="0"
+							styleClass="ui-panelgrid-blank">
+
+
+
+							<p:outputLabel for="calFechaDesde" value="#{mensaje.fechaDesde}"
+								style="font-weight:bold; font-size:14px" />
+
+							<p:calendar id="calFechaDesde"
+								value="#{administrarArbolito.historico.venta.tFechaDesde}"
+								pattern="yyyy-MM-dd" mask="true" style="font-size:14px" />
+							<p:spacer width="1" />
+							<p:message for="calFechaDesde" />
+
+
+
+
+							<p:outputLabel for="calFechaHasta" value="#{mensaje.fechaHasta}"
+								style="font-weight:bold; font-size:14px" />
+
+							<p:calendar id="calFechaHasta"
+								value="#{administrarArbolito.historico.venta.tFechaHasta}"
+								pattern="yyyy-MM-dd" mask="true" style="font-size:14px" />
+							<p:spacer width="1" />
+							<p:message for="calFechaHasta" />
+
+
+
+							<p:outputLabel for="txtNombres" value="#{mensaje.comprador}"
+								style="font-weight:bold; font-size:14px" />
+
+
+
+							<p:inputText
+								value="#{administrarArbolito.historico.venta.comprador.nombreCompleto}"
+								id="txtNombres" style="font-size:14px;" />
+
+
+							<p:spacer width="1" />
+							<p:message for="txtNombres" />
+
+							<p:outputLabel for="lstArbolito" value="#{mensaje.arbolito}"
+								style="font-weight:bold; font-size:14px;" />
+							<p:selectOneMenu id="lstArbolito"
+								style="font-size:14px; width:100%"
+								value="#{administrarArbolito.historico.arbolito.id}"
+								label="#{mensaje.arbolito}">
+								<f:selectItems value="#{administrarVenta.itemsArbolitos}" />
+							</p:selectOneMenu>
+
+							<p:spacer width="1" />
+							<p:message for="lstArbolito" />
+
+
+							<p:outputLabel for="lstEstado" value="#{mensaje.estadoArbolito}"
+								style="font-weight:bold; font-size:14px;" />
+							<p:selectOneMenu id="lstEstado"
+								style="font-size:14px; width:100%"
+								value="#{administrarArbolito.historico.estado.id}"
+								label="#{mensaje.estadoArbolito}">
+								<f:selectItems
+									value="#{administrarArbolito.itemsEstadosConsulta}" />
+							</p:selectOneMenu>
+
+							<p:spacer width="1" />
+							<p:message for="lstEstado" />
+
+							<p:outputLabel for="lstNombreLote"
+								value="#{mensaje.loteConsultar}"
+								style="font-weight:bold; font-size:14px;" />
+							<p:selectOneMenu id="lstNombreLote"
+								style="font-size:14px; width:100%"
+								value="#{administrarArbolito.historico.lote.nombreLote}"
+								label="#{mensaje.loteConsultar}">
+								<f:selectItems value="#{administrarArbolito.itemsLotes}" />
+							</p:selectOneMenu>
+
+							<p:spacer width="1" />
+							<p:message for="lstNombreLote" />
+
+
+
+							<p:outputLabel for="lstPersonalizado"
+								value="#{mensaje.buscarPersonalizado}"
+								style="font-weight:bold; font-size:14px;" />
+							<p:selectOneMenu id="lstPersonalizado"
+								style="font-size:14px; width:100%"
+								value="#{administrarArbolito.historico.TPlacaNombreParticular}"
+								label="#{mensaje.buscarPersonalizado}">
+
+								<f:selectItem itemValue="" itemLabel="#{mensaje.comboVacio}" />
+								<f:selectItem itemValue="S" itemLabel="#{mensaje.SI}" />
+								<f:selectItem itemValue="N" itemLabel="#{mensaje.NO}" />
+
+							</p:selectOneMenu>
+
+							<p:spacer width="1" />
+							<p:message for="lstPersonalizado" />
+
+
+							<p:outputLabel for="lstRegalado" value="#{mensaje.regaladoAmigo}"
+								style="font-weight:bold; font-size:14px;" />
+							<p:selectOneMenu id="lstRegalado"
+								style="font-size:14px; width:100%"
+								value="#{administrarArbolito.historico.tregalarlo}"
+								label="#{mensaje.regaladoAmigo}">
+
+								<f:selectItem itemValue="" itemLabel="#{mensaje.comboVacio}" />
+								<f:selectItem itemValue="S" itemLabel="#{mensaje.SI}" />
+								<f:selectItem itemValue="N" itemLabel="#{mensaje.NO}" />
+
+							</p:selectOneMenu>
+
+							<p:spacer width="1" />
+							<p:message for="lstRegalado" />
+
+
+							<p:outputLabel for="lstReemplazado"
+								value="#{mensaje.reemplazado}"
+								style="font-weight:bold; font-size:14px;" />
+							<p:selectOneMenu id="lstReemplazado"
+								style="font-size:14px; width:100%"
+								value="#{administrarArbolito.historico.TReemplazado}"
+								label="#{mensaje.reemplazado}">
+
+								<f:selectItem itemValue="" itemLabel="#{mensaje.comboVacio}" />
+								<f:selectItem itemValue="S" itemLabel="#{mensaje.SI}" />
+								<f:selectItem itemValue="N" itemLabel="#{mensaje.NO}" />
+
+							</p:selectOneMenu>
+
+							<p:spacer width="1" />
+							<p:message for="lstReemplazado" />
+
+
+
+						</p:panelGrid>
+						<p:spacer height="10" />
+						<div align="center">
+							<p:commandButton id="btnConsultar"
+								style="font-size:14px; font-weight: normal !important;"
+								action="#{administrarArbolito.consultarArbolitosAdoptados()}"
+								value="#{mensaje.consultar}" update=":formCompras" />
+
+							<p:spacer width="10" />
+							<p:commandButton id="btnBorrar"
+								style="font-size:14px; font-weight: normal; text-decoration: none !important;"
+								action="#{administrarArbolito.cancelarArbolitoAdoptado()}"
+								process="@this" value="#{mensaje.cancelar}"
+								update=":formCompras">
+
+								<p:resetInput target=":formCompras:pnlVenta" />
+
+							</p:commandButton>
+
+						</div>
+
+
+						<p:blockUI block=":formCompras:pnlVenta"
+							trigger="btnConsultar, btnBorrar">
+
+							<p:graphicImage value="../../imagenes/cargando.gif" />
+
+
+						</p:blockUI>
+					</p:tab>
+				</p:accordionPanel>
+
+				<p:spacer height="30" />
+				<p:accordionPanel id="pnlDtlTransaccionesAprobadas">
+					<p:tab title="#{mensaje.listadoArbolitosAdoptados}"
+						titleStyle="font-size:16px" closable="true">
+
+						<p:dataTable var="loc" id="dtlDetalleArbolitos" rowIndexVar="item"
+							value="#{administrarArbolito.historicos}" reflow="true"
+							style="font-size:14px" paginatorPosition="bottom"
+							draggableColumns="true" rows="10" paginator="true"
+							emptyMessage="#{mensaje.noExistenciaDetalleCriterios}">
+
+							<f:facet name="header">
+								<div align="left">
+									<p:commandButton id="toggler" type="button"
+										value="#{mensaje.columnas}" style="font-size:14px;" />
+									<p:columnToggler datasource="dtlDetalleArbolitos"
+										trigger="toggler" />
+
+								</div>
+							</f:facet>
+
+							<p:column headerText="#"
+								style="font-size:14px; text-align:right; width:35px">
+								<p:outputLabel value="#{(item+1)}"
+									style="font-weight:normal; font-size:14px" />
+							</p:column>
+
+							<p:column headerText="#{mensaje.fechaTransaccion}"
+								sortBy="#{loc.venta.fechaTransaccion}" style="font-size:14px">
+								<p:outputLabel value="#{loc.venta.fechaTransaccion}"
+									style="font-weight:normal; font-size:14px" />
+							</p:column>
+
+							<p:column headerText="#{mensaje.compradorSimple}"
+								sortBy="#{loc.venta.comprador.nombreCompleto}"
+								style="font-size:14px">
+								<p:outputLabel value="#{loc.venta.comprador.nombreCompleto}"
+									style="font-weight:normal; font-size:14px" />
+
+							</p:column>
+
+
+							<p:column headerText="#{mensaje.arbolito}"
+								sortBy="#{loc.arbolito.nombre}"
+								rendered="#{administrarSesionCliente.idioma=='ES'}"
+								style="font-size:14px">
+								<p:outputLabel value="#{loc.arbolito.nombre}"
+									style="font-weight:normal; font-size:14px" />
+
+
+							</p:column>
+
+							<p:column headerText="#{mensaje.arbolito}"
+								sortBy="#{loc.arbolito.nombreUS}"
+								rendered="#{administrarSesionCliente.idioma=='US'}"
+								style="font-size:14px">
+
+
+								<p:outputLabel value="#{loc.arbolito.nombreUS}"
+									style="font-weight:normal; font-size:14px" />
+							</p:column>
+
+							<p:column headerText="#{mensaje.lote}"
+								sortBy="#{loc.lote.nombreLote} #{loc.numeroInterno}"
+								style="font-size:14px">
+								<p:outputLabel
+									value="#{loc.lote.nombreLote}-#{loc.numeroInterno}"
+									style="font-weight:normal; font-size:14px" />
+
+							</p:column>
+
+							<p:column headerText="#{mensaje.estadoArbolito}"
+								sortBy="#{loc.estado.tituloEstado}" style="font-size:14px">
+								<p:outputLabel value="#{loc.estado.tituloEstado}"
+									style="font-weight:normal; font-size:14px" />
+
+							</p:column>
+
+
+							<p:column headerText="#{mensaje.nombreArbolitoPersonalizado}"
+								sortBy="#{loc.nombrePersonalizadoArbolito}"
+								style="font-size:14px">
+								<p:outputLabel value="#{loc.nombrePersonalizadoArbolito}"
+									style="font-weight:normal; font-size:14px" />
+
+							</p:column>
+
+
+							<p:column headerText="#{mensaje.regaladoA}"
+								sortBy="#{loc.correoReceptorRegalo}" style="font-size:14px">
+								<p:outputLabel value="#{loc.correoReceptorRegalo}"
+									style="font-weight:normal; font-size:14px" />
+
+							</p:column>
+
+							<p:column headerText="#{mensaje.reemplazado}"
+								sortBy="#{loc.historicoSuperior}" style="font-size:14px">
+
+
+								<p:outputLabel value="#{mensaje.NO}"
+									rendered="#{loc.historicoSuperior==null or loc.historicoSuperior==''}"
+									style="font-weight:normal; font-size:14px" />
+
+								<p:spacer width="2" />
+
+								<p:outputLabel value="#{mensaje.elMismoAnterior}"
+									rendered="#{loc.historicoSuperior!=null and loc.historicoSuperior!='' and loc.historicoSuperior=='EL_MISMO_LOTE'}"
+									style="font-weight:normal; font-size:14px" />
+
+								<p:outputLabel value="#{mensaje.anteriorSinLote}"
+									rendered="#{loc.historicoSuperior!=null and loc.historicoSuperior!='' and loc.historicoSuperior=='ANTES_SIN_LOTE_ASIGNADO'}"
+									style="font-weight:normal; font-size:14px" />
+
+								<p:outputLabel
+									value="#{mensaje.antesEra} #{loc.historicoSuperior}"
+									rendered="#{loc.historicoSuperior!=null and loc.historicoSuperior!='' and loc.historicoSuperior!='ANTES_SIN_LOTE_ASIGNADO' and loc.historicoSuperior!='EL_MISMO_LOTE'}"
+									style="font-weight:normal; font-size:14px" />
+
+							</p:column>
+
+
+							<p:column headerText="#{mensaje.acciones}"
+								style="font-size:14px; text-align:center;">
+
+
+
+								<p:commandButton id="btnIrReemplazar"
+									style="background-origin: content-box; background-image: url('../../imagenes/c_mayuscula.png'); background-size: cover; background-repeat:no-repeat; width:16px; height:16px; vertical-align:bottom; border:0; background-color:transparent"
+									value=""
+									rendered="#{loc.historicoSuperior==null or loc.historicoSuperior==''}"
+									action="#{administrarArbolito.asignarArbolitoPersonalizacion(loc,'REEMPLAZAR_ARBOLITO')}"
+									process="dtlDetalleArbolitos" update=":formReemplazarArbolito" />
+
+
+
+
+
+								<p:commandButton id="btnIrEstado"
+									style="background-origin: content-box; background-image: url('../../imagenes/e_minuscula.png'); background-size: cover; background-repeat:no-repeat; width:16px; height:16px; vertical-align:bottom; border:0; background-color:transparent"
+									value=""
+									action="#{administrarArbolito.asignarArbolitoPersonalizacion(loc,'CAMBIAR_ESTADO')}"
+									process="dtlDetalleArbolitos" update=":formCambiarEstado" />
+
+
+								<p:commandButton value=""
+									style="background-origin: content-box; background-image: url('../../imagenes/f_minuscula.png'); background-size: cover; background-repeat:no-repeat; width:16px; height:16px; vertical-align:bottom; border:0; background-color:transparent"
+									id="btnIrFotos" title="#{mensaje.fotosArbolitoAdoptado}"
+									action="#{administrarArbolito.asignarArbolitoPersonalizacion(loc,'VISTA_FOTOS')}"
+									process="@this" update=":formAsignarArbolito, :formCompras" />
+
+
+								<p:commandButton id="btnIrLote"
+									rendered="#{!(loc.lote!=null and loc.lote.id!=null)}"
+									style="background-origin: content-box; background-image: url('../../imagenes/l_mayuscula.png'); background-size: cover; background-repeat:no-repeat; width:16px; height:16px; vertical-align:bottom; border:0; background-color:transparent"
+									value=""
+									action="#{administrarArbolito.asignarArbolitoPersonalizacion(loc,'ASIGNAR_LOTE')}"
+									process="dtlDetalleArbolitos" update=":formAsignarLote" />
+
+
+
+								<p:commandButton id="btnIrPersonalizar"
+									rendered="#{loc.estado.permitePersonalizacion=='S' and (!(loc.indicativoBolsa!=null and loc.indicativoBolsa=='S'))}"
+									style="background-origin: content-box; background-image: url('../../imagenes/p_minuscula.png'); background-size: cover; background-repeat:no-repeat; width:16px; height:16px; vertical-align:bottom; border:0; background-color:transparent"
+									value=""
+									action="#{administrarArbolito.asignarArbolitoPersonalizacion(loc,'PERSONALIZAR_ARBOLITO')}"
+									process="dtlDetalleArbolitos"
+									update=":formPersonalizarArbolito" />
+
+
+								<p:commandButton id="btnIrRegalar"
+									rendered="#{(loc.correoReceptorRegalo==null or loc.correoReceptorRegalo=='')  and (!(loc.indicativoBolsa!=null and loc.indicativoBolsa=='S'))}"
+									style="background-origin: content-box; background-image: url('../../imagenes/r_mayuscula.png'); background-size: cover; background-repeat:no-repeat; width:16px; height:16px; vertical-align:bottom; border:0; background-color:transparent"
+									value=""
+									action="#{administrarArbolito.asignarArbolitoPersonalizacion(loc,'REGALAR_ARBOLITO')}"
+									process="dtlDetalleArbolitos" update=":formRegalar" />
+
+
+
+
+
+
+
+
+
+								<p:tooltip for="btnIrReemplazar"
+									rendered="#{loc.historicoSuperior==null or loc.historicoSuperior==''}"
+									value="#{mensaje.cambiarReemplazarArbolito}" trackMouse="true" />
+								<p:tooltip for="btnIrPersonalizar"
+									rendered="#{loc.estado.permitePersonalizacion=='S' and (!(loc.indicativoBolsa!=null and loc.indicativoBolsa=='S'))}"
+									value="#{mensaje.personalizarArbolito}" trackMouse="true" />
+								<p:tooltip for="btnIrRegalar"
+									rendered="#{(loc.correoReceptorRegalo==null or loc.correoReceptorRegalo=='')  and (!(loc.indicativoBolsa!=null and loc.indicativoBolsa=='S'))}"
+									value="#{mensaje.regalarArbolito}" trackMouse="true" />
+								<p:tooltip for="btnIrEstado" value="#{mensaje.cambiarEstado}"
+									trackMouse="true" />
+								<p:tooltip for="btnIrLote"
+									rendered="#{!(loc.lote!=null and loc.lote.id!=null)}"
+									value="#{mensaje.asignarLote}" trackMouse="true" />
+
+
+
+
+							</p:column>
+
+						</p:dataTable>
+
+						<div align="center">
+
+							<br /> <br />
+							<p:commandButton
+								rendered="#{administrarArbolito.historicos!=null and administrarArbolito.historicos.size()>0}"
+								style="font-size:14px; font-weight: normal !important;"
+								action="#{administrarArbolito.asignarArbolitoPersonalizacion(null,'ASIGNAR_LOTE_MASIVO')}"
+								value="#{mensaje.asignarLoteMasivo}"
+								update=":formAsignarLoteMasivo" />
+
+							<p:spacer width="10" />
+
+							<p:commandButton
+								rendered="#{administrarArbolito.historicos!=null and administrarArbolito.historicos.size()>0}"
+								style="font-size:14px; font-weight: normal !important;"
+								action="#{administrarArbolito.asignarArbolitoPersonalizacion(null,'CAMBIAR_ESTADO_MASIVO')}"
+								value="#{mensaje.cambiarEstadoMasivo}"
+								update=":formCambiarEstadoMasivo" />
+
+						</div>
+
+					</p:tab>
+				</p:accordionPanel>
+
+
+			</p:outputPanel>
+		</h:form>
+
+		<ui:include
+			src="/arbolitos/historicoArbolitos/personalizarHistorico.xhtml" />
+		<ui:include src="/arbolitos/historicoArbolitos/regalarArbolito.xhtml" />
+		<ui:include src="/arbolitos/historicoArbolitos/asignarLote.xhtml" />
+		<ui:include
+			src="/arbolitos/historicoArbolitos/asignarLoteMasivo.xhtml" />
+		<ui:include src="/arbolitos/historicoArbolitos/cambiarEstado.xhtml" />
+		<ui:include
+			src="/arbolitos/historicoArbolitos/cambiarEstadoMasivo.xhtml" />
+		<ui:include
+			src="/arbolitos/historicoArbolitos/reemplazarArbolito.xhtml" />
+
+
+		<ui:include
+			src="/arbolitos/historicoArbolitos/crearFotoArbolitoAdoptado.xhtml" />
+		<ui:include
+			src="/arbolitos/historicoArbolitos/editarFotoArbolitoAdoptado.xhtml" />
+		<ui:include
+			src="/arbolitos/historicoArbolitos/eliminarFotoArbolitoAdoptado.xhtml" />
+
+		<p:spacer height="400" />
+
+	</ui:define>
+</ui:composition>
